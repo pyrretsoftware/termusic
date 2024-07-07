@@ -10,9 +10,9 @@ termusic is a terminalpilot-included utility for playing music from YouTube. It 
 
 simply install termusic via npm by running
 
-``
+```
 npm i -g termusic
-``
+```
 
 After installing, run termusic in your terminal. It will open up a new window.
 
