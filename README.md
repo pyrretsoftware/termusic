@@ -1,14 +1,14 @@
 # termusic
-play music in your terminal
+Play music in your terminal
 ![image](image_url)
 
 ## What is termusic?
-termusic is a terminalpilot-included utility for playing music from YouTube. It uses the invidious api along with ffmpeg to stream and play audio.
+Termusic is a terminalpilot-included utility for playing music from YouTube. It uses the invidious api along with ffmpeg to stream and play audio.
 # How do i install and use termusic
 > [!IMPORTANT]  
 > You need to install ffmpeg in order to use termusic.
 
-simply install termusic via npm by running
+Simply install termusic via npm by running
 
 ```
 npm i -g termusic
@@ -16,7 +16,7 @@ npm i -g termusic
 
 After installing, enter ``termusic`` in your terminal. It will open up a new window.
 
-to play songs, first press the ``↓`` key on your keyboard to enter the command bar. Here you can type different commands:
+To play songs, first press the ``↓`` key on your keyboard to enter the command bar. Here you can type different commands:
 
 - ``play <song name>`` - searches up a song and starts playing it.
 - ``queue <song name>`` - adds a song to the queue
