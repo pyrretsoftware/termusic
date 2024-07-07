@@ -1,0 +1,23 @@
+{
+  "name": "termusic",
+  "version": "1.0.0",
+  "description": "a music player inside your terminal",
+  "main": "termusic.js",
+  "scripts": {
+    "test": "music"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pyrretsoftware/termusic.git"
+  },
+  "keywords": [
+    "music",
+    "cli",
+    "terminal"
+  ],
+  "author": "pyrret software",
+  "bugs": {
+    "url": "https://github.com/pyrretsoftware/termusic/issues"
+  },
+  "homepage": "https://github.com/pyrretsoftware/termusic#readme"
+}
