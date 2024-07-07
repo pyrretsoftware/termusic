@@ -14,7 +14,7 @@ simply install termusic via npm by running
 npm i -g termusic
 ```
 
-After installing, run termusic in your terminal. It will open up a new window.
+After installing, enter ``termusic`` in your terminal. It will open up a new window.
 
 to play songs, first press the ``↓`` key on your keyboard to enter the command bar. Here you can type different commands:
 
