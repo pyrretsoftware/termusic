@@ -1,8 +1,11 @@
 {
-    "instances" : [
-        "https://yewtu.be",
+    "invidious-instances" : [
         "https://inv.tux.pizza",
         "https://yt.artemislena.eu",
         "https://invidious.flokinet.to"
-    ]
+    ],
+    "cobalt-instances" : [
+        "https://api.cobalt.tools/api/json"
+    ],
+    "DebugMode" : false
 }

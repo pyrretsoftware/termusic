@@ -19,5 +19,6 @@
   "bugs": {
     "url": "https://github.com/pyrretsoftware/termusic/issues"
   },
-  "homepage": "https://github.com/pyrretsoftware/termusic#readme"
+  "homepage": "https://github.com/pyrretsoftware/termusic#readme",
+  "type": "module"
 }

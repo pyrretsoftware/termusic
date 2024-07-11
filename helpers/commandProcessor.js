@@ -1,0 +1,35 @@
+/*
+termusic/helpers/commandprocessor.js
+
+Written by axell (mail@axell.me) for pyrret software.
+*/
+import {getAudioUrl} from './cobalt.js'
+import { searchInvidious } from './invidious.js';
+import {playAudioUrl} from '../snippets/player.js'
+import { setPlayStatus } from './playStatus.js';
+import {setSongTitle, startProgressBarMoving, startSongDurationMoving } from './ui.js';
+
+
+
+export async function processCommand(command) {
+    setPlayStatus("log", "Starting command processor, processing "+ command.replace("play ", ""))
+    if (command.split(" ")[0] == "play") {
+        setPlayStatus("log", "Processing " + command.replace("play ", ""))
+        setPlayStatus("log", "Searching...")
+        let searchResult = await searchInvidious(command.replace("play ", ""))
+        setPlayStatus("log", "Searching complete.")
+        while (!searchResult) {
+            setPlayStatus("log", "Retrying search.")
+            searchResult = await searchInvidious(command.replace("play ", ""))
+        }
+        
+        setPlayStatus("log", "Grabbing audio...")
+        playAudioUrl((await getAudioUrl(searchResult["id"])))
+        startProgressBarMoving(searchResult["length"])
+        setSongTitle(searchResult["title"])
+        startSongDurationMoving(searchResult["length"])
+        setPlayStatus("important", `Now playing ${searchResult["title"]}!`)
+        
+        
+    }
+}
