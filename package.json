@@ -15,6 +15,9 @@
     "cli",
     "terminal"
   ],
+  "bin" : {
+    "termusic" : "termusic.js"
+  },
   "author": "pyrret software",
   "bugs": {
     "url": "https://github.com/pyrretsoftware/termusic/issues"

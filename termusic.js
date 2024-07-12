@@ -43,6 +43,6 @@ if (process.argv[2] == "launch") {
     
     //playAudioUrl((await getAudioUrl(searchResult["id"])))
 } else {
-    setPlayStatus("Launching termusic in a seperate window...")
     spawn(`${getCrossPlatformString("new-terminal-window")} node ${__filename} launch`, [], {shell: true})
+    console.log("Launched termusic in a seperate window✅")
 }
