@@ -16,7 +16,7 @@
     "terminal"
   ],
   "bin" : {
-    "termusic" : "termusic.js"
+    "termusic" : "node termusic.js"
   },
   "author": "pyrret software",
   "bugs": {
