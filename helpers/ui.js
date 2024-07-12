@@ -1,5 +1,5 @@
 /*
-termusic/helpers/playui.js
+termusic/helpers/ui.js
 
 Written by axell (mail@axell.me) for pyrret software.
 */
@@ -191,9 +191,6 @@ process.stdin.on('keypress', async function(c, key) {
                 moveCursorPos(0,0)
                 isTypingCommand = false    
             }
-
         }
-        
-
     }
 })
