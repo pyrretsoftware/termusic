@@ -19,7 +19,7 @@ After installing, enter ``termusic`` in your terminal. It will open up a new win
 To play songs, first press the ``↓`` key on your keyboard to enter the command bar. Here you can type different commands:
 
 - ``play <song name>`` - searches up a song and starts playing it.
-- ``queue <song name>`` - adds a song to the queue
+- ``queue add <song name>`` - adds a song to the queue
 - ``queue remove`` - removes the last song from the queue
 - ``queue clear`` - clears the queue
 
