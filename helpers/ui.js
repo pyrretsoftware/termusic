@@ -7,6 +7,7 @@ import readline from 'readline';
 import process from 'process';
 import { processCommand } from './commandProcessor.js';
 import { getCrossPlatformString } from './crossPlatformHelper.js';
+import { listContinue } from './listManager.js';
 
 readline.emitKeypressEvents(process.stdin);
 
@@ -50,7 +51,7 @@ function clearBar() {
     } 
 }
 
-async function updateProgressBar(steps) { //steps/30
+export async function updateProgressBar(steps) { //steps/30
     moveCursorPos(38, startString +1)
     process.stdout.write('\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b')
     process.stdout.write('\x1b[1m' + '──────────────────────────────'.slice(0, steps) + "\x1b[0m\x1b[2m" + '──────────────────────────────'.slice(steps) + '\x1b[0m')
@@ -80,7 +81,7 @@ function changePlayState(state) {
 }
 
 
- function setSongDuration(dur1, dur2) {
+export function setSongDuration(dur1, dur2) {
     moveCursorPos(7, startString + 1)
     process.stdout.write('\b\b\b\b')
     process.stdout.write(dur1)
@@ -95,9 +96,16 @@ function changePlayState(state) {
         moveCursorPos(0, 0)
     }
 }
+let currentSongIndex2 = 0; //this is a horrible way of doing this..
+
 
 export async function startSongDurationMoving(songlength) {
+    currentSongIndex2++
+    let  _currentSongIndex = currentSongIndex2
     for (let i = 0; i < songlength +1; i++) {
+        if (currentSongIndex2 != _currentSongIndex) {
+            return
+        }
         setSongDuration((i - (i % 60)) / 60 + ":" + (i % 60).toString().padStart(2, '0'), (songlength - (songlength % 60)) / 60 + ":" + (songlength % 60).toString().padStart(2, '0'))
         await new Promise(resolve => setTimeout(resolve,  1000));
     }
@@ -121,10 +129,16 @@ export async function startProgressBarMoving(length) {
         updateProgressBar(i)
         await new Promise(resolve => setTimeout(resolve, (length / 30) * 1000));
     }
+
+    //we have reached the end of the song
+    listContinue()
 }
 
 export function setSongTitle(title) {
-    moveCursorPos(0, startString)
+    moveCursorPos(widthChars, startString)
+    for (let i = 0; i < widthChars; i++) {
+        process.stdout.write("\b \b")
+    }
     process.stdout.write("\x1b[1m" +centerText(title) + "\x1b[0m")
 
     if (isTypingCommand) {
@@ -164,7 +178,7 @@ process.stdin.on('keypress', async function(c, key) {
                 process.stdout.write('\x1b[35m>\x1b[0m ')
             }
 
-            if (key.sequence != "\b") {
+            if (key.sequence != "\b" && key.name) {
                 command += key.name.replace("space", " ")
                 
                 process.stdout.write(key.name.replace("space", " "))                

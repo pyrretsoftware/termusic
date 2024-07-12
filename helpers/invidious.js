@@ -26,6 +26,9 @@ export async function searchInvidious(query) {
     } catch {
         return false
     }
+    if (!invidiousResponse[0]) {
+        return false
+    }
 
     return {
         "title" : invidiousResponse[0]["title"],

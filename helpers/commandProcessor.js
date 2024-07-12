@@ -8,6 +8,7 @@ import { searchInvidious } from './invidious.js';
 import {playAudioUrl} from '../snippets/player.js'
 import { setPlayStatus } from './playStatus.js';
 import {setSongTitle, startProgressBarMoving, startSongDurationMoving } from './ui.js';
+import { addSong, clearList, removeLastSong } from './listManager.js';
 
 
 
@@ -28,8 +29,23 @@ export async function processCommand(command) {
         startProgressBarMoving(searchResult["length"])
         setSongTitle(searchResult["title"])
         startSongDurationMoving(searchResult["length"])
-        setPlayStatus("important", `Now playing ${searchResult["title"]}!`)
-        
-        
+        setPlayStatus("important", `Now playing ${searchResult["title"]}!`)        
+    } else if (command.split(" ")[0] == "queue") {
+        if (command.split(" ")[1] == "add")  {
+            setPlayStatus("log", "Processing " + command.replace("queue add", ""))
+            setPlayStatus("log", "Searching...")
+            let searchResult = await searchInvidious(command.replace("queue add", ""))
+            setPlayStatus("log", "Searching complete.")
+            while (!searchResult) {
+                setPlayStatus("log", "Retrying search.")
+                searchResult = await searchInvidious(command.replace("queue add", ""))
+            }
+            addSong(searchResult)
+            setPlayStatus("important", `Added ${searchResult["title"]} to queue!`)
+        } else if (command.split(" ")[1] == "remove") {
+            removeLastSong()
+        } else if (command.split(" ")[1] == "clear") {
+            clearList()
+        }
     }
 }
