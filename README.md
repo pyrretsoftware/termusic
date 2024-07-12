@@ -1,5 +1,6 @@
 # termusic
 A minimal and lightweight terminal music player.
+![image](https://github.com/pyrretsoftware/termusic/images/carbon.png?raw=true)
 > [!WARNING]  
 > Termusic is in a very early stage of development, the code is messy, the application is unstable and its overall a bad experience. I recommend waiting until a stable release before trying termusic out.
 
@@ -8,9 +9,13 @@ Termusic is a utility for playing music from YouTube. It uses the invidious api,
 # Getting started!
 > [!IMPORTANT]  
 > You need to install ffmpeg in order to use termusic.
+Simply install termusic via npm by running
 
-To install, clone to Github repo and run it with ``node termusic.js``
+```
+npm i -g termusic
+```
 
+After installing, enter ``termusic`` in your terminal. It will open up a new window.
 
 To play songs, enter the command bar by starting to type on your keyboards. In the command bar you can type different commands:
 - ``play <song name>`` - searches up a song and starts playing it.
@@ -19,4 +24,3 @@ To play songs, enter the command bar by starting to type on your keyboards. In t
 - ``queue clear`` - clears the queue
 
 When your done, press enter on your keyboard and termusic will search up the song and play it. This can take a few seconds.
-
