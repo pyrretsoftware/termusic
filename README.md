@@ -9,6 +9,7 @@ Termusic is a utility for playing music from YouTube. It uses the invidious api,
 # Getting started!
 > [!IMPORTANT]  
 > You need to install ffmpeg in order to use termusic.
+
 Simply install termusic via npm by running
 
 ```
