@@ -8,10 +8,18 @@ import { getCrossPlatformString } from '../helpers/crossPlatformHelper.js';
 
 let currentlyPLayingAudio
 
+export function killAudioProcesses() {
+    if (currentlyPLayingAudio) {
+        exec(getCrossPlatformString("kill-process") + currentlyPLayingAudio.pid, {
+            detached: true
+        })
+    }
+}
+
 export function playAudioUrl(url) {
     if (currentlyPLayingAudio) {
-        spawn(getCrossPlatformString("kill-process") + currentlyPLayingAudio.pid, [], {
-            shell: true
+        exec(getCrossPlatformString("kill-process") + currentlyPLayingAudio.pid, {
+            detached: true
         })
     }
 

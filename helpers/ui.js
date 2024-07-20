@@ -8,6 +8,7 @@ import process from 'process';
 import { processCommand } from './commandProcessor.js';
 import { getCrossPlatformString } from './crossPlatformHelper.js';
 import { listContinue } from './listManager.js';
+import { killAudioProcesses } from '../snippets/player.js';
 
 readline.emitKeypressEvents(process.stdin);
 
@@ -112,10 +113,7 @@ export async function startSongDurationMoving(songlength) {
 }
 
 const mediaComponents = {
-    "progressBar" : "{0} ────────────────────────────── {1}", //30 lines
-    "mediaControls" : "◀◀️ ▶️ ▶▶️",
-    "mediaControlsv2_1" : "◣",
-    "mediaControlsv2_2" : "◤"
+    "progressBar" : "{0} ────────────────────────────── {1}" //30 lines
 }
 
 let currentSongIndex = 0; //this is a horrible way of doing this..
@@ -162,6 +160,7 @@ let steps = 1
 
 process.stdin.on('keypress', async function(c, key) {
     if (key.ctrl && key.name == "c") {
+        killAudioProcesses()
         process.exit(0)
     }
     if (process.argv[2] == "launch") {
