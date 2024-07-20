@@ -9,6 +9,7 @@ Termusic is a utility for playing music from YouTube. It uses the invidious api,
 # Getting started!
 > [!IMPORTANT]  
 > You need to install ffmpeg in order to use termusic.
+
 Simply install termusic via npm by running
 
 ```
@@ -19,7 +20,7 @@ After installing, enter ``termusic`` in your terminal. It will open up a new win
 
 To play songs, enter the command bar by starting to type on your keyboards. In the command bar you can type different commands:
 - ``play <song name>`` - searches up a song and starts playing it.
-- ``queue <song name>`` - adds a song to the queue
+- ``queue add <song name>`` - searches up a song and adds it to the queue
 - ``queue remove`` - removes the last song from the queue
 - ``queue clear`` - clears the queue
 
