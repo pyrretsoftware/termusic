@@ -1,57 +1,35 @@
-/*
-termusic/helpers/ui.js
-
-Written by axell (mail@axell.me) for pyrret software.
-*/
 import readline from 'readline';
 import process from 'process';
-import { processCommand } from './commandProcessor.js';
-import { getCrossPlatformString } from './crossPlatformHelper.js';
-import { listContinue } from './listManager.js';
-import { killAudioProcesses } from '../snippets/player.js';
+
+import { processCommand } from '../../helpers/commandProcessor.js';
+import { getCrossPlatformString } from '../../helpers/crossPlatformHelper.js';
+import { listContinue } from '../../helpers/listManager.js';
+import { killAudioProcesses } from '../../snippets/player.js';
+
+import { centerText } from '../utils/centerText.js';
+import { moveCursorPos } from '../utils/moveCursorPos.js';
 
 readline.emitKeypressEvents(process.stdin);
-
 if (process.stdin.isTTY) {
     process.stdin.setRawMode(true);   
 }
 
 const startString = 1
 const commandString = 4
-
-let isTypingCommand = false
-
 const heightChars = 5
 const widthChars = 46
 
-function moveCursorPos(x, y) {
-    process.stdout.cursorTo(x, y);
-}
-
-let mode = true //true is play mode, false is command bar mode
 let command = ""
-function changeMode(_mode) {
-        mode = _mode
-        if (mode == true) {
-            moveCursorPos(45, commandString)
-            for (let i = 0; i < 45;) {
-                process.stdout.write('\b \b')
-            } 
-            command = ""
-        } else {
-            console.log("fired")
-            moveCursorPos(1, commandString)
-            process.stdout.write('\x1b[35m>\x1b[0m')
-        }
-}
+let isTypingCommand = false
 
+
+//#region playerMetadata
 function clearBar() {
     moveCursorPos(45, commandString)
     for (let i = 0; i < 45; i++) {
         process.stdout.write('\b \b')
     } 
 }
-
 export async function updateProgressBar(steps) { //steps/30
     moveCursorPos(38, startString +1)
     process.stdout.write('\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b')
@@ -63,25 +41,6 @@ export async function updateProgressBar(steps) { //steps/30
         moveCursorPos(0, 0)
     }
 }
-function centerText(text) {
-    if (text.length > widthChars -2) {
-        text = text.substring(0, widthChars - 5) //2 for margin, 3 for ...
-        text = text + '...'
-    }
-    const ammountOfSpaces = (widthChars - (text.length - 1)) / 2
-    for (let i = 1; i < ammountOfSpaces; i++) {
-        text = " " + text
-    }
-    
-    return text
-}
-
-function changePlayState(state) {
-    moveCursorPos(23, startString + 2)
-    process.stdout.write('\b' + state ? '▶️' : '⏸️')
-}
-
-
 export function setSongDuration(dur1, dur2) {
     moveCursorPos(7, startString + 1)
     process.stdout.write('\b\b\b\b')
@@ -97,9 +56,24 @@ export function setSongDuration(dur1, dur2) {
         moveCursorPos(0, 0)
     }
 }
+function changePlayState(state) {
+    moveCursorPos(23, startString + 2)
+    process.stdout.write('\b' + state ? '▶️' : '⏸️')
+}
+export function setSongTitle(title) {
+    moveCursorPos(widthChars, startString)
+    for (let i = 0; i < widthChars; i++) {
+        process.stdout.write("\b \b")
+    }
+    process.stdout.write("\x1b[1m" +centerText(title, widthChars) + "\x1b[0m")
+
+    if (isTypingCommand) {
+        moveCursorPos(command.length + 2, commandString)
+    } else {
+        moveCursorPos(0, 0)
+    }
+}
 let currentSongIndex2 = 0; //this is a horrible way of doing this..
-
-
 export async function startSongDurationMoving(songlength) {
     currentSongIndex2++
     let  _currentSongIndex = currentSongIndex2
@@ -111,11 +85,6 @@ export async function startSongDurationMoving(songlength) {
         await new Promise(resolve => setTimeout(resolve,  1000));
     }
 }
-
-const mediaComponents = {
-    "progressBar" : "{0} ────────────────────────────── {1}" //30 lines
-}
-
 let currentSongIndex = 0; //this is a horrible way of doing this..
 export async function startProgressBarMoving(length) {
     currentSongIndex++
@@ -131,33 +100,19 @@ export async function startProgressBarMoving(length) {
     //we have reached the end of the song
     listContinue()
 }
-
-export function setSongTitle(title) {
-    moveCursorPos(widthChars, startString)
-    for (let i = 0; i < widthChars; i++) {
-        process.stdout.write("\b \b")
-    }
-    process.stdout.write("\x1b[1m" +centerText(title) + "\x1b[0m")
-
-    if (isTypingCommand) {
-        moveCursorPos(command.length + 2, commandString)
-    } else {
-        moveCursorPos(0, 0)
-    }
+const mediaComponents = {
+    "progressBar" : "{0} ────────────────────────────── {1}" //30 lines
 }
-
 export async function displayPlayUi(title) {
     moveCursorPos(0, startString)
-    process.stdout.write("\x1b[1m" +centerText(title) + "\x1b[0m")
+    process.stdout.write("\x1b[1m" +centerText(title, widthChars) + "\x1b[0m")
     moveCursorPos(0, startString +1)
-    process.stdout.write(centerText(mediaComponents["progressBar"].replace("{0}", "0:00").replace("{1}", "0:00") ))
+    process.stdout.write(centerText(mediaComponents["progressBar"].replace("{0}", "0:00").replace("{1}", "0:00")), widthChars)
     moveCursorPos(0, startString +2)
-    process.stdout.write(centerText(getCrossPlatformString("mediaComponents")))
+    process.stdout.write(centerText(getCrossPlatformString("mediaComponents")), widthChars)
 }
-let steps = 1
-
-//user input
-
+//#endregion
+//#region userInput
 process.stdin.on('keypress', async function(c, key) {
     if (key.ctrl && key.name == "c") {
         killAudioProcesses()
@@ -193,3 +148,4 @@ process.stdin.on('keypress', async function(c, key) {
         }
     }
 })
+//#endregion

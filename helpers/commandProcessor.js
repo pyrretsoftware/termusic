@@ -7,7 +7,7 @@ import {getAudioUrl} from './cobalt.js'
 import { searchInvidious } from './invidious.js';
 import {playAudioUrl} from '../snippets/player.js'
 import { setPlayStatus } from './playStatus.js';
-import {setSongTitle, startProgressBarMoving, startSongDurationMoving } from './ui.js';
+import {setSongTitle, startProgressBarMoving, startSongDurationMoving } from '../ui/uiManagers/player.js';
 import { addSong, clearList, removeLastSong } from './listManager.js';
 
 
