@@ -13,7 +13,8 @@ export async function listContinue() {
         setSongTitle(list[0]["title"])
         startSongDurationMoving(list[0]["length"])
         setPlayStatus("important", `Now playing ${list[0]["title"]}!`)
-        
+        setPlayStatus("report", list[0])
+
         list.shift()
     } else {
         setSongTitle("no song playing")

@@ -29,7 +29,8 @@ export async function processCommand(command) {
         startProgressBarMoving(searchResult["length"])
         setSongTitle(searchResult["title"])
         startSongDurationMoving(searchResult["length"])
-        setPlayStatus("important", `Now playing ${searchResult["title"]}!`)        
+        setPlayStatus("important", `Now playing ${searchResult["title"]}!`)
+        setPlayStatus("report", searchResult)        
     } else if (command.split(" ")[0] == "queue") {
         if (command.split(" ")[1] == "add")  {
             setPlayStatus("log", "Processing " + command.replace("queue add", ""))

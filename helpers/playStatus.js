@@ -1,3 +1,7 @@
+import { changeRpcStatus } from "./discordRpc.js";
+
 export function setPlayStatus(type, playStatus) {
-    //used for later
+    if (type == 'report') {
+        changeRpcStatus(playStatus["title"], playStatus["thumbnail"])
+    }
 }
