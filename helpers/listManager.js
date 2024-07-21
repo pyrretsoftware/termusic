@@ -1,7 +1,7 @@
 import { playAudioUrl } from "../snippets/player.js"
 import { getAudioUrl } from "./cobalt.js"
 import { setPlayStatus } from "./playStatus.js"
-import { setSongDuration, setSongTitle, startProgressBarMoving, startSongDurationMoving, updateProgressBar } from "./ui.js"
+import { setSongDuration, setSongTitle, startProgressBarMoving, startSongDurationMoving, updateProgressBar } from "../ui/uiManagers/player.js"
 
 let list = []
 
