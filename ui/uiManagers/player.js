@@ -107,9 +107,9 @@ export async function displayPlayUi(title) {
     moveCursorPos(0, startString)
     process.stdout.write("\x1b[1m" +centerText(title, widthChars) + "\x1b[0m")
     moveCursorPos(0, startString +1)
-    process.stdout.write(centerText(mediaComponents["progressBar"].replace("{0}", "0:00").replace("{1}", "0:00")), widthChars)
+    process.stdout.write(centerText(mediaComponents["progressBar"].replace("{0}", "0:00").replace("{1}", "0:00"), widthChars))
     moveCursorPos(0, startString +2)
-    process.stdout.write(centerText(getCrossPlatformString("mediaComponents")), widthChars)
+    process.stdout.write(centerText(getCrossPlatformString("mediaComponents"), widthChars))
 }
 //#endregion
 //#region userInput
@@ -129,7 +129,7 @@ process.stdin.on('keypress', async function(c, key) {
             if (!isTypingCommand) {
                 isTypingCommand = true
                 moveCursorPos(1, commandString)
-                process.stdout.write('\x1b[35m>\x1b[0m ')
+                process.stdout.write('>')
             }
 
             if (key.sequence != "\b" && key.name) {

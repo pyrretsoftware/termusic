@@ -1,4 +1,4 @@
-import { displayPlayUi } from './ui/uiManagers/player.js';
+import { displayPlayUi } from '../ui/uiManagers/player.js';
 
 export function launch() {
     setInterval(function() {}, 1000 * 60 * 60);
