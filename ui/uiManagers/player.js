@@ -114,10 +114,6 @@ export async function displayPlayUi(title) {
 //#endregion
 //#region userInput
 process.stdin.on('keypress', async function(c, key) {
-    if (key.ctrl && key.name == "c") {
-        killAudioProcesses()
-        process.exit(0)
-    }
     if (process.argv[2] == "launch") {
         if (key.name == "return") {
             clearBar()
