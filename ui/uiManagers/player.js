@@ -132,11 +132,13 @@ process.stdin.on('keypress', async function(c, key) {
                 process.stdout.write('>')
             }
 
-            if (key.sequence != "\b" && key.name) {
-                command += key.name.replace("space", " ")
-                
-                process.stdout.write(key.name.replace("space", " "))                
-            } else if (command != "") {
+            if (key.name == "space") {
+                command += " "
+                process.stdout.write(" ")                
+            } else if (key.sequence != "\b" && RegExp(/^\p{L}/,'u').test(key.sequence)) {
+                command += key.sequence
+                process.stdout.write(key.sequence)                
+            } else if (command != "" && key.sequence == "\b") {
                 process.stdout.write("\b \b")
                 command = command.substring(0, command.length -1)
             } else if (command == "") {
