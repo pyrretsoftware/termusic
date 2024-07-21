@@ -1,6 +1,7 @@
 # termusic
-A minimal and lightweight terminal music player.
 ![image](https://raw.githubusercontent.com/pyrretsoftware/termusic/main/images/carbon.png)
+
+A minimal and lightweight terminal music player.
 > [!WARNING]  
 > Termusic is in a very early stage of development, the code is messy, the application is unstable and its overall a bad experience. I recommend waiting until a stable release before trying termusic out.
 
