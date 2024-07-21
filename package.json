@@ -21,5 +21,8 @@
     "url": "https://github.com/pyrretsoftware/termusic/issues"
   },
   "homepage": "https://github.com/pyrretsoftware/termusic#readme",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "easy-presence": "^1.2.0-oops1"
+  }
 }
