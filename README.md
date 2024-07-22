@@ -16,10 +16,10 @@ Simply install termusic via npm by running
 ```
 npm i -g termusic
 ```
-
+# Commands
 After installing, enter ``termusic`` in your terminal. It will open up a new window.
 
-To play songs, enter the command bar by starting to type on your keyboards. In the command bar you can type different commands:
+To play songs, enter the command bar by starting to type on your keyboard. In the command bar you can type different commands:
 - ``play <song name>`` - searches up a song and starts playing it.
 - ``queue add <song name>`` - searches up a song and adds it to the queue
 - ``queue remove`` - removes the last song from the queue
