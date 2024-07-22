@@ -1,8 +1,6 @@
 {
     "invidious-instances" : [
-        "https://inv.tux.pizza",
-        "https://yt.artemislena.eu",
-        "https://invidious.flokinet.to"
+        "https://inv.tux.pizza"
     ],
     "cobalt-instances" : [
         "https://api.cobalt.tools/api/json"
