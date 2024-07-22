@@ -24,5 +24,3 @@ To play songs, enter the command bar by starting to type on your keyboards. In t
 - ``queue add <song name>`` - searches up a song and adds it to the queue
 - ``queue remove`` - removes the last song from the queue
 - ``queue clear`` - clears the queue
-
-When your done, press enter on your keyboard and termusic will search up the song and play it. This can take a few seconds.
