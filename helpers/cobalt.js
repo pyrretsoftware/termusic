@@ -8,7 +8,6 @@ import {config} from '../snippets/config.js'
 let currentInstance = 0
 
 export async function getAudioUrl(id ) {
-
     const cobaltRequest = await fetch(config["cobalt-instances"][currentInstance], {
         method : "POST",
         body : JSON.stringify({
@@ -31,5 +30,4 @@ export async function getAudioUrl(id ) {
     if (cobaltRequest.status != 200) {
         return "ERROR: " + cobaltRequest.status + ": "
     }
-    return cobaltResponse["url"]
 }
