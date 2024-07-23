@@ -14,6 +14,6 @@ export function changeRpcStatus(title, thumbnail, id) {
                 label: "View song",
                 url: "https://termusic.axell.me/?s=" + id
             }
-        ]
+        ],
     })
 }
