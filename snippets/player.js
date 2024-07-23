@@ -23,5 +23,7 @@ export function playAudioUrl(url) {
         })
     }
 
-    currentlyPLayingAudio = exec(`ffplay "${url}" -nodisp -autoexit`, {stdio: 'pipe', detached: true})
+    //currentlyPLayingAudio = spawn(`ffplay "${url}" -nodisp`, [], {stdio: 'pipe', shell: true})
+    currentlyPLayingAudio = exec(`ffplay "${url}" -nodisp`, {stdio: 'pipe', detached: true})
+
 }
