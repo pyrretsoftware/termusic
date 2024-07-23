@@ -47,5 +47,7 @@ export async function processCommand(command) {
         } else if (command.split(" ")[1] == "clear") {
             clearList()
         }
-    }
+    } //else if (command.split(" ")[0] == "share") {
+        
+    //}
 }

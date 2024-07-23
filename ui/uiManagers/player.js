@@ -44,7 +44,7 @@ export async function updateProgressBar(steps) { //steps/30
         moveCursorPos(0, 0)
     }
 }
-export function setSongDuration(dur1, dur2) {
+export async function setSongDuration(dur1, dur2) {
     moveCursorPos(7, startString + 1)
     process.stdout.write('\b\b\b\b')
     process.stdout.write(dur1)
