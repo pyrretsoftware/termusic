@@ -12,7 +12,7 @@ export function changeRpcStatus(title, thumbnail, id) {
         buttons : [
             {
                 label: "View song",
-                url: "https://termusic.axell.me/song?id=" + id
+                url: "https://termusic.axell.me/?s=" + id
             }
         ]
     })
