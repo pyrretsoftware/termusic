@@ -39,7 +39,7 @@ export async function updateProgressBar(steps) { //steps/30
     process.stdout.write('\x1b[1m' + '──────────────────────────────'.slice(0, steps) + "\x1b[0m\x1b[2m" + '──────────────────────────────'.slice(steps) + '\x1b[0m')
     
     if (isTypingCommand) {
-        moveCursorPos(command.length + 3, commandString)
+        moveCursorPos(command.length + 2, commandString)
     } else {
         moveCursorPos(0, 0)
     }
@@ -54,7 +54,7 @@ export async function setSongDuration(dur1, dur2) {
     process.stdout.write(dur2)
 
     if (isTypingCommand) {
-        moveCursorPos(command.length + 3, commandString)
+        moveCursorPos(command.length + 2, commandString)
     } else {
         moveCursorPos(0, 0)
     }
@@ -92,7 +92,7 @@ let currentSongIndex = 0; //this is a horrible way of doing this..
 export async function startProgressBarMoving(length) {
     currentSongIndex++
     let  _currentSongIndex = currentSongIndex
-    for (let i = 0; i < 30 +1; i++) { 
+    for (let i = 0; i < 30; i++) { 
         if (currentSongIndex != _currentSongIndex) {
             return
         }

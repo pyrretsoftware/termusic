@@ -24,3 +24,4 @@ To play songs, enter the command bar by starting to type on your keyboard. In th
 - ``queue add <song name>`` - searches up a song and adds it to the queue
 - ``queue remove`` - removes the last song from the queue
 - ``queue clear`` - clears the queue
+- ``queue skip`` - skips to the next song in the queue
