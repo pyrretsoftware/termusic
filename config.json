@@ -4,6 +4,5 @@
     ],
     "cobalt-instances" : [
         "https://api.cobalt.tools/api/json"
-    ],
-    "DebugMode" : false
+    ]
 }

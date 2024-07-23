@@ -5,7 +5,7 @@ import { setSongDuration, setSongTitle, startProgressBarMoving, startSongDuratio
 
 let list = []
 
-export async function listContinue() {
+export async function listContinue(isSkip = false) {
     if (list[0]) {
         setPlayStatus("log", "Grabbing audio...")
         playAudioUrl((await getAudioUrl(list[0]["id"])))
@@ -16,10 +16,12 @@ export async function listContinue() {
         setPlayStatus("report", list[0])
 
         list.shift()
-    } else {
+    } else if (!isSkip) {
         setSongTitle("no song playing")
         setSongDuration("0:00", "0:00")
         updateProgressBar(0)
+    } else {
+        setPlayStatus("important_err", "Couldn't skip song, no songs in the queue.")
     }
 }
 export function addSong(song) {
