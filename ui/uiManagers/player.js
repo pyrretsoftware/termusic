@@ -8,6 +8,8 @@ import { killAudioProcesses } from '../../snippets/player.js';
 
 import { centerText } from '../utils/centerText.js';
 import { moveCursorPos } from '../utils/moveCursorPos.js';
+import { clearBar } from '../utils/clearBar.js';
+import { outputWritten } from '../../helpers/playStatus.js';
 
 readline.emitKeypressEvents(process.stdin);
 if (process.stdin.isTTY) {
@@ -25,14 +27,7 @@ const widthChars = 46
 let command = ""
 let isTypingCommand = false
 
-
 //#region playerMetadata
-function clearBar() {
-    moveCursorPos(45, commandString)
-    for (let i = 0; i < 45; i++) {
-        process.stdout.write('\b \b')
-    } 
-}
 export async function updateProgressBar(steps) { //steps/30
     moveCursorPos(38, startString +1)
     process.stdout.write('\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b')
@@ -44,7 +39,7 @@ export async function updateProgressBar(steps) { //steps/30
         moveCursorPos(0, 0)
     }
 }
-export async function setSongDuration(dur1, dur2) {
+export function setSongDuration(dur1, dur2) {
     moveCursorPos(7, startString + 1)
     process.stdout.write('\b\b\b\b')
     process.stdout.write(dur1)
@@ -87,6 +82,7 @@ export async function startSongDurationMoving(songlength) {
         setSongDuration((i - (i % 60)) / 60 + ":" + (i % 60).toString().padStart(2, '0'), (songlength - (songlength % 60)) / 60 + ":" + (songlength % 60).toString().padStart(2, '0'))
         await new Promise(resolve => setTimeout(resolve,  1000));
     }
+    setSongDuration("0:00", "0:00")
 }
 let currentSongIndex = 0; //this is a horrible way of doing this..
 export async function startProgressBarMoving(length) {
@@ -117,7 +113,7 @@ export async function displayPlayUi(title) {
 //#endregion
 //#region userInput
 process.stdin.on('keypress', async function(c, key) {
-    if (process.argv[2] == "launch") {
+    if (process.argv[2] == "launch" && !outputWritten) {
         if (key.name == "return") {
             clearBar()
             moveCursorPos(0,0)

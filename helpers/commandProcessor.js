@@ -26,10 +26,10 @@ export async function processCommand(command) {
         
         setPlayStatus("log", "Grabbing audio...")
         playAudioUrl((await getAudioUrl(searchResult["id"])))
+        setPlayStatus("important", `Now playing ${searchResult["title"]}!`)
         startProgressBarMoving(searchResult["length"])
         setSongTitle(searchResult["title"])
         startSongDurationMoving(searchResult["length"])
-        setPlayStatus("important", `Now playing ${searchResult["title"]}!`)
         setPlayStatus("report", searchResult)        
     } else if (command.split(" ")[0] == "queue") {
         if (command.split(" ")[1] == "add")  {
@@ -42,7 +42,7 @@ export async function processCommand(command) {
                 searchResult = await searchInvidious(command.replace("queue add", ""))
             }
             addSong(searchResult)
-            setPlayStatus("important", `Added ${searchResult["title"]} to queue!`)
+            setPlayStatus("important", `Added ${searchResult["title"]} to the queue!`)
         } else if (command.split(" ")[1] == "remove") {
             removeLastSong()
         } else if (command.split(" ")[1] == "clear") {

@@ -18,8 +18,8 @@ export async function listContinue(isSkip = false) {
         list.shift()
     } else if (!isSkip) {
         setSongTitle("no song playing")
-        setSongDuration("0:00", "0:00")
         updateProgressBar(0)
+        setSongDuration("0:00", "0:00")
     } else {
         setPlayStatus("important_err", "Couldn't skip song, no songs in the queue.")
     }
