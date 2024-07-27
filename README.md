@@ -25,3 +25,5 @@ To play songs, enter the command bar by starting to type on your keyboard. In th
 - ``queue remove`` - removes the last song from the queue
 - ``queue clear`` - clears the queue
 - ``queue skip`` - skips to the next song in the queue
+- ``exit`` - exits the program.
+- ``volume <volume percent>`` - sets the volume, a value from 0 to 100.
