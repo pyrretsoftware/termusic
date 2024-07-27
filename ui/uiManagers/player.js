@@ -9,7 +9,7 @@ import { killAudioProcesses } from '../../snippets/player.js';
 import { centerText } from '../utils/centerText.js';
 import { moveCursorPos } from '../utils/moveCursorPos.js';
 import { clearBar } from '../utils/clearBar.js';
-import { outputWritten } from '../../helpers/playStatus.js';
+import { outputWritten, setoutputWritten } from '../../helpers/playStatus.js';
 
 readline.emitKeypressEvents(process.stdin);
 if (process.stdin.isTTY) {
@@ -122,7 +122,13 @@ export async function reWriteCommandText() {
 //#endregion
 //#region userInput
 process.stdin.on('keypress', async function(c, key) {
-    if (process.argv[2] == "launch" && !outputWritten) {
+    if (process.argv[2] == "launch") {
+        if (outputWritten) {
+            clearBar()
+            reWriteCommandText()
+            setoutputWritten(false)
+        }
+
         if (key.name == "return") {
             clearBar()
             moveCursorPos(0,0)
@@ -131,17 +137,25 @@ process.stdin.on('keypress', async function(c, key) {
             command = ""
         } else {
             if (!isTypingCommand) {
-                isTypingCommand = true
-                moveCursorPos(1, commandString)
-                process.stdout.write('>')
+                if (key.name == "left") {
+
+                } else if (key.name == "right") {
+                    listContinue(true)
+                } else {
+                    isTypingCommand = true
+                    moveCursorPos(1, commandString)
+                    process.stdout.write('>')
+                }
             }
 
             if (key.name == "space") {
                 command += " "
                 process.stdout.write(" ")                
-            } else if (key.sequence != "\b" && RegExp(/^\p{L}/,'u').test(key.sequence)) {
-                command += key.sequence
-                process.stdout.write(key.sequence)                
+            } else if (key.sequence != "\b") {
+                if (RegExp(/^\p{L}/,'u').test(key.sequence) || parseInt(key.sequence) || key.sequence === "0") {
+                    command += key.sequence
+                    process.stdout.write(key.sequence)
+                }                
             } else if (command != "" && key.sequence == "\b") {
                 process.stdout.write("\b \b")
                 command = command.substring(0, command.length -1)

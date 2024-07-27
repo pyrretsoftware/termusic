@@ -1,6 +1,7 @@
 import { reWriteCommandText } from "../ui/uiManagers/player.js";
 import { clearBar } from "../ui/utils/clearBar.js";
 import { moveCursorPos } from "../ui/utils/moveCursorPos.js";
+import { Blue, Green, Red } from "./colorCodes.js";
 import { changeRpcStatus } from "./discordRpc.js";
 
 
@@ -17,13 +18,18 @@ export function setPlayStatus(type, playStatus) { //playStatus can either be a s
             playStatus = playStatus.substring(0, widthChars - 3)
             playStatus = playStatus + '...'
         }
-        process.stdout.write((type == 'important' ? '\x1b[32m' : '\x1b[31m') + '\x1b[2m'  + playStatus + '\x1b[0m')
+        process.stdout.write((type == 'important' ? Green : Red)  + playStatus + '\x1b[0m')
         outputWritten = true
         moveCursorPos(0, 0)
         setTimeout(function() {
-            clearBar()
-            reWriteCommandText()
-            outputWritten = false
+            if (outputWritten) {
+                clearBar()
+                reWriteCommandText()
+                outputWritten = false
+            }
         }, 3000)
     }
+}
+export function setoutputWritten(val) {
+    outputWritten = val
 }
