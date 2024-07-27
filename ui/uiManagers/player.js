@@ -110,6 +110,15 @@ export async function displayPlayUi(title) {
     moveCursorPos(0, startString +2)
     process.stdout.write(centerText(getCrossPlatformString("mediaComponents"), widthChars))
 }
+
+export async function reWriteCommandText() {
+    if (isTypingCommand) {
+        moveCursorPos(0, commandString)
+        process.stdout.write(" >" + command)
+    }
+
+}
+
 //#endregion
 //#region userInput
 process.stdin.on('keypress', async function(c, key) {

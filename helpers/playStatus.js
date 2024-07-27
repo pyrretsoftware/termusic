@@ -1,3 +1,4 @@
+import { reWriteCommandText } from "../ui/uiManagers/player.js";
 import { clearBar } from "../ui/utils/clearBar.js";
 import { moveCursorPos } from "../ui/utils/moveCursorPos.js";
 import { changeRpcStatus } from "./discordRpc.js";
@@ -21,6 +22,7 @@ export function setPlayStatus(type, playStatus) { //playStatus can either be a s
         moveCursorPos(0, 0)
         setTimeout(function() {
             clearBar()
+            reWriteCommandText()
             outputWritten = false
         }, 3000)
     }
