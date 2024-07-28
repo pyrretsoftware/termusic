@@ -10,18 +10,18 @@ const directory = path.join(path.dirname(fileURLToPath(import.meta.url)), '../',
 const updateNotice = `${Magenta}There is a new version of termusic available (${Green}v{v}${Magenta}). To update, run ${Green}'npm update -g termusic'${Reset}`
 
 export async function startLauncher() {
-    process.stdout.write('Checking for updates')
+    process.stdout.write('Checking for updates ')
     const updateStatus = await checkForUpdates()
     if (updateStatus) {
         console.log(` [${PastelRed}UPDATES FOUND${Reset}]`)
         console.log(updateNotice.replace('{v}', updateStatus))
     } else {
-        console.log(` [${PastelGreen}DONE${Reset}]`)
+        console.log(`[${PastelGreen}DONE${Reset}]`)
     }
-    process.stdout.write('Launching termusic in a seperate window')
+    process.stdout.write('Launching termusic in a seperate window ')
     spawn(`${getCrossPlatformString("new-terminal-window")} node ${directory} launch`, [], {shell: true})
     setTimeout(function() {
-        console.log(` [${Green}DONE${Reset}]`)
+        console.log(`[${Green}DONE${Reset}]`)
         process.exit(0)
     }, 400)
 }
