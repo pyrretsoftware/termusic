@@ -1,3 +1,4 @@
+import { setPlayStatus } from '../helpers/playStatus.js';
 import { displayPlayUi } from '../ui/uiManagers/player.js';
 
 export function launch() {
@@ -7,4 +8,7 @@ export function launch() {
         process.stdout.write(`${String.fromCharCode(0o33)}[8;h;wt`.replaceAll("h", "5").replaceAll("w", "46"))      
     }
     displayPlayUi("no song playing")
+    setPlayStatus("report", {
+        'special' : 'idling'
+    })
 }

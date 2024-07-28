@@ -100,7 +100,8 @@ export async function startProgressBarMoving(length) {
     listContinue()
 }
 const mediaComponents = {
-    "progressBar" : "{0} ────────────────────────────── {1}" //30 lines
+    "progressBar" : "{0} ────────────────────────────── {1}", //30 lines
+    "mediaComponent" : "◀◀ ▶ ▶▶"
 }
 export async function displayPlayUi(title) {
     moveCursorPos(0, startString)
@@ -108,7 +109,7 @@ export async function displayPlayUi(title) {
     moveCursorPos(0, startString +1)
     process.stdout.write(centerText(mediaComponents["progressBar"].replace("{0}", "0:00").replace("{1}", "0:00"), widthChars))
     moveCursorPos(0, startString +2)
-    process.stdout.write(centerText(getCrossPlatformString("mediaComponents"), widthChars))
+    process.stdout.write(centerText(process.argv[3] == 'debug' ? mediaComponents["mediaComponent"] : getCrossPlatformString("mediaComponents"), widthChars))
 }
 
 export async function reWriteCommandText() {

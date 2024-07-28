@@ -20,6 +20,9 @@ export async function listContinue(isSkip = false) {
         setSongTitle("no song playing")
         updateProgressBar(0)
         setSongDuration("0:00", "0:00")
+        setPlayStatus("report", {
+            'special' : 'idling'
+        })
     } else {
         setPlayStatus("important_err", "Couldn't skip song, no songs in the queue.")
     }

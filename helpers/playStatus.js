@@ -12,8 +12,12 @@ export let currentSongReport
 
 export function setPlayStatus(type, playStatus) { //playStatus can either be a string or a video object
     if (type == 'report') {
-        changeRpcStatus(playStatus["title"], playStatus["thumbnail"], playStatus["id"])
-        currentSongReport = playStatus
+        if (playStatus['special'] == 'idling') {
+            changeRpcStatus('', 'https://apis.axell.me/termusic/v1/idling-image', '', true)
+        } else {
+            changeRpcStatus(playStatus["title"], playStatus["thumbnail"], playStatus["id"])
+            currentSongReport = playStatus
+        }
     } else if (type == 'important' || type == 'important_err') {
         moveCursorPos(0, 4)
         if (playStatus.length > widthChars) {
