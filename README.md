@@ -24,3 +24,5 @@ To play songs, enter the command bar by starting to type on your keyboard. In th
 - ``queue skip`` - skips to the next song in the queue
 - ``exit`` - exits the program.
 - ``volume <volume percent>`` - sets the volume, a value from 0 to 100.
+
+To exit the command bar, press backspace until the arrow at the start is removed. When your outside the command bar, you can use the arrow keys to skip around.
