@@ -58,4 +58,7 @@ export async function processCommand(command) {
     }//else if (command.split(" ")[0] == "share") {
         
     //}
+    else {
+        setPlayStatus("important_err", "Unknown command.")
+    }
 }
