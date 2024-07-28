@@ -21,7 +21,7 @@ export async function startLauncher() {
     process.stdout.write('Launching termusic in a seperate window ')
     spawn(`${getCrossPlatformString("new-terminal-window")} node ${directory} launch`, [], {shell: true})
     setTimeout(function() {
-        console.log(`[${Green}DONE${Reset}]`)
+        console.log(`[${PastelGreen}DONE${Reset}]`)
         process.exit(0)
     }, 400)
 }
