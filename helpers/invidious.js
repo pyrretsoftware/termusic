@@ -8,7 +8,7 @@ import {config} from '../snippets/config.js'
 let currentInstance = 0
 
 export async function searchInvidious(query) {
-    const invidiousRequest = await fetch(config["invidious-instances"][currentInstance] + `/api/v1/search?q=${encodeURIComponent(query)}&type=video&duration=short`, {
+    const invidiousRequest = await fetch(config["invidious-instances"][currentInstance] + `/api/v1/search?q=${encodeURIComponent(query)}&type=video`, {
         method : "GET",
         headers : {
             "Content-type": "application/json"
