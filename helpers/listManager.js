@@ -1,6 +1,6 @@
 import { playAudioUrl } from "../snippets/player.js"
 import { getAudioUrl } from "./cobalt.js"
-import { setPlayStatus } from "./playStatus.js"
+import { currentSongReport, setPlayStatus } from "./playStatus.js"
 import { setSongDuration, setSongTitle, startProgressBarMoving, startSongDurationMoving, updateProgressBar } from "../ui/uiManagers/player.js"
 
 let list = []
@@ -22,6 +22,17 @@ export async function listContinue(isSkip = false) {
         setSongDuration("0:00", "0:00")
     } else {
         setPlayStatus("important_err", "Couldn't skip song, no songs in the queue.")
+    }
+}
+export async function restartSong() {
+    if (currentSongReport) {
+        setPlayStatus("log", "Grabbing audio...")
+        playAudioUrl((await getAudioUrl(currentSongReport["id"])))
+        startProgressBarMoving(currentSongReport["length"])
+        setSongTitle(currentSongReport["title"])
+        startSongDurationMoving(currentSongReport["length"])
+        setPlayStatus("important", `Restarted song ${currentSongReport["title"]}!`)
+        setPlayStatus("report", currentSongReport)
     }
 }
 export function addSong(song) {

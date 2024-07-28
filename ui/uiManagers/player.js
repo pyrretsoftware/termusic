@@ -3,7 +3,7 @@ import process from 'process';
 
 import { processCommand } from '../../helpers/commandProcessor.js';
 import { getCrossPlatformString } from '../../helpers/crossPlatformHelper.js';
-import { listContinue } from '../../helpers/listManager.js';
+import { listContinue, restartSong } from '../../helpers/listManager.js';
 import { killAudioProcesses } from '../../snippets/player.js';
 
 import { centerText } from '../utils/centerText.js';
@@ -138,7 +138,7 @@ process.stdin.on('keypress', async function(c, key) {
         } else {
             if (!isTypingCommand) {
                 if (key.name == "left") {
-
+                    restartSong()
                 } else if (key.name == "right") {
                     listContinue(true)
                 } else {

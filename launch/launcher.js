@@ -2,7 +2,7 @@ import { spawn } from 'child_process';
 import { getCrossPlatformString } from '../helpers/crossPlatformHelper.js'
 import { fileURLToPath } from 'url';
 import path from 'path';
-import { Green, Magenta, Reset, Yellow } from '../helpers/colorCodes.js';
+import { Green, Magenta, PastelGreen, PastelRed, Red, Reset, Yellow } from '../helpers/colorCodes.js';
 import { checkForUpdates } from '../helpers/updateChecker.js'
 
 const directory = path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'termusic.js')
@@ -13,10 +13,10 @@ export async function startLauncher() {
     process.stdout.write('Checking for updates')
     const updateStatus = await checkForUpdates()
     if (updateStatus) {
-        console.log(` [${Yellow}UPDATES FOUND${Reset}]`)
+        console.log(` [${PastelRed}UPDATES FOUND${Reset}]`)
         console.log(updateNotice.replace('{v}', updateStatus))
     } else {
-        console.log(` [${Green}DONE${Reset}]`)
+        console.log(` [${PastelGreen}DONE${Reset}]`)
     }
     process.stdout.write('Launching termusic in a seperate window')
     spawn(`${getCrossPlatformString("new-terminal-window")} node ${directory} launch`, [], {shell: true})
