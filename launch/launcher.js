@@ -8,8 +8,16 @@ import { checkForUpdates } from '../helpers/updateChecker.js'
 const directory = path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'termusic.js')
 
 const updateNotice = `${Magenta}There is a new version of termusic available (${Green}v{v}${Magenta}). To update, run ${Green}'npm update -g termusic'${Reset}`
+const nodeUpdateNotice = `${PastelRed}Your version of Node.js is not supported. Please use Node.js ${PastelGreen}v18${PastelRed} or later.${Reset}`
 
 export async function startLauncher() {
+    process.stdout.write('Checking Node.js version ')
+    if (process.version.split('.')[0] != 'v18') {
+        console.log(` [${PastelRed}INCOMPATIBLE VERSION${Reset}]`)
+    } else {
+        console.log(`[${PastelGreen}DONE${Reset}]`)
+    }
+
     process.stdout.write('Checking for updates ')
     const updateStatus = await checkForUpdates()
     if (updateStatus) {
