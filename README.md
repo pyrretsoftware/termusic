@@ -2,9 +2,6 @@
 ![image](https://raw.githubusercontent.com/pyrretsoftware/termusic/main/images/carbon.png)
 
 A minimal and lightweight terminal music player.
-> [!WARNING]  
-> Termusic is in a very early stage of development, the code is messy, the application is unstable and its overall a bad experience. I recommend waiting until a stable release before trying termusic out.
-
 ## What is termusic?
 Termusic is a utility for playing music from YouTube. It uses the invidious api, the cobalt api and ffplay to stream and play audio.
 # Getting started!
