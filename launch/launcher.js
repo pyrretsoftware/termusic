@@ -14,6 +14,7 @@ export async function startLauncher() {
     process.stdout.write('Checking Node.js version ')
     if (process.version.split('.')[0] != 'v18') {
         console.log(` [${PastelRed}INCOMPATIBLE VERSION${Reset}]`)
+        console.log(nodeUpdateNotice)
     } else {
         console.log(`[${PastelGreen}DONE${Reset}]`)
     }
