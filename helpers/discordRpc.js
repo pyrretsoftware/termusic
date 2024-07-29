@@ -1,9 +1,29 @@
-import ep from 'easy-presence'
+import _ep from 'easy-presence'
+import { setPlayStatus } from './playStatus.js';
 
-const _ep = new ep.EasyPresence("1263923824613920861")
+let ep
+let connected = false
+
+if (process.argv[2] == 'launch') {
+    ep = new _ep.EasyPresence("1263923824613920861")
+
+    ep.on('connected', () => {
+        connected = true
+        setPlayStatus("report", {
+            'special' : 'idling'
+        })
+    })
+    ep.on('disconnected', () => connected = false)
+}
 
 export function changeRpcStatus(title, thumbnail, id, idling = false) {
-    _ep.setActivity({
+    if (!connected) {
+        setPlayStatus('important_err', 'Could not connect to Discord.')
+    } else {
+        setPlayStatus('important', 'Connected to Discord.')
+    }
+
+    ep.setActivity({
         details: (idling == false ? ("Listening to " + title) : 'Idling'),
         assets: {
             large_image: thumbnail + '?cacheStop=' + Math.floor(Math.random() * 500)

@@ -8,7 +8,4 @@ export function launch() {
         process.stdout.write(`${String.fromCharCode(0o33)}[8;h;wt`.replaceAll("h", "5").replaceAll("w", "46"))      
     }
     displayPlayUi("no song playing")
-    setPlayStatus("report", {
-        'special' : 'idling'
-    })
 }
