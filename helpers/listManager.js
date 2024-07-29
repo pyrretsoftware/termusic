@@ -4,9 +4,12 @@ import { currentSongReport, setPlayStatus } from "./playStatus.js"
 import { setSongDuration, setSongTitle, startProgressBarMoving, startSongDurationMoving, updateProgressBar } from "../ui/uiManagers/player.js"
 
 let list = []
+let looping = false
 
 export async function listContinue(isSkip = false) {
-    if (list[0]) {
+    if (looping) {
+        restartSong()
+    } else if (list[0]) {
         setPlayStatus("log", "Grabbing audio...")
         playAudioUrl((await getAudioUrl(list[0]["id"])))
         startProgressBarMoving(list[0]["length"])
@@ -38,6 +41,16 @@ export async function restartSong() {
         setPlayStatus("report", currentSongReport)
     }
 }
+
+export function toggleLooping(value) {
+    if (value == looping) {
+        setPlayStatus("important_err", `Looping is already ${looping ? 'enabled' : 'disabled'}.`)
+        return
+    }
+    looping = value
+    setPlayStatus("important_err", `${looping ? 'Enabled' : 'Disabled'} looping!`)
+}
+
 export function addSong(song) {
     list.push(song);
 }
