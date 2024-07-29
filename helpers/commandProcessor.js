@@ -71,6 +71,7 @@ export async function processCommand(command) {
         case 'theme':
             loadThemeObject(command.replace('theme ', ''))
             performFullRealTimeReRender()
+            setPlayStatus('important', 'Applied theme!')
             break;
         default:
             setPlayStatus("important_err", "Unknown command.")

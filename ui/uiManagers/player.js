@@ -37,6 +37,7 @@ export async function updateProgressBar(steps) { //steps/30
     
     if (isTypingCommand) {
         moveCursorPos(command.length + 2, commandString)
+        process.stdout.write(getThemeEscapeCode('commandBar'))
     } else {
         moveCursorPos(0, 0)
     }
@@ -52,6 +53,7 @@ export function setSongDuration(dur1, dur2) {
 
     if (isTypingCommand) {
         moveCursorPos(command.length + 2, commandString)
+        process.stdout.write(getThemeEscapeCode('commandBar'))
     } else {
         moveCursorPos(0, 0)
     }
@@ -122,7 +124,7 @@ export async function displayPlayUi(title) {
 export async function reWriteCommandText() {
     if (isTypingCommand) {
         moveCursorPos(0, commandString)
-        process.stdout.write(" >" + command)
+        process.stdout.write(getThemeEscapeCode('commandBar') + " >" + command + Reset)
     }
 
 }
@@ -169,7 +171,7 @@ process.stdin.on('keypress', async function(c, key) {
                 } else {
                     isTypingCommand = true
                     moveCursorPos(1, commandString)
-                    process.stdout.write('>')
+                    process.stdout.write(getThemeEscapeCode('commandBar') + '>')
                 }
             }
 
