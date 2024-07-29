@@ -4,5 +4,6 @@
     ],
     "cobalt-instances" : [
         "https://api.cobalt.tools/api/json"
-    ]
+    ],
+    "idlingImageStyle" : "eastern-europe-night"
 }
