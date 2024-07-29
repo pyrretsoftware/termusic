@@ -12,6 +12,7 @@ if (process.argv[2] == 'launch') {
         setPlayStatus("report", {
             'special' : 'idling'
         })
+        setPlayStatus('important', 'Connected to Discord.')
     })
     ep.on('disconnected', () => connected = false)
 }
@@ -19,8 +20,6 @@ if (process.argv[2] == 'launch') {
 export function changeRpcStatus(title, thumbnail, id, idling = false) {
     if (!connected) {
         setPlayStatus('important_err', 'Could not connect to Discord.')
-    } else {
-        setPlayStatus('important', 'Connected to Discord.')
     }
 
     ep.setActivity({

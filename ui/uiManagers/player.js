@@ -9,7 +9,9 @@ import { killAudioProcesses } from '../../snippets/player.js';
 import { centerText } from '../utils/centerText.js';
 import { moveCursorPos } from '../utils/moveCursorPos.js';
 import { clearBar } from '../utils/clearBar.js';
-import { outputWritten, setoutputWritten } from '../../helpers/playStatus.js';
+import { currentSongReport, outputWritten, setoutputWritten } from '../../helpers/playStatus.js';
+import { Reset } from '../../helpers/colorCodes.js';
+import { getThemeEscapeCode } from '../themes.js';
 
 readline.emitKeypressEvents(process.stdin);
 if (process.stdin.isTTY) {
@@ -31,7 +33,7 @@ let isTypingCommand = false
 export async function updateProgressBar(steps) { //steps/30
     moveCursorPos(38, startString +1)
     process.stdout.write('\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b')
-    process.stdout.write('\x1b[1m' + '──────────────────────────────'.slice(0, steps) + "\x1b[0m\x1b[2m" + '──────────────────────────────'.slice(steps) + '\x1b[0m')
+    process.stdout.write(`\x1b[1m${getThemeEscapeCode('progressBar')}` + `──────────────────────────────`.slice(0, steps) + `${Reset}\x1b[2m${getThemeEscapeCode('progressBar')}` + '──────────────────────────────'.slice(steps) + '\x1b[0m')
     
     if (isTypingCommand) {
         moveCursorPos(command.length + 2, commandString)
@@ -42,11 +44,11 @@ export async function updateProgressBar(steps) { //steps/30
 export function setSongDuration(dur1, dur2) {
     moveCursorPos(7, startString + 1)
     process.stdout.write('\b\b\b\b')
-    process.stdout.write(dur1)
+    process.stdout.write(getThemeEscapeCode('songTitle') + dur1)
 
     moveCursorPos(43, startString + 1)
     process.stdout.write('\b\b\b\b')
-    process.stdout.write(dur2)
+    process.stdout.write(dur2 + Reset)
 
     if (isTypingCommand) {
         moveCursorPos(command.length + 2, commandString)
@@ -56,14 +58,14 @@ export function setSongDuration(dur1, dur2) {
 }
 function changePlayState(state) {
     moveCursorPos(23, startString + 2)
-    process.stdout.write('\b' + state ? '▶️' : '⏸️')
+    process.stdout.write('\b' + getThemeEscapeCode('mediaComponents') + (state ? '▶️' : '⏸️') + Reset)
 }
 export function setSongTitle(title) {
     moveCursorPos(widthChars, startString)
     for (let i = 0; i < widthChars; i++) {
         process.stdout.write("\b \b")
     }
-    process.stdout.write("\x1b[1m" +centerText(title, widthChars) + "\x1b[0m")
+    process.stdout.write(`\x1b[1m${getThemeEscapeCode('songTitle')}` + centerText(title, widthChars) + Reset)
 
     if (isTypingCommand) {
         moveCursorPos(command.length + 2, commandString)
@@ -72,10 +74,13 @@ export function setSongTitle(title) {
     }
 }
 let currentSongIndex2 = 0; //this is a horrible way of doing this..
+
+let publicForIndexSongDuration = 0
 export async function startSongDurationMoving(songlength) {
     currentSongIndex2++
     let  _currentSongIndex = currentSongIndex2
     for (let i = 0; i < songlength +1; i++) {
+        publicForIndexSongDuration  = i
         if (currentSongIndex2 != _currentSongIndex) {
             return
         }
@@ -85,10 +90,13 @@ export async function startSongDurationMoving(songlength) {
     setSongDuration("0:00", "0:00")
 }
 let currentSongIndex = 0; //this is a horrible way of doing this..
+
+let publicForIndex = 0 //another horrible way of doing this
 export async function startProgressBarMoving(length) {
     currentSongIndex++
     let  _currentSongIndex = currentSongIndex
     for (let i = 0; i < 30; i++) { 
+        publicForIndex = i
         if (currentSongIndex != _currentSongIndex) {
             return
         }
@@ -104,12 +112,11 @@ const mediaComponents = {
     "mediaComponent" : "◀◀ ▶ ▶▶"
 }
 export async function displayPlayUi(title) {
-    moveCursorPos(0, startString)
-    process.stdout.write("\x1b[1m" +centerText(title, widthChars) + "\x1b[0m")
-    moveCursorPos(0, startString +1)
-    process.stdout.write(centerText(mediaComponents["progressBar"].replace("{0}", "0:00").replace("{1}", "0:00"), widthChars))
+    setSongTitle(title)
+    setSongDuration('0:00', '0:00')
+    updateProgressBar(0)
     moveCursorPos(0, startString +2)
-    process.stdout.write(centerText(process.argv[3] == 'debug' ? mediaComponents["mediaComponent"] : getCrossPlatformString("mediaComponents"), widthChars))
+    process.stdout.write(getThemeEscapeCode('mediaComponents') + centerText(process.argv[3] == 'debug' ? mediaComponents["mediaComponent"] : getCrossPlatformString("mediaComponents"), widthChars) + Reset)
 }
 
 export async function reWriteCommandText() {
@@ -121,6 +128,23 @@ export async function reWriteCommandText() {
 }
 
 //#endregion
+
+//#region themes
+export async function performFullRealTimeReRender() {
+    let songInfo = {
+        'title' : 'no song playing',
+        'length' : 0
+    }
+    if (currentSongReport) {
+        songInfo = currentSongReport
+    }
+    setSongTitle(songInfo['title'])
+    setSongDuration((publicForIndexSongDuration - (publicForIndexSongDuration % 60)) / 60 + ":" + (publicForIndexSongDuration % 60).toString().padStart(2, '0'), (songInfo['length'] - (songInfo['length'] % 60)) / 60 + ":" + (songInfo['length'] % 60).toString().padStart(2, '0'))
+    updateProgressBar(publicForIndex)
+    moveCursorPos(0, startString +2)
+    process.stdout.write(getThemeEscapeCode('mediaComponents') + centerText(process.argv[3] == 'debug' ? mediaComponents["mediaComponent"] : getCrossPlatformString("mediaComponents"), widthChars) + Reset)
+}
+
 //#region userInput
 process.stdin.on('keypress', async function(c, key) {
     if (process.argv[2] == "launch") {

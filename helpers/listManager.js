@@ -17,7 +17,6 @@ export async function listContinue(isSkip = false) {
         startSongDurationMoving(list[0]["length"])
         setPlayStatus("important", `Now playing ${list[0]["title"]}!`)
         setPlayStatus("report", list[0])
-
         list.shift()
     } else if (!isSkip) {
         setSongTitle("no song playing")

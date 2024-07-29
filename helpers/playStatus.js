@@ -1,16 +1,15 @@
 import { config } from "../snippets/config.js";
+import { getThemeEscapeCode } from "../ui/themes.js";
 import { reWriteCommandText } from "../ui/uiManagers/player.js";
 import { clearBar } from "../ui/utils/clearBar.js";
 import { moveCursorPos } from "../ui/utils/moveCursorPos.js";
-import { Blue, Green, PastelGreen, Red, PastelRed } from "./colorCodes.js";
+import { PastelGreen, PastelRed } from "./colorCodes.js";
 import { changeRpcStatus } from "./discordRpc.js";
-
-
-const widthChars = 46
 
 export let outputWritten = false;
 export let currentSongReport 
 
+const widthChars = 46
 const idlingImageStyle = config['idlingImageStyle']
 
 export function setPlayStatus(type, playStatus) { //playStatus can either be a string or a video object
@@ -27,7 +26,7 @@ export function setPlayStatus(type, playStatus) { //playStatus can either be a s
             playStatus = playStatus.substring(0, widthChars - 3)
             playStatus = playStatus + '...'
         }
-        process.stdout.write((type == 'important' ? PastelGreen : PastelRed)  + playStatus + '\x1b[0m')
+        process.stdout.write((type == 'important' ? getThemeEscapeCode('commandSuccess') : getThemeEscapeCode('commandError'))  + playStatus + '\x1b[0m')
         outputWritten = true
         moveCursorPos(0, 0)
         setTimeout(function() {

@@ -3,12 +3,13 @@ termusic/helpers/commandprocessor.js
 
 Written by axell (mail@axell.me) for pyrret software.
 */
-import {getAudioUrl} from './cobalt.js'
+import { getAudioUrl } from './cobalt.js'
 import { searchInvidious } from './invidious.js';
-import {changeAudioVolume, playAudioUrl} from '../snippets/player.js'
+import { changeAudioVolume, playAudioUrl} from '../snippets/player.js'
 import { setPlayStatus } from './playStatus.js';
-import {setSongTitle, startProgressBarMoving, startSongDurationMoving } from '../ui/uiManagers/player.js';
+import { performFullRealTimeReRender, setSongTitle, startProgressBarMoving, startSongDurationMoving } from '../ui/uiManagers/player.js';
 import { addSong, clearList, listContinue, removeLastSong, toggleLooping } from './listManager.js';
+import { loadThemeObject } from '../ui/themes.js';
 
 
 
@@ -66,6 +67,10 @@ export async function processCommand(command) {
             break;
         case 'noloop':
             toggleLooping(false)
+            break;
+        case 'theme':
+            loadThemeObject(command.replace('theme ', ''))
+            performFullRealTimeReRender()
             break;
         default:
             setPlayStatus("important_err", "Unknown command.")
