@@ -48,7 +48,7 @@ export function toggleLooping(value) {
         return
     }
     looping = value
-    setPlayStatus("important_err", `${looping ? 'Enabled' : 'Disabled'} looping!`)
+    setPlayStatus("important", `${looping ? 'Enabled' : 'Disabled'} looping!`)
 }
 
 export function addSong(song) {

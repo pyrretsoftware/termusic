@@ -63,9 +63,12 @@ export async function processCommand(command) {
         //case 'share':
         case 'loop':
             toggleLooping(true)
+            break;
         case 'noloop':
             toggleLooping(false)
+            break;
         default:
             setPlayStatus("important_err", "Unknown command.")
+            break;
     }
 }
