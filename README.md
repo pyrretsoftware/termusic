@@ -26,5 +26,6 @@ To play songs, enter the command bar by starting to type on your keyboard. In th
 - ``volume <volume percent>`` - sets the volume, a value from 0 to 100.
 - ``loop`` - enables looping, ignoring the queue and looping the current song.
 - ``noloop`` - disables looping.
+- ``theme <theme>`` - applies a theme given its name. You can view your themes in the ./ui/themes folder.
 
 To exit the command bar, press backspace until the arrow at the start is removed. When your outside the command bar, you can use the arrow keys to skip around.
