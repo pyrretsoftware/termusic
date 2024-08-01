@@ -27,7 +27,7 @@ const defualtCommandColors = {
 }
 
 export function getThemeEscapeCode(themeColorType) {
-    if (themeObject[themeColorType]) {
+    if (themeObject && themeObject[themeColorType]) {
         return RGBToEscapeCode(themeObject[themeColorType])
     } else if (defualtCommandColors[themeColorType]) {
         return RGBToEscapeCode(defualtCommandColors[themeColorType])
