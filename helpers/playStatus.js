@@ -3,7 +3,6 @@ import { getThemeEscapeCode } from "../ui/themes.js";
 import { reWriteCommandText } from "../ui/uiManagers/player.js";
 import { clearBar } from "../ui/utils/clearBar.js";
 import { moveCursorPos } from "../ui/utils/moveCursorPos.js";
-import { PastelGreen, PastelRed } from "./colorCodes.js";
 import { changeRpcStatus } from "./discordRpc.js";
 
 export let outputWritten = false;

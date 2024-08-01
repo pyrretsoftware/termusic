@@ -23,6 +23,7 @@
   "homepage": "https://github.com/pyrretsoftware/termusic#readme",
   "type": "module",
   "dependencies": {
+    "clipboardy": "^4.0.0",
     "easy-presence": "github:axellse/easy-presence"
   }
 }

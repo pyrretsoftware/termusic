@@ -6,11 +6,11 @@ Written by axell (mail@axell.me) for pyrret software.
 import { getAudioUrl } from './cobalt.js'
 import { searchInvidious } from './invidious.js';
 import { changeAudioVolume, playAudioUrl} from '../snippets/player.js'
-import { setPlayStatus } from './playStatus.js';
+import { currentSongReport, setPlayStatus } from './playStatus.js';
 import { performFullRealTimeReRender, setSongTitle, startProgressBarMoving, startSongDurationMoving } from '../ui/uiManagers/player.js';
 import { addSong, clearList, listContinue, removeLastSong, toggleLooping } from './listManager.js';
 import { loadThemeObject } from '../ui/themes.js';
-
+import clipboard from 'clipboardy';
 
 
 export async function processCommand(command) {
@@ -61,7 +61,9 @@ export async function processCommand(command) {
         case 'volume':
             changeAudioVolume(command.split(" ")[1])
             break;
-        //case 'share':
+        case 'share':
+            clipboard.write('https://termusic.axell.me?s=' + currentSongReport['id'])
+            break;
         case 'loop':
             toggleLooping(true)
             break;
