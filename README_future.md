@@ -1,23 +1,18 @@
-# termusic
-![image](https://raw.githubusercontent.com/pyrretsoftware/termusic/main/images/carbon.png)
+# <img src="https://github.com/pyrretsoftware/termusic/raw/main/images/icon.png" width="32"/> termusic
 
-A minimal and lightweight terminal music player.
-
-## What is termusic?
-Termusic is a utility for playing music from YouTube. It uses the invidious api, the cobalt api and ffplay to stream and play audio.
+A minimal and lightweight terminal music player. Uses the invidious api, the cobalt api and ffplay to stream and play audio.
 # Getting started!
-> [!IMPORTANT]  
-> You need to install ffmpeg in order to use termusic.
+First, make sure you have node.js version **18** or later aswell as [ffmpeg](https://ffmpeg.org) installed on your system.
 
-Simply install termusic via npm by running
+After that, you can install termusic via npm by running the following command:
 
 ```
 npm i -g termusic
 ```
-# Commands
-After installing, enter ``termusic`` in your terminal. It will open up a new window.
+# Using termusic
+After installing, enter ``termusic`` in your terminal. It will open up a new terminal window.
 
-To play songs, enter the command bar by starting to type on your keyboard. In the command bar you can type different commands:
+Start typing on your keyboard to enter a command. Here's a list of commands you can run:
 - ``play <song name>`` - searches up a song and starts playing it.
 - ``queue add <song name>`` - searches up a song and adds it to the queue
 - ``queue remove`` - removes the last song from the queue
@@ -25,3 +20,10 @@ To play songs, enter the command bar by starting to type on your keyboard. In th
 - ``queue skip`` - skips to the next song in the queue
 - ``exit`` - exits the program.
 - ``volume <volume percent>`` - sets the volume, a value from 0 to 100.
+- ``loop`` - enables looping, ignoring the queue and looping the current song.
+- ``noloop`` - disables looping.
+- ``theme <theme>`` - applies a theme given its name. You can view your themes in the ./ui/themes folder.
+- ``share`` - copies a sharable link to the song your listening to.
+
+
+You can also use the right and left arrow keys to restart or skip songs.

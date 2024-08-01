@@ -62,7 +62,12 @@ export async function processCommand(command) {
             changeAudioVolume(command.split(" ")[1])
             break;
         case 'share':
-            clipboard.write('https://termusic.axell.me?s=' + currentSongReport['id'])
+            if (currentSongReport) {
+                clipboard.write('https://termusic.axell.me?s=' + currentSongReport['id'])
+                setPlayStatus('important', 'Copied song link to clipboard!')
+            } else {
+                setPlayStatus('important_err', 'No song playing.')
+            }
             break;
         case 'loop':
             toggleLooping(true)

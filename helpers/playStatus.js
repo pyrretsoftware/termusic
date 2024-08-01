@@ -15,6 +15,7 @@ export function setPlayStatus(type, playStatus) { //playStatus can either be a s
     if (type == 'report') {
         if (playStatus['special'] == 'idling') {
             changeRpcStatus('', 'https://apis.axell.me/termusic/v1/idling-images/from-style/' + idlingImageStyle, '', true)
+            currentSongReport = []
         } else {
             changeRpcStatus(playStatus["title"], playStatus["thumbnail"], playStatus["id"])
             currentSongReport = playStatus

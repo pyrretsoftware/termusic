@@ -20,8 +20,5 @@ Start typing on your keyboard to enter a command. Here's a list of commands you 
 - ``queue skip`` - skips to the next song in the queue
 - ``exit`` - exits the program.
 - ``volume <volume percent>`` - sets the volume, a value from 0 to 100.
-- ``loop`` - enables looping, ignoring the queue and looping the current song.
-- ``noloop`` - disables looping.
-- ``theme <theme>`` - applies a theme given its name. You can view your themes in the ./ui/themes folder.
 
 You can also use the right and left arrow keys to restart or skip songs.
