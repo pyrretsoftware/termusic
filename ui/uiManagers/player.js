@@ -81,7 +81,7 @@ let publicForIndexSongDuration = 0
 export async function startSongDurationMoving(songlength) {
     currentSongIndex2++
     let  _currentSongIndex = currentSongIndex2
-    for (let i = 0; i < songlength +1; i++) {
+    for (let i = 0; i < songlength; i++) {
         publicForIndexSongDuration  = i
         if (currentSongIndex2 != _currentSongIndex) {
             return
