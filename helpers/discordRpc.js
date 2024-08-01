@@ -28,11 +28,11 @@ export function changeRpcStatus(title, thumbnail, id, idling = false) {
             large_image: thumbnail + '?cacheStop=' + Math.floor(Math.random() * 500)
         },
         timestamps: { start: new Date() },
-        /*buttons : (idling == true ? [] : [
+        buttons : (idling == true ? [] : [
             {
                 label: "View song",
                 url: "https://termusic.axell.me/?s=" + id
             }
-        ]),*/
+        ]),
     })
 }
