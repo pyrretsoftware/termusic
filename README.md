@@ -1,6 +1,6 @@
 # <img src="https://github.com/pyrretsoftware/termusic/raw/main/images/icon.png" width="32"/> termusic
 
-<img src="https://github.com/pyrretsoftware/termusic/raw/main/images/carbon" width="120"/>
+<img src="https://github.com/pyrretsoftware/termusic/raw/main/images/carbon.png" width="120"/>
 
 A minimal and lightweight terminal music player. Uses the invidious api, the cobalt api and ffplay to stream and play audio.
 # Getting started!
