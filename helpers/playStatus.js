@@ -7,6 +7,7 @@ import { changeRpcStatus } from "./discordRpc.js";
 
 export let outputWritten = false;
 export let currentSongReport 
+export let currentSongPlayingReport
 
 const widthChars = 46
 const idlingImageStyle = config['idlingImageStyle']
@@ -15,10 +16,11 @@ export function setPlayStatus(type, playStatus) { //playStatus can either be a s
     if (type == 'report') {
         if (playStatus['special'] == 'idling') {
             changeRpcStatus('', 'https://apis.axell.me/termusic/v1/idling-images/from-style/' + idlingImageStyle, '', true)
-            currentSongReport = []
+            currentSongPlayingReport = []
         } else {
             changeRpcStatus(playStatus["title"], playStatus["thumbnail"], playStatus["id"])
             currentSongReport = playStatus
+            currentSongPlayingReport = playStatus
         }
     } else if (type == 'important' || type == 'important_err') {
         moveCursorPos(0, 4)
