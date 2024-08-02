@@ -20,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/pyrretsoftware/termusic/issues"
   },
-  "homepage": "https://github.com/pyrretsoftware/termusic#readme",
+  "homepage": "https://termusic.axell.me",
   "type": "module",
   "dependencies": {
     "clipboardy": "^4.0.0",
