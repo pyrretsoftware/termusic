@@ -20,10 +20,6 @@ if (process.argv[2] == 'launch') {
 }
 
 export function changeRpcStatus(title, thumbnail, id, idling = false) {
-    if (!connected) {
-        setPlayStatus('important_err', 'Could not connect to Discord.')
-    }
-
     let activity = {
         details: (idling == false ? ("Listening to " + title) : 'Idling'),
         assets: {
