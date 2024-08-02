@@ -5,5 +5,6 @@
     "cobalt-instances": [
         "https://api.cobalt.tools/api/json"
     ],
-    "idlingImageStyle": "nostalgia-1"
+    "idlingImageStyle": "nostalgia-1",
+    "alwaysFullReload" : false
 }

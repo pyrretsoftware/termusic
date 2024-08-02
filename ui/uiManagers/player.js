@@ -18,6 +18,8 @@ if (process.stdin.isTTY) {
     process.stdin.setRawMode(true);   
 }
 process.stdout.on('resize', () => {
+    console.clear()
+    performFullRealTimeReRender()
     process.stdout.write(`${String.fromCharCode(0o33)}[8;h;wt`.replaceAll("h", "5").replaceAll("w", "46"))      
 }); 
 

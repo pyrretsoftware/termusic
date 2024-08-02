@@ -80,6 +80,14 @@ export async function processCommand(command) {
             performFullRealTimeReRender()
             setPlayStatus('important', 'Applied theme!')
             break;
+        case 'reloadui':
+            console.clear()
+            performFullRealTimeReRender()
+            if (process.argv[3] != "debug") {
+                process.stdout.write(`${String.fromCharCode(0o33)}[8;h;wt`.replaceAll("h", "5").replaceAll("w", "46"))
+            }
+            setPlayStatus('important', 'Reloaded ui!')
+            break;
         default:
             setPlayStatus("important_err", "Unknown command.")
             break;
