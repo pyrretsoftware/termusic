@@ -182,11 +182,17 @@ process.stdin.on('keypress', async function(c, key) {
                 process.stdout.write(" ")                
             } else if (key.sequence != "\b") {
                 if (RegExp(/^\p{L}/,'u').test(key.sequence) || parseInt(key.sequence) || key.sequence === "0") {
-                    command += key.sequence
-                    process.stdout.write(key.sequence)
+                    if (command.length < widthChars - 3) {
+                        command += key.sequence
+                        process.stdout.write(key.sequence)
+                    } else {
+                        command += key.sequence
+                    }
                 }                
             } else if (command != "" && key.sequence == "\b") {
-                process.stdout.write("\b \b")
+                if (command.length < widthChars - 3) {
+                    process.stdout.write("\b \b")
+                }
                 command = command.substring(0, command.length -1)
             } else if (command == "") {
                 clearBar()
