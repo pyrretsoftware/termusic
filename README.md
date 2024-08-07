@@ -1,6 +1,6 @@
 # <img src="https://github.com/pyrretsoftware/termusic/raw/main/images/icon.png" width="32"/> termusic
 
-A minimal and lightweight terminal music player. Uses the invidious api, the cobalt api and ffplay to stream and play audio.
+A minimal and lightweight terminal music player. Uses the invidious api, the cobalt api and ffplay to stream and play audio from youtube.
 # Getting started!
 First, make sure you have node.js version **18** or later aswell as [ffmpeg](https://ffmpeg.org) installed on your system.
 
