@@ -15,4 +15,3 @@ export async function checkForUpdates() {
     }
     return false
 }
-const notice = `There is a new termusic update available`
