@@ -2,7 +2,7 @@
 
 A minimal and lightweight terminal music player. Uses the invidious api, the cobalt api and ffplay to stream and play audio from youtube.
 # Getting started!
-First, make sure you have node.js version **18** or later aswell as [ffmpeg](https://ffmpeg.org) installed on your system.
+First, make sure you have node.js version **18** or later, [npm](https://npmjs.org), aswell as [ffmpeg](https://ffmpeg.org) installed on your system.
 
 After that, you can install termusic via npm by running the following command:
 
@@ -19,7 +19,7 @@ Start typing on your keyboard to enter a command. Here's a list of commands you 
 - ``queue clear`` - clears the queue
 - ``queue skip`` - skips to the next song in the queue
 - ``exit`` - exits the program.
-- ``volume <volume percent>`` - sets the volume, a value from 0 to 100.
+- ``volume <volume percent>`` - sets the volume, a value from 0 to 100. Note that any volume changes you have made will not be applied to the currently playing song.
 - ``loop`` - enables looping, ignoring the queue and looping the current song.
 - ``noloop`` - disables looping.
 - ``theme <theme>`` - applies a theme given its name. You can view your themes in the ./ui/themes folder.
