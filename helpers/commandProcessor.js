@@ -14,8 +14,6 @@ import clipboard from 'clipboardy';
 
 
 export async function processCommand(command) {
-    setPlayStatus("log", "Starting command processor, processing "+ command.replace("play ", ""))
-
     switch (command.split(" ")[0]) {
         case 'play' :
             setPlayStatus("log", "Processing " + command.replace("play ", ""))
