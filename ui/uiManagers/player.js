@@ -1,3 +1,4 @@
+//this needs refactoring, mainly better naming.
 import readline from 'readline';
 import process from 'process';
 
