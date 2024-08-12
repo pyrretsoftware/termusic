@@ -15,7 +15,7 @@ const idlingImageStyle = config['idlingImageStyle']
 export function setPlayStatus(type, playStatus) { //playStatus can either be a string or a video object
     if (type == 'report') {
         if (playStatus['special'] == 'idling') {
-            changeRpcStatus('', 'https://apis.axell.me/termusic/v1/idling-images/from-style/' + idlingImageStyle, '', true)
+            changeRpcStatus(null, 'https://apis.axell.me/termusic/v1/idling-images/from-style/' + idlingImageStyle, null, true)
             currentSongPlayingReport = []
         } else {
             changeRpcStatus(playStatus["title"], playStatus["thumbnail"], playStatus["id"])

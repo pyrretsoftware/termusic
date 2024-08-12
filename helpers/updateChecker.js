@@ -1,5 +1,4 @@
 import fs from 'fs';
-import { Green, Reset } from './colorCodes.js'
 import path from 'path';
 import { fileURLToPath } from 'url';
 
