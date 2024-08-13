@@ -9,14 +9,16 @@ import { changeAudioVolume, playAudioUrl} from '../snippets/player.js'
 import { currentSongPlayingReport, setPlayStatus } from './playStatus.js';
 import { performFullRealTimeReRender, setSongTitle, startProgressBarMoving, startSongDurationMoving } from '../ui/uiManagers/player.js';
 import { addSong, clearList, listContinue, removeLastSong, toggleLooping } from './listManager.js';
+import { getCrossPlatformString } from './crossPlatformHelper.js';
 import { loadThemeObject } from '../ui/themes.js';
 import clipboard from 'clipboardy';
+import { spawn } from 'child_process'
+import path from 'path';
+import { fileURLToPath } from 'url';
 
-
+const directory = path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'termusic.js')
 
 export async function processCommand(command) {
-    setPlayStatus("log", "Starting command processor, processing "+ command.replace("play ", ""))
-
     switch (command.split(" ")[0]) {
         case 'play' :
             setPlayStatus("log", "Searching...")
@@ -65,6 +67,9 @@ export async function processCommand(command) {
         case 'exit': 
             console.clear()
             process.kill(process.pid, 'SIGTERM');
+        case 'about':
+            spawn(`${getCrossPlatformString("new-terminal-window")} node ${directory} about`, [], {shell: true})
+            break;
         case 'volume':
             changeAudioVolume(command.split(" ")[1])
             break;

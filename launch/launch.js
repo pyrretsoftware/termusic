@@ -2,6 +2,8 @@ import { setPlayStatus } from '../helpers/playStatus.js';
 import { displayPlayUi } from '../ui/uiManagers/player.js';
 
 export function launch() {
+    process.stdout.write(String.fromCharCode(27) + "]0;termusic" + String.fromCharCode(7));
+
     setInterval(function() {}, 1000 * 60 * 60);
     console.clear()
     if (process.argv[3] != "debug") {

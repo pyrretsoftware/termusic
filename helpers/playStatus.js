@@ -42,7 +42,7 @@ export function setPlayStatus(type, playStatus) { //playStatus can either be a s
         outputWritten = true
         moveCursorPos(0, 0)
         setTimeout(function() {
-            if (outputWritten) {
+            if (outputWritten && type != 'log') {
                 clearBar()
                 reWriteCommandText()
                 outputWritten = false
