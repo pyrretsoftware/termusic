@@ -28,7 +28,7 @@ export async function processCommand(command) {
             }
             
             setPlayStatus("log", "Grabbing audio...")
-            playAudioUrl((await getAudioUrl(searchResult["id"])))
+            await playAudioUrl((await getAudioUrl(searchResult["id"])))
             setPlayStatus("important", `Now playing ${searchResult["title"]}!`)
             startProgressBarMoving(searchResult["length"])
             setSongTitle(searchResult["title"])

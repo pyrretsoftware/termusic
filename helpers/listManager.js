@@ -11,7 +11,7 @@ export async function listContinue(isSkip = false) {
         restartSong()
     } else if (list[0]) {
         setPlayStatus("log", "Grabbing audio...")
-        playAudioUrl((await getAudioUrl(list[0]["id"])))
+        await playAudioUrl((await getAudioUrl(list[0]["id"])))
         startProgressBarMoving(list[0]["length"])
         setSongTitle(list[0]["title"])
         startSongDurationMoving(list[0]["length"])
@@ -32,7 +32,7 @@ export async function listContinue(isSkip = false) {
 export async function restartSong() {
     if (currentSongReport) {
         setPlayStatus("log", "Grabbing audio...")
-        playAudioUrl((await getAudioUrl(currentSongReport["id"])))
+        await playAudioUrl((await getAudioUrl(currentSongReport["id"])))
         startProgressBarMoving(currentSongReport["length"])
         setSongTitle(currentSongReport["title"])
         startSongDurationMoving(currentSongReport["length"])
