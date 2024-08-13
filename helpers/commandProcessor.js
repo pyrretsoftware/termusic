@@ -13,38 +13,45 @@ import { loadThemeObject } from '../ui/themes.js';
 import clipboard from 'clipboardy';
 
 
+
 export async function processCommand(command) {
     setPlayStatus("log", "Starting command processor, processing "+ command.replace("play ", ""))
 
     switch (command.split(" ")[0]) {
         case 'play' :
-            setPlayStatus("log", "Processing " + command.replace("play ", ""))
             setPlayStatus("log", "Searching...")
             let searchResult = await searchInvidious(command.replace("play ", ""))
             setPlayStatus("log", "Searching complete.")
+
             while (!searchResult) {
                 setPlayStatus("log", "Retrying search.")
                 searchResult = await searchInvidious(command.replace("play ", ""))
             }
             
             setPlayStatus("log", "Grabbing audio...")
-            await playAudioUrl((await getAudioUrl(searchResult["id"])))
+            const audio = await getAudioUrl(searchResult["id"])
+            setPlayStatus("log", "Waiting for ffmpeg...")
+            await playAudioUrl(audio)
+
             setPlayStatus("important", `Now playing ${searchResult["title"]}!`)
+
             startProgressBarMoving(searchResult["length"])
-            setSongTitle(searchResult["title"])
             startSongDurationMoving(searchResult["length"])
+
+            setSongTitle(searchResult["title"])
             setPlayStatus("report", searchResult);
             break;
         case 'queue' :
             if (command.split(" ")[1] == "add")  {
-                setPlayStatus("log", "Processing " + command.replace("queue add", ""))
                 setPlayStatus("log", "Searching...")
-                let searchResult = await searchInvidious(command.replace("queue add", ""))
+                let searchResult = await searchInvidious(command.replace("play ", ""))
                 setPlayStatus("log", "Searching complete.")
+    
                 while (!searchResult) {
                     setPlayStatus("log", "Retrying search.")
-                    searchResult = await searchInvidious(command.replace("queue add", ""))
+                    searchResult = await searchInvidious(command.replace("play ", ""))
                 }
+
                 addSong(searchResult)
                 setPlayStatus("important", `Added ${searchResult["title"]} to the queue!`)
             } else if (command.split(" ")[1] == "remove") {

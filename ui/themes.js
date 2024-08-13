@@ -23,7 +23,8 @@ export function loadThemeObject(themeName) {
 
 const defualtCommandColors = {
     'commandSuccess' : 'rgb(13, 188, 121)',
-    'commandError' : 'rgb(203, 89, 89)'
+    'commandError' : 'rgb(203, 89, 89)',
+    'log' : 'rgb(203, 156, 242)'
 }
 
 export function getThemeEscapeCode(themeColorType) {

@@ -22,31 +22,23 @@ export function setPlayStatus(type, playStatus) { //playStatus can either be a s
             currentSongReport = playStatus
             currentSongPlayingReport = playStatus
         }
-    } else if (type == 'important' || type == 'important_err') {
+    } else if (type == 'important' || type == 'important_err' || type == 'log') {
         moveCursorPos(0, 4)
         if (playStatus.length > widthChars) {
             playStatus = playStatus.substring(0, widthChars - 3)
             playStatus = playStatus + '...'
         }
         clearBar()
-        process.stdout.write((type == 'important' ? getThemeEscapeCode('commandSuccess') : getThemeEscapeCode('commandError'))  + playStatus + '\x1b[0m')
-        outputWritten = true
-        moveCursorPos(0, 0)
-        setTimeout(function() {
-            if (outputWritten) {
-                clearBar()
-                reWriteCommandText()
-                outputWritten = false
-            }
-        }, 3000)
-    } else if (type == 'log') {
-        moveCursorPos(0, 4)
-        if (playStatus.length > widthChars) {
-            playStatus = playStatus.substring(0, widthChars - 3)
-            playStatus = playStatus + '...'
+
+        const themes = {
+            'important' : getThemeEscapeCode('commandSuccess'),
+            'important_err' : getThemeEscapeCode('commandError'),
+            'log' : getThemeEscapeCode('log')
         }
-        clearBar()
-        process.stdout.write(playStatus)
+
+        const textColor = 
+        process.stdout.write(themes[type]  + playStatus + '\x1b[0m')
+        
         outputWritten = true
         moveCursorPos(0, 0)
         setTimeout(function() {

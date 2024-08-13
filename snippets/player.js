@@ -26,7 +26,7 @@ export function changeAudioVolume(vol) {
     }
 }
 
-export function playAudioUrl(url) {
+export async function playAudioUrl(url) {
     if (currentlyPLayingAudio) {
         exec(getCrossPlatformString("kill-process") + currentlyPLayingAudio.pid, {
             detached: true
@@ -34,8 +34,7 @@ export function playAudioUrl(url) {
     }
 
     //currentlyPLayingAudio = spawn(`ffplay "${url}" -nodisp`, [], {stdio: 'pipe', shell: true})
-    //(async () => {
-        currentlyPLayingAudio = exec(`ffplay "${url}" -nodisp -volume ${audioVolume}`, {stdio: 'pipe', detached: true})
-    //})()
+    currentlyPLayingAudio = exec(`ffplay "${url}" -nodisp -volume ${audioVolume}`, {stdio: 'pipe', detached: true})
 
+    await fetch(url)
 }
