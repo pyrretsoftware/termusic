@@ -58,8 +58,10 @@ export async function processCommand(command) {
                 setPlayStatus("important", `Added ${searchResult["title"]} to the queue!`)
             } else if (command.split(" ")[1] == "remove") {
                 removeLastSong()
+                setPlayStatus('important', `Removed last song from the queue!`)
             } else if (command.split(" ")[1] == "clear") {
                 clearList()
+                setPlayStatus('important', `Cleared queue!`)
             } else if (command.split(" ")[1] == "skip") {
                 listContinue(true)
             }
