@@ -25,6 +25,7 @@ Start typing on your keyboard to enter a command. Here's a list of commands you 
 - ``theme <theme>`` - applies a theme given its name. You can view your themes in the ./ui/themes folder.
 - ``share`` - copies a sharable link to the song your listening to.
 - ``reloadui`` - reloads the ui, mainly useful for debugging.
+- ``about`` - shows an about dialog.
 
 
 You can also use the right and left arrow keys to restart or skip songs.
