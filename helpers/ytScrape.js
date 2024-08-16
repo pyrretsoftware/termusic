@@ -8,7 +8,7 @@ export async function searchYoutube(query) {
         const videoField = JSON.parse('{' + html.match(regex)[1] + '}')['contents']['twoColumnSearchResultsRenderer']['primaryContents']['sectionListRenderer']['contents'][0]['itemSectionRenderer']['contents'][0]['videoRenderer']
     
     
-        const length = (videoField["lengthText"]['simpleText'].split(':')[0] * 60) + videoField["lengthText"]['simpleText'].split(':')[1]
+        const length = (parseInt(videoField["lengthText"]['simpleText'].split(':')[0]) * 60) + parseInt(videoField["lengthText"]['simpleText'].split(':')[1])
     
         return {
             "title" : videoField['title']['runs'][0]['text'],
