@@ -15,6 +15,7 @@ import clipboard from 'clipboardy';
 import { spawn } from 'child_process'
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { searchYoutube } from './ytScrape.js';
 
 const directory = path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'termusic.js')
 
@@ -22,12 +23,18 @@ export async function processCommand(command) {
     switch (command.split(" ")[0]) {
         case 'play' :
             setPlayStatus("log", "Searching...")
-            let searchResult = await searchInvidious(command.replace("play ", ""))
-            setPlayStatus("log", "Searching complete.")
+            let searchResult = await searchYoutube(command.replace("play ", ""))
+            let searchType = 'direct-scrape'
 
             while (!searchResult) {
-                setPlayStatus("log", "Retrying search.")
-                searchResult = await searchInvidious(command.replace("play ", ""))
+                if (searchType == 'direct-scrape') {
+                    searchResult = await searchInvidious(command.replace("play ", ""))
+                    setPlayStatus("log", "Falling back to invidious api")
+                    searchType = 'invidious'
+                } else {
+                    setPlayStatus("log", "Retrying search.")
+                    searchResult = await searchInvidious(command.replace("play ", ""))
+                }
             }
             
             setPlayStatus("log", "Grabbing audio...")
@@ -48,12 +55,18 @@ export async function processCommand(command) {
         case 'queue' :
             if (command.split(" ")[1] == "add")  {
                 setPlayStatus("log", "Searching...")
-                let searchResult = await searchInvidious(command.replace("play ", ""))
-                setPlayStatus("log", "Searching complete.")
+                let searchResult = await searchYoutube(command.replace("play ", ""))
+                let searchType = 'direct-scrape'
     
                 while (!searchResult) {
-                    setPlayStatus("log", "Retrying search.")
-                    searchResult = await searchInvidious(command.replace("play ", ""))
+                    if (searchType == 'direct-scrape') {
+                        searchResult = await searchInvidious(command.replace("play ", ""))
+                        setPlayStatus("log", "Falling back to invidious api")
+                        searchType = 'invidious'
+                    } else {
+                        setPlayStatus("log", "Retrying search.")
+                        searchResult = await searchInvidious(command.replace("play ", ""))
+                    }
                 }
 
                 addSong(searchResult)
