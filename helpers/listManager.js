@@ -11,7 +11,13 @@ export async function listContinue(isSkip = false) {
         restartSong()
     } else if (list[0]) {
         setPlayStatus("log", "Grabbing audio...")
-        await playAudioUrl((await getAudioUrl(list[0]["id"])))
+        
+        const audio = await getAudioUrl(searchResult["id"])
+        if (!audio) return
+
+        setPlayStatus("log", "Waiting for ffmpeg...")
+        await playAudioUrl(audio)
+
         startProgressBarMoving(list[0]["length"])
         setSongTitle(list[0]["title"])
         startSongDurationMoving(list[0]["length"])
@@ -32,7 +38,13 @@ export async function listContinue(isSkip = false) {
 export async function restartSong() {
     if (currentSongReport) {
         setPlayStatus("log", "Grabbing audio...")
-        await playAudioUrl((await getAudioUrl(currentSongReport["id"])))
+        
+        const audio = await getAudioUrl(searchResult["id"])
+        if (!audio) return
+
+        setPlayStatus("log", "Waiting for ffmpeg...")
+        await playAudioUrl(audio)
+
         startProgressBarMoving(currentSongReport["length"])
         setSongTitle(currentSongReport["title"])
         startSongDurationMoving(currentSongReport["length"])

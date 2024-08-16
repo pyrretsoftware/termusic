@@ -32,6 +32,8 @@ export async function processCommand(command) {
             
             setPlayStatus("log", "Grabbing audio...")
             const audio = await getAudioUrl(searchResult["id"])
+            if (!audio) return
+
             setPlayStatus("log", "Waiting for ffmpeg...")
             await playAudioUrl(audio)
 
