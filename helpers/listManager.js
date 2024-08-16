@@ -39,7 +39,7 @@ export async function restartSong() {
     if (currentSongReport) {
         setPlayStatus("log", "Grabbing audio...")
         
-        const audio = await getAudioUrl(searchResult["id"])
+        const audio = await getAudioUrl(currentSongReport["id"])
         if (!audio) return
 
         setPlayStatus("log", "Waiting for ffmpeg...")

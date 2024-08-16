@@ -102,7 +102,7 @@ let publicForIndex = 0 //another horrible way of doing this
 export async function startProgressBarMoving(length) {
     currentSongIndex++
     let  _currentSongIndex = currentSongIndex
-    for (let i = 0; i < 30; i++) { 
+    for (let i = 0; i < (30 +1); i++) { 
         publicForIndex = i
         if (currentSongIndex != _currentSongIndex) {
             return
