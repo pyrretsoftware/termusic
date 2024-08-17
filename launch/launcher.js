@@ -12,7 +12,7 @@ const nodeUpdateNotice = `${PastelRed}Your version of Node.js is not supported. 
 
 export async function startLauncher() {
     process.stdout.write('Checking Node.js version ')
-    if (process.version.split('.')[0] != 'v18') {
+    if (parseInt(process.version.split('.')[0].replace('v', '')) < 18) {
         console.log(` [${PastelRed}INCOMPATIBLE VERSION${Reset}]`)
         console.log(nodeUpdateNotice)
     } else {
