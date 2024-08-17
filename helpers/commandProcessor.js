@@ -4,7 +4,6 @@ termusic/helpers/commandprocessor.js
 Written by axell (mail@axell.me) for pyrret software.
 */
 import { getAudioUrl } from './cobalt.js'
-import { searchInvidious } from './invidious.js';
 import { changeAudioVolume, playAudioUrl} from '../snippets/player.js'
 import { currentSongPlayingReport, setPlayStatus } from './playStatus.js';
 import { performFullRealTimeReRender, setSongTitle, startProgressBarMoving, startSongDurationMoving } from '../ui/uiManagers/player.js';
@@ -15,25 +14,27 @@ import clipboard from 'clipboardy';
 import { spawn } from 'child_process'
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { searchYoutube } from './ytScrape.js';
+import { getSearchFunction, isSearchEngine } from './defualtSearchEngine.js';
+import { config, editConfigValue } from '../snippets/config.js';
 
 const directory = path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'termusic.js')
+const search = getSearchFunction()
 
 export async function processCommand(command) {
     switch (command.split(" ")[0]) {
         case 'play' :
             setPlayStatus("log", "Searching...")
-            let searchResult = await searchYoutube(command.replace("play ", ""))
-            let searchType = 'direct-scrape'
+            let searchResult = await search(command.replace("play ", ""))
+            let searchType = config['searchEngine']
 
             while (!searchResult) {
-                if (searchType == 'direct-scrape') {
-                    searchResult = await searchInvidious(command.replace("play ", ""))
+                if (searchType == 'youtube') {
+                    searchResult = await search(command.replace("play ", ""))
                     setPlayStatus("log", "Falling back to invidious api")
                     searchType = 'invidious'
                 } else {
                     setPlayStatus("log", "Retrying search.")
-                    searchResult = await searchInvidious(command.replace("play ", ""))
+                    searchResult = await search(command.replace("play ", ""))
                 }
             }
             
@@ -55,17 +56,17 @@ export async function processCommand(command) {
         case 'queue' :
             if (command.split(" ")[1] == "add")  {
                 setPlayStatus("log", "Searching...")
-                let searchResult = await searchYoutube(command.replace("play ", ""))
-                let searchType = 'direct-scrape'
+                let searchResult = await search(command.replace("play ", ""))
+                let searchType = config['searchEngine']
     
                 while (!searchResult) {
-                    if (searchType == 'direct-scrape') {
-                        searchResult = await searchInvidious(command.replace("play ", ""))
+                    if (searchType == 'youtube') {
+                        searchResult = await search(command.replace("play ", ""))
                         setPlayStatus("log", "Falling back to invidious api")
                         searchType = 'invidious'
                     } else {
                         setPlayStatus("log", "Retrying search.")
-                        searchResult = await searchInvidious(command.replace("play ", ""))
+                        searchResult = await search(command.replace("play ", ""))
                     }
                 }
 
@@ -116,6 +117,14 @@ export async function processCommand(command) {
                 process.stdout.write(`${String.fromCharCode(0o33)}[8;h;wt`.replaceAll("h", "5").replaceAll("w", "46"))
             }
             setPlayStatus('important', 'Reloaded ui!')
+            break;
+        case 'se':
+            if (isSearchEngine(command.split(" ")[1])) {
+                editConfigValue('searchEngine', command.split(' ')[1])
+                setPlayStatus('important', 'Changed search engine.')
+            } else {
+                setPlayStatus('important_err', 'Thats not a valid search engine.')
+            }
             break;
         default:
             setPlayStatus("important_err", "Unknown command.")
