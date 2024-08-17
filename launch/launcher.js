@@ -1,4 +1,4 @@
-import { spawn } from 'child_process';
+import { exec, execSync, spawn } from 'child_process';
 import { getCrossPlatformString } from '../helpers/crossPlatformHelper.js'
 import { fileURLToPath } from 'url';
 import path from 'path';
@@ -27,8 +27,36 @@ export async function startLauncher() {
     } else {
         console.log(`[${PastelGreen}DONE${Reset}]`)
     }
+    
+    const useWinIconLauncher = (() => { 
+        if (process.platform === 'win32') { 
+            process.stdout.write('Checking whether winIconLauncher can be used ')
+            try {
+                const dotNetInfo = execSync('dotnet --info')
+
+                if (dotNetInfo.toString().includes('8.')) {
+                    console.log(`[${PastelGreen}DONE${Reset}]`)
+                    return true
+                } else {
+                    console.log(`[${PastelRed}.NET 8.0 NOT FOUND${Reset}]`)
+                }
+            } catch (e) {
+                console.log(`[${PastelRed}NO .NET RUNTIMES FOUND${Reset}]`)
+            }
+        }
+        return false
+    })()
     process.stdout.write('Launching termusic in a seperate window ')
-    spawn(`${getCrossPlatformString("new-terminal-window")} node ${directory} launch`, [], {shell: true})
+
+    if (useWinIconLauncher) {
+        spawn(`${getCrossPlatformString("new-terminal-window")} iconhost.exe`,[], {
+            shell: true,
+            cwd: path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'bin')
+        })
+    } else {
+        spawn(`${getCrossPlatformString("new-terminal-window")} node ${directory} launch`, [], {shell: true})
+    }
+
     setTimeout(function() {
         console.log(`[${PastelGreen}DONE${Reset}]`)
         process.exit(0)
