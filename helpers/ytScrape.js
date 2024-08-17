@@ -1,4 +1,4 @@
-export async function searchYoutube(query) {
+export async function searchYoutube(query, isTest = false) {
     try {
         const request = await fetch('https://www.youtube.com/results?search_query=' + encodeURIComponent(query))
         const html = await request.text()
@@ -17,6 +17,6 @@ export async function searchYoutube(query) {
             "thumbnail" : videoField['thumbnail']['thumbnails'][0]['url']
         } 
     } catch (e) {
-        return false
+        return isTest ? e : false
     }
 }
