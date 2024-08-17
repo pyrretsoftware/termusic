@@ -1,6 +1,6 @@
 export async function searchYoutube(query, isTest = false) {
     try {
-        const request = await fetch('https://www.youtube.com/results?search_query=' + encodeURIComponent(query))
+        const request = await fetch('https://www.youtube.com/results?search_query=' + encodeURIComponent(query + " song"))
         const html = await request.text()
     
         const regex = /ytInitialData = {(.*)};<\/script/
