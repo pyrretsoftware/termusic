@@ -12,7 +12,7 @@ export async function listContinue(isSkip = false) {
     } else if (list[0]) {
         setPlayStatus("log", "Grabbing audio...")
         
-        const audio = await getAudioUrl(searchResult["id"])
+        const audio = await getAudioUrl(list["id"])
         if (!audio) return
 
         setPlayStatus("log", "Waiting for ffmpeg...")
