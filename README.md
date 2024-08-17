@@ -9,6 +9,8 @@ After that, you can install termusic via npm by running the following command:
 ```
 npm i -g termusic
 ```
+
+[More info on installation](https://github.com/pyrretsoftware/termusic/wiki/Installing-termusic)
 # Using termusic
 After installing, enter ``termusic`` in your terminal. It will open up a new terminal window.
 
