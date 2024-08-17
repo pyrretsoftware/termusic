@@ -10,7 +10,7 @@ let currentInstance = 0
 
 export async function getAudioUrl(id ) {
 
-    const cobaltRequest = await fetch(config["cobalt-instances"][currentInstance], {
+    let cobaltRequest = await fetch(config["cobalt-instances"][currentInstance], {
         method : "POST",
         body : JSON.stringify({
             "url": "https://www.youtube.com/watch?v=" + id,
@@ -21,10 +21,30 @@ export async function getAudioUrl(id ) {
             "Content-type": "application/json"
         }
     })
-    const cobaltResponse = await cobaltRequest.json()
-    
+    let cobaltResponse = await cobaltRequest.json()
+    let retryTimes = 3
+
+
+    while (cobaltResponse['status'] == 'error' && retryTimes > 0) {
+        setPlayStatus('log', 'Cobalt failed, trying again...')
+        retryTimes -= 1
+
+        cobaltRequest = await fetch(config["cobalt-instances"][currentInstance], {
+            method : "POST",
+            body : JSON.stringify({
+                "url": "https://www.youtube.com/watch?v=" + id,
+                "isAudioOnly": "true"
+            }),
+            headers : {
+                "Accept": "application/json",
+                "Content-type": "application/json"
+            }
+        })
+        cobaltResponse = await cobaltRequest.json()
+    }
+
     if (cobaltResponse['status'] == 'error') {
-        setPlayStatus('important_err', 'Cobalt reported an error, check status.cobalt.tools')
+        setPlayStatus('important_err', 'Cobalt failed, check status.cobalt.tools')
         return false
     }
 
