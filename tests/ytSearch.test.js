@@ -3,6 +3,7 @@ import test from "node:test";
 import assert from 'node:assert';
 
 const result = await searchYoutube('california girls')
+await new Promise(resolve => setTimeout(resolve, 700))
 
 test('ytScrape does not throw an error', async () => {
     if (!result) {
