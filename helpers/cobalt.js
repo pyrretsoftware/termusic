@@ -25,7 +25,7 @@ export async function getAudioUrl(id ) {
     let retryTimes = 3
 
 
-    while (cobaltResponse['status'] == 'error' && retryTimes > 0) {
+    while (cobaltResponse['status'] == 'error' && retryTimes != 0) {
         setPlayStatus('log', 'Cobalt failed, trying again...')
         retryTimes -= 1
 
