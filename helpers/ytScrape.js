@@ -3,9 +3,9 @@ import path from 'path';
 import { config } from '../snippets/config.js';
 import fs from 'fs';
 
-export async function searchYoutube(query) {
+export async function searchYoutube(query, isTest = false) {
     try {
-        const request = await fetch('https://www.youtube.com/results?search_query=' + encodeURIComponent(query + " song"))
+        const request = await fetch(isTest ? 'https://apis.axell.me/termusic/v1/ytScrape-proxy/california-girls' : ('https://www.youtube.com/results?search_query=' + encodeURIComponent(query + " song")))
         const html = await request.text()
     
         const regex = /ytInitialData = {(.*)};<\/script/

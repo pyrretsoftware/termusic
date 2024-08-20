@@ -2,7 +2,7 @@ import { searchYoutube } from "../helpers/ytScrape.js"
 import test from "node:test";
 import assert from 'node:assert';
 
-const result = await searchYoutube('california girls')
+const result = await searchYoutube('california girls', true)
 
 test('ytScrape does not throw an error', async () => {
     if (!result) {
