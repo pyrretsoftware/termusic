@@ -21,6 +21,8 @@ const directory = path.join(path.dirname(fileURLToPath(import.meta.url)), '../',
 let search = getSearchFunction()
 
 export async function processCommand(command) {
+    if (command.length == 0) return
+
     switch (command.split(" ")[0]) {
         case 'play' :
             setPlayStatus("log", "Searching...")
