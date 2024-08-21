@@ -5,11 +5,7 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export default {
-    get config() {
-        return JSON.parse(fs.readFileSync(path.join(__dirname, '../', 'config.json')))
-    }
-}
+export const config = JSON.parse(fs.readFileSync(path.join(__dirname, '../', 'config.json')))
 
 export function editConfigValue(field, value) {
     let modifiedConfig = config
