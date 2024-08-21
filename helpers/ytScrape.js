@@ -10,10 +10,21 @@ export async function searchYoutube(query, isTest = false) {
     
         const regex = /ytInitialData = {(.*)};<\/script/
     
-        const videoField = JSON.parse('{' + html.match(regex)[1] + '}')['contents']['twoColumnSearchResultsRenderer']['primaryContents']['sectionListRenderer']['contents'][0]['itemSectionRenderer']['contents'][0]['videoRenderer']
+        const pageContent = JSON.parse('{' + html.match(regex)[1] + '}')['contents']['twoColumnSearchResultsRenderer']['primaryContents']['sectionListRenderer']['contents'][0]['itemSectionRenderer']['contents']
 
-        if (config['debuggingMode']) {
-            fs.writeFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'debugFiles', 'ytInitialData.json'), JSON.stringify(JSON.parse('{' + html.match(regex)[1] + '}')))
+        let videoField
+        for (let item in pageContent) {
+            if (pageContent[item]['videoRenderer']) {
+                videoField = pageContent[item]['videoRenderer']
+                break;
+            }
+        }
+
+        if (!videoField) {
+            throw new Error('No videoRenderer found')
+        }
+        if (process.argv[3] == 'debug') {
+            fs.writeFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'debugFiles', 'ytInitialData.json'), JSON.stringify(JSON.parse('{' + html.match(regex)[1] + '}')['contents'], null, 4))
         }
     
         const length = (parseInt(videoField["lengthText"]['simpleText'].split(':')[0]) * 60) + parseInt(videoField["lengthText"]['simpleText'].split(':')[1])
@@ -25,6 +36,9 @@ export async function searchYoutube(query, isTest = false) {
             "thumbnail" : videoField['thumbnail']['thumbnails'][0]['url']
         } 
     } catch (e) {
+        if (process.argv[3] == 'debug') {
+            console.log(e)
+        }
         return false
     }
 }

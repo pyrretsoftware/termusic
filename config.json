@@ -7,6 +7,5 @@
     ],
     "idlingImageStyle": "nostalgia-1",
     "alwaysFullReload": false,
-    "searchEngine": "youtube",
-    "debuggingMode" : true
+    "searchEngine": "youtube"
 }
