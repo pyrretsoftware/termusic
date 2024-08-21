@@ -15,6 +15,13 @@ export function isSearchEngine(engine) {
     }
 }
 
-export function getSearchFunction() {
-    return searchEngines[config['searchEngine']]
+export function getSearchFunction(engine) {
+    let searchEngine
+
+    if (!engine) { //we do this in order to always use the latest search engine
+        searchEngine = config['searchEngine']
+    } else {
+        searchEngine = engine
+    }
+    return searchEngines[searchEngine]
 }

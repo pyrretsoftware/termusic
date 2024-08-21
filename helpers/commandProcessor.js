@@ -18,7 +18,7 @@ import { getSearchFunction, isSearchEngine } from './defualtSearchEngine.js';
 import { config, editConfigValue } from '../snippets/config.js';
 
 const directory = path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'termusic.js')
-const search = getSearchFunction()
+let search = getSearchFunction()
 
 export async function processCommand(command) {
     switch (command.split(" ")[0]) {
@@ -29,9 +29,10 @@ export async function processCommand(command) {
 
             while (!searchResult) {
                 if (searchType == 'youtube') {
-                    searchResult = await search(command.replace("play ", ""))
                     setPlayStatus("log", "Falling back to invidious api")
                     searchType = 'invidious'
+                    search = getSearchFunction(searchType)
+                    searchResult = await search(command.replace("play ", ""))
                 } else {
                     setPlayStatus("log", "Retrying search.")
                     searchResult = await search(command.replace("play ", ""))
@@ -61,9 +62,10 @@ export async function processCommand(command) {
     
                 while (!searchResult) {
                     if (searchType == 'youtube') {
-                        searchResult = await search(command.replace("play ", ""))
                         setPlayStatus("log", "Falling back to invidious api")
                         searchType = 'invidious'
+                        search = getSearchFunction(searchType)
+                        searchResult = await search(command.replace("play ", ""))
                     } else {
                         setPlayStatus("log", "Retrying search.")
                         searchResult = await search(command.replace("play ", ""))
