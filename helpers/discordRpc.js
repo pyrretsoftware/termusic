@@ -1,5 +1,6 @@
 import _ep from 'easy-presence'
 import { setPlayStatus } from './playStatus.js';
+import { config } from '../snippets/config.js';
 
 let ep
 let connected = false
@@ -20,6 +21,10 @@ if (process.argv[2] == 'launch') {
 }
 
 export function changeRpcStatus(title, thumbnail, id, idling = false) {
+    if (!config['discordRpcEnabled']) {
+        return
+    }
+
     let activity = {
         details: (idling == false ? ("Listening to " + title) : 'Idling'),
         assets: {
