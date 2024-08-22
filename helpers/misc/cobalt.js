@@ -3,8 +3,8 @@ termusic/helpers/cobalt.js
 
 Written by axell (mail@axell.me) for pyrret software.
 */
-import {config} from '../snippets/config.js'
-import { setPlayStatus } from './playStatus.js'
+import {config} from '../../snippets/config.js'
+import { setPlayStatus } from '../player/playStatus.js'
 
 let currentInstance = 0
 

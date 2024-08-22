@@ -1,11 +1,11 @@
-import { Red, Reset, RGBToEscapeCode } from '../../helpers/colorCodes.js'
+import { Red, Reset, RGBToEscapeCode } from '../../helpers/misc/colorCodes.js'
 import { moveCursorPos } from '../utils/moveCursorPos.js';
 import fs from 'fs';
 import path from 'path';
 import { config } from '../../snippets/config.js';
 import { fileURLToPath } from 'url';
 import { getThemeEscapeCode } from '../themes.js';
-import { checkForUpdates } from '../../helpers/updateChecker.js'
+import { checkForUpdates } from '../../helpers/startup/updateChecker.js'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

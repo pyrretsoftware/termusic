@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { launch } from "./launch/launch.js";
 import { startLauncher, startQuickLauncher } from "./launch/launcher.js";
-import { validateConfig} from "./helpers/configFileValidator.js"
+import { validateConfig} from "./helpers/startup/configFileValidator.js"
 import { launchAbout } from "./launch/about.js";
 
 validateConfig()

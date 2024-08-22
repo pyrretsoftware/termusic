@@ -1,9 +1,9 @@
-import { config } from "../snippets/config.js";
-import { getThemeEscapeCode } from "../ui/themes.js";
-import { isTypingCommand, reWriteCommandText } from "../ui/uiManagers/player.js";
-import { clearBar } from "../ui/utils/clearBar.js";
-import { moveCursorPos } from "../ui/utils/moveCursorPos.js";
-import { changeRpcStatus } from "./discordRpc.js";
+import { config } from "../../snippets/config.js";
+import { getThemeEscapeCode } from "../../ui/themes.js";
+import { isTypingCommand, reWriteCommandText } from "../../ui/uiManagers/player.js";
+import { clearBar } from "../../ui/utils/clearBar.js";
+import { moveCursorPos } from "../../ui/utils/moveCursorPos.js";
+import { changeRpcStatus } from "../misc/discordRpc.js";
 
 export let outputWritten = false;
 export let currentSongReport 

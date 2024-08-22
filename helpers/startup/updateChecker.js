@@ -7,7 +7,7 @@ const __dirname = path.dirname(__filename);
 
 export async function checkForUpdates() {
     const latestVersion = (await (await fetch('https://github.com/pyrretsoftware/termusic/raw/main/package.json')).json())["version"]
-    const currentVersion = JSON.parse(fs.readFileSync(path.join(__dirname, '../package.json')))["version"]
+    const currentVersion = JSON.parse(fs.readFileSync(path.join(__dirname, '../', '../', '/package.json')))["version"]
 
     if (currentVersion != latestVersion) {
         return latestVersion

@@ -1,6 +1,6 @@
 import _ep from 'easy-presence'
-import { setPlayStatus } from './playStatus.js';
-import { config } from '../snippets/config.js';
+import { setPlayStatus } from '../player/playStatus.js';
+import { config } from '../../snippets/config.js';
 
 let ep
 let connected = false

@@ -3,19 +3,19 @@ termusic/helpers/commandprocessor.js
 
 Written by axell (mail@axell.me) for pyrret software.
 */
-import { getAudioUrl } from './cobalt.js'
-import { changeAudioVolume, playAudioUrl} from '../snippets/player.js'
-import { currentSongPlayingReport, setPlayStatus } from './playStatus.js';
-import { performFullRealTimeReRender, setSongTitle, startProgressBarMoving, startSongDurationMoving } from '../ui/uiManagers/player.js';
-import { addSong, clearList, listContinue, removeLastSong, toggleLooping } from './listManager.js';
-import { getCrossPlatformString } from './crossPlatformHelper.js';
-import { loadThemeObject } from '../ui/themes.js';
+import { getAudioUrl } from '../misc/cobalt.js'
+import { changeAudioVolume, playAudioUrl} from '../../snippets/player.js'
+import { currentSongPlayingReport, setPlayStatus } from '../player/playStatus.js';
+import { performFullRealTimeReRender, setSongTitle, startProgressBarMoving, startSongDurationMoving } from '../../ui/uiManagers/player.js';
+import { addSong, clearList, listContinue, removeLastSong, toggleLooping } from '../player/listManager.js';
+import { getCrossPlatformString } from '../misc/crossPlatformHelper.js';
+import { loadThemeObject } from '../../ui/themes.js';
 import clipboard from 'clipboardy';
 import { spawn } from 'child_process'
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { getSearchFunction, isSearchEngine } from './defualtSearchEngine.js';
-import { config, editConfigValue } from '../snippets/config.js';
+import { getSearchFunction, isSearchEngine } from '../search/defualtSearchEngine.js';
+import { config, editConfigValue } from '../../snippets/config.js';
 
 const directory = path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'termusic.js')
 let search = getSearchFunction()

@@ -1,9 +1,9 @@
 import { exec, execSync, spawn } from 'child_process';
-import { getCrossPlatformString } from '../helpers/crossPlatformHelper.js'
+import { getCrossPlatformString } from '../helpers/misc/crossPlatformHelper.js'
 import { fileURLToPath } from 'url';
 import path from 'path';
-import { Green, Magenta, PastelGreen, PastelRed, Red, Reset, Yellow } from '../helpers/colorCodes.js';
-import { checkForUpdates } from '../helpers/updateChecker.js'
+import { Green, Magenta, PastelGreen, PastelRed, Red, Reset, Yellow } from '../helpers/misc/colorCodes.js';
+import { checkForUpdates } from '../helpers/startup/updateChecker.js'
 
 const directory = path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'termusic.js')
 

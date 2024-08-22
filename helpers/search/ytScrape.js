@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'url';
 import path from 'path';
-import { config } from '../snippets/config.js';
+import { config } from '../../snippets/config.js';
 import fs from 'fs';
 
 export async function searchYoutube(query, isTest = false) {

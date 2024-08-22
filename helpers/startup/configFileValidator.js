@@ -12,14 +12,14 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 export function validateConfig() {
-    if (!fs.existsSync(path.join(__dirname, '../', 'config.json'))) {
+    if (!fs.existsSync(path.join(__dirname, '../', '../', 'config.json'))) {
         console.error('Could not find config.json.')
         process.exit(1)
     }
 
     let parsedConfig
     try {
-        parsedConfig = JSON.parse(fs.readFileSync(path.join(__dirname, '../', 'config.json')));
+        parsedConfig = JSON.parse(fs.readFileSync(path.join(__dirname, '../', '../', 'config.json')));
     } catch (e) {
         console.error('Error parsing config file: ' + e)
         process.exit(1)

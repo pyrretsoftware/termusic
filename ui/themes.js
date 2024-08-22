@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
-import { setPlayStatus } from '../helpers/playStatus.js';
-import { RGBToEscapeCode } from '../helpers/colorCodes.js';
+import { setPlayStatus } from '../helpers/player/playStatus.js';
+import { RGBToEscapeCode } from '../helpers/misc/colorCodes.js';
 import { fileURLToPath } from 'url';
 import { config, editConfigValue } from '../snippets/config.js';
 

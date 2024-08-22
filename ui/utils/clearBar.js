@@ -1,4 +1,4 @@
-import { Reset } from "../../helpers/colorCodes.js"
+import { Reset } from "../../helpers/misc/colorCodes.js"
 import { moveCursorPos } from "./moveCursorPos.js"
 
 export function clearBar() {

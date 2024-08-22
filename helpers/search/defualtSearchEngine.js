@@ -1,5 +1,5 @@
-import { config } from "../snippets/config.js";
-import { searchInvidious } from "./invidious.js";
+import { config } from "../../snippets/config.js";
+import { searchInvidious } from "../search/invidious.js";
 import { searchYoutube } from "./ytScrape.js";
 
 const searchEngines = {

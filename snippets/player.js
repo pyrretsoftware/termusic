@@ -4,8 +4,8 @@ termusic/snippets/player.js
 Written by axell (mail@axell.me) for pyrret software.
 */
 import { exec, spawn } from 'child_process';
-import { getCrossPlatformString } from '../helpers/crossPlatformHelper.js';
-import { setPlayStatus } from '../helpers/playStatus.js';
+import { getCrossPlatformString } from '../helpers/misc/crossPlatformHelper.js';
+import { setPlayStatus } from '../helpers/player/playStatus.js';
 
 let currentlyPLayingAudio
 let audioVolume = 100

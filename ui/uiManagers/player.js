@@ -2,16 +2,16 @@
 import readline from 'readline';
 import process from 'process';
 
-import { processCommand } from '../../helpers/commandProcessor.js';
-import { getCrossPlatformString } from '../../helpers/crossPlatformHelper.js';
-import { listContinue, restartSong } from '../../helpers/listManager.js';
+import { processCommand } from '../../helpers/core/commandProcessor.js';
+import { getCrossPlatformString } from '../../helpers/misc/crossPlatformHelper.js';
+import { listContinue, restartSong } from '../../helpers/player/listManager.js';
 import { killAudioProcesses } from '../../snippets/player.js';
 
 import { centerText } from '../utils/centerText.js';
 import { moveCursorPos } from '../utils/moveCursorPos.js';
 import { clearBar } from '../utils/clearBar.js';
-import { currentSongReport, outputWritten, setoutputWritten } from '../../helpers/playStatus.js';
-import { Reset } from '../../helpers/colorCodes.js';
+import { currentSongReport, outputWritten, setoutputWritten } from '../../helpers/player/playStatus.js';
+import { Reset } from '../../helpers/misc/colorCodes.js';
 import { getThemeEscapeCode } from '../themes.js';
 
 readline.emitKeypressEvents(process.stdin);

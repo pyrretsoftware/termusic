@@ -1,4 +1,4 @@
-import { setPlayStatus } from "./playStatus.js"
+import { setPlayStatus } from "../player/playStatus.js"
 
 export const Reset = "\x1b[0m"
 export const Black = "\x1b[30m"
