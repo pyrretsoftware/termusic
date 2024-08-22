@@ -17,7 +17,7 @@ import { fileURLToPath } from 'url';
 import { getSearchFunction, isSearchEngine } from '../search/defualtSearchEngine.js';
 import { config, editConfigValue } from '../../snippets/config.js';
 
-const directory = path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'termusic.js')
+const directory = path.join(path.dirname(fileURLToPath(import.meta.url)), '../', '../', 'termusic.js')
 let search = getSearchFunction()
 
 export async function processCommand(command) {
