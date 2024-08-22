@@ -1,6 +1,6 @@
 import { config } from "../snippets/config.js";
 import { getThemeEscapeCode } from "../ui/themes.js";
-import { reWriteCommandText } from "../ui/uiManagers/player.js";
+import { isTypingCommand, reWriteCommandText } from "../ui/uiManagers/player.js";
 import { clearBar } from "../ui/utils/clearBar.js";
 import { moveCursorPos } from "../ui/utils/moveCursorPos.js";
 import { changeRpcStatus } from "./discordRpc.js";
@@ -23,6 +23,8 @@ export function setPlayStatus(type, playStatus) { //playStatus can either be a s
             currentSongPlayingReport = playStatus
         }
     } else if (type == 'important' || type == 'important_err' || type == 'log') {
+        if (type == 'log' && isTypingCommand) return
+
         moveCursorPos(0, 4)
         if (playStatus.length > widthChars) {
             playStatus = playStatus.substring(0, widthChars - 3)
@@ -36,7 +38,6 @@ export function setPlayStatus(type, playStatus) { //playStatus can either be a s
             'log' : getThemeEscapeCode('log')
         }
 
-        const textColor = 
         process.stdout.write(themes[type]  + playStatus + '\x1b[0m')
         
         outputWritten = true

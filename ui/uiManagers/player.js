@@ -32,7 +32,7 @@ const heightChars = 5
 const widthChars = 46
 
 let command = ""
-let isTypingCommand = false
+export let isTypingCommand = false
 
 //#region playerMetadata
 export async function updateProgressBar(steps) { //steps/30
@@ -151,7 +151,7 @@ export async function performFullRealTimeReRender() {
     moveCursorPos(0, startString +2)
     process.stdout.write(getThemeEscapeCode('mediaComponents') + centerText(process.argv[3] == 'debug' ? mediaComponents["mediaComponent"] : getCrossPlatformString("mediaComponents"), widthChars) + Reset)
 }
-
+//#endregion
 //#region userInput
 process.stdin.on('keypress', async function(c, key) {
     if (process.argv[2] == "launch") {
