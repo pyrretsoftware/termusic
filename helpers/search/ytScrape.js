@@ -2,6 +2,7 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 import { config } from '../../snippets/config.js';
 import fs from 'fs';
+import { ask } from '../player/playStatus.js';
 
 export async function searchYoutube(query, isTest = false) {
     try {
@@ -17,6 +18,19 @@ export async function searchYoutube(query, isTest = false) {
             if (pageContent[item]['videoRenderer']) {
                 videoField = pageContent[item]['videoRenderer']
                 break;
+            } else if (pageContent[item]['didYouMeanRenderer']) {
+                let correctedQuery = ""
+                pageContent[item]['didYouMeanRenderer']['correctedQuery']['runs'].forEach(queryItem => {
+                    correctedQuery += queryItem['text']
+                });
+
+                correctedQuery = correctedQuery.replace(' song', '')
+                if ((await ask('Did you mean ' + correctedQuery + '?'))) {
+                    return {
+                        'status' : 'typeIssue',
+                        'query' : correctedQuery
+                    }
+                }
             }
         }
 
@@ -24,7 +38,7 @@ export async function searchYoutube(query, isTest = false) {
             throw new Error('No videoRenderer found')
         }
         if (process.argv[3] == 'debug') {
-            fs.writeFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'debugFiles', 'ytInitialData.json'), JSON.stringify(JSON.parse('{' + html.match(regex)[1] + '}')['contents'], null, 4))
+            fs.writeFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), '../', '../', 'debugFiles', 'ytInitialData.json'), JSON.stringify(JSON.parse('{' + html.match(regex)[1] + '}')['contents'], null, 4))
         }
     
         const length = (parseInt(videoField["lengthText"]['simpleText'].split(':')[0]) * 60) + parseInt(videoField["lengthText"]['simpleText'].split(':')[1])

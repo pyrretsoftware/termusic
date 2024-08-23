@@ -27,6 +27,11 @@ export async function processCommand(command) {
         case 'play' :
             setPlayStatus("log", "Searching...")
             let searchResult = await search(command.replace("play ", ""))
+            if (searchResult['status'] && searchResult['status'] == 'typeIssue') {
+                setPlayStatus("log", "Searching again...")
+                searchResult = await search(searchResult['query'])
+            }
+
             let searchType = config['searchEngine']
 
             while (!searchResult) {

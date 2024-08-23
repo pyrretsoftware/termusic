@@ -12,6 +12,8 @@ export let currentSongPlayingReport
 const widthChars = 46
 const idlingImageStyle = config['idlingImageStyle']
 
+export let answer
+
 export function setPlayStatus(type, playStatus) { //playStatus can either be a string or a video object
     if (type == 'report') {
         if (playStatus['special'] == 'idling') {
@@ -50,6 +52,23 @@ export function setPlayStatus(type, playStatus) { //playStatus can either be a s
             }
         }, 3000)
     }
+}
+
+export function ask(question) {
+    return new Promise((resolve) => {
+        moveCursorPos(0, 4)
+        if (question.length > widthChars) {
+            question = question.substring(0, widthChars - 3)
+            question = question + '...'
+        }
+        clearBar()
+        outputWritten = true
+        answer = (val) => {
+            resolve(val)
+            answer = undefined
+        }
+        process.stdout.write(getThemeEscapeCode('question') + question + ' (y/n)' + '\x1b[0m')
+    })
 }
 export function setoutputWritten(val) {
     outputWritten = val

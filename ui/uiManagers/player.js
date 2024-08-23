@@ -10,7 +10,7 @@ import { killAudioProcesses } from '../../snippets/player.js';
 import { centerText } from '../utils/centerText.js';
 import { moveCursorPos } from '../utils/moveCursorPos.js';
 import { clearBar } from '../utils/clearBar.js';
-import { currentSongReport, outputWritten, setoutputWritten } from '../../helpers/player/playStatus.js';
+import { answer, currentSongReport, outputWritten, setoutputWritten } from '../../helpers/player/playStatus.js';
 import { Reset } from '../../helpers/misc/colorCodes.js';
 import { getThemeEscapeCode } from '../themes.js';
 
@@ -155,10 +155,21 @@ export async function performFullRealTimeReRender() {
 //#region userInput
 process.stdin.on('keypress', async function(c, key) {
     if (process.argv[2] == "launch") {
-        if (outputWritten) {
+        if (outputWritten && !answer) {
             clearBar()
             reWriteCommandText()
             setoutputWritten(false)
+        } else if (answer) {
+            if (key.name == 'y') {
+                answer(true)
+            } else {
+                answer(false)
+            }
+
+            clearBar()
+            reWriteCommandText()
+            setoutputWritten(false)
+            return
         }
 
         if (key.name == "return") {
