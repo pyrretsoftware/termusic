@@ -4,9 +4,39 @@ import { config } from '../../snippets/config.js';
 import fs from 'fs';
 import { ask } from '../player/playStatus.js';
 
-export async function searchYoutube(query, isTest = false) {
+export async function scrapePlaylist(plId) {
     try {
-        const request = await fetch(isTest ? 'https://apis.axell.me/termusic/v1/ytScrape-proxy/california-girls' : ('https://www.youtube.com/results?search_query=' + encodeURIComponent(query + " song")))
+        const request = await fetch('https://www.youtube.com/playlist?list=' + plId)
+        const html = await request.text()
+    
+        const regex = /ytInitialData = {(.*)};<\/script/
+        const pageContent = JSON.parse('{' + html.match(regex)[1] + '}')['contents']['twoColumnBrowseResultsRenderer']['tabs'][0]['tabRenderer']['content']['sectionListRenderer']['contents'][0]['itemSectionRenderer']['contents'][0]['playlistVideoListRenderer']['contents']
+
+        let playlistVideos = []
+        for (let item in pageContent) {
+            if (pageContent[item]['playlistVideoRenderer']) {
+                const length = (parseInt(pageContent[item]['playlistVideoRenderer']["lengthText"]['simpleText'].split(':')[0]) * 60) + parseInt(pageContent[item]['playlistVideoRenderer']["lengthText"]['simpleText'].split(':')[1])
+
+                playlistVideos.push({
+                    "title" : pageContent[item]['playlistVideoRenderer']['title']['runs'][0]['text'],
+                    "id" : pageContent[item]['playlistVideoRenderer']['videoId'],
+                    "length" : length,
+                    "thumbnail" : pageContent[item]['playlistVideoRenderer']['thumbnail']['thumbnails'][0]['url']
+                })
+            }
+        }
+
+        if (process.argv[3] == 'debug') {
+            fs.writeFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), '../', '../', 'debugFiles', 'ytPlaylist.json'), JSON.stringify(JSON.parse('{' + html.match(regex)[1] + '}'), null, 4))
+        }
+        return playlistVideos
+    } catch (e) {
+        console.log(e)
+    }
+}
+export async function searchYoutube(query, searchType = 'song') {
+    try {
+        const request = await fetch('https://www.youtube.com/results?search_query=' + encodeURIComponent(query + ' ' + searchType))
         const html = await request.text()
     
         const regex = /ytInitialData = {(.*)};<\/script/
@@ -15,9 +45,16 @@ export async function searchYoutube(query, isTest = false) {
 
         let videoField
         for (let item in pageContent) {
-            if (pageContent[item]['videoRenderer']) {
+            if (searchType == 'song' && pageContent[item]['videoRenderer']) {
                 videoField = pageContent[item]['videoRenderer']
                 break;
+            } else if (searchType == 'playlist' && pageContent[item]['playlistRenderer']) {
+                return {
+                    'title' : pageContent[item]['playlistRenderer']['title']['simpleText'],
+                    'playlistId' : pageContent[item]['playlistRenderer']['playlistId'],
+                    'videoCount' : pageContent[item]['playlistRenderer']['videoCount'],
+                    'videos' : (await scrapePlaylist(pageContent[item]['playlistRenderer']['playlistId']))
+                }
             } else if (pageContent[item]['didYouMeanRenderer']) {
                 let correctedQuery = ""
                 pageContent[item]['didYouMeanRenderer']['correctedQuery']['runs'].forEach(queryItem => {

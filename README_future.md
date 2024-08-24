@@ -1,14 +1,16 @@
 # <img src="https://github.com/pyrretsoftware/termusic/raw/main/images/icon.png" width="32"/> termusic
 
-A minimal and lightweight terminal music player. Uses the invidious api, the cobalt api and ffplay to stream and play audio.
+A minimal and lightweight terminal music player. Uses the cobalt api and ffplay to stream and play audio from youtube.
 # Getting started!
-First, make sure you have node.js version **18** or later aswell as [ffmpeg](https://ffmpeg.org) installed on your system.
+First, make sure you have node.js version **18** or later, [npm](https://npmjs.org), aswell as [ffmpeg](https://ffmpeg.org) installed on your system.
 
 After that, you can install termusic via npm by running the following command:
 
 ```
 npm i -g termusic
 ```
+
+[More info on installation](https://github.com/pyrretsoftware/termusic/wiki/Installing-termusic)
 # Using termusic
 After installing, enter ``termusic`` in your terminal. It will open up a new terminal window.
 
@@ -26,6 +28,7 @@ Start typing on your keyboard to enter a command. Here's a list of commands you 
 - ``share`` - copies a sharable link to the song your listening to.
 - ``reloadui`` - reloads the ui, mainly useful for debugging.
 - ``about`` - shows an about dialog.
+- ``pl <playlist>`` - searches for a playlist and adds all of its songs to the queue.
 
 
 You can also use the right and left arrow keys to restart or skip songs.

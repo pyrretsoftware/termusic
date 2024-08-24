@@ -12,7 +12,7 @@ export async function listContinue(isSkip = false) {
     } else if (list[0]) {
         setPlayStatus("log", "Grabbing audio...")
         
-        const audio = await getAudioUrl(list["id"])
+        const audio = await getAudioUrl(list[0]["id"])
         if (!audio) return
 
         setPlayStatus("log", "Waiting for ffmpeg...")
@@ -70,4 +70,7 @@ export function removeLastSong() {
 }
 export function clearList() {
     list = []
+}
+export function replaceList(newList) {
+    list = newList
 }

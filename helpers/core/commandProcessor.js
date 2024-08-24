@@ -7,7 +7,7 @@ import { getAudioUrl } from '../misc/cobalt.js'
 import { changeAudioVolume, playAudioUrl} from '../../snippets/player.js'
 import { currentSongPlayingReport, setPlayStatus } from '../player/playStatus.js';
 import { performFullRealTimeReRender, setSongTitle, startProgressBarMoving, startSongDurationMoving } from '../../ui/uiManagers/player.js';
-import { addSong, clearList, listContinue, removeLastSong, toggleLooping } from '../player/listManager.js';
+import { addSong, clearList, listContinue, removeLastSong, replaceList, toggleLooping } from '../player/listManager.js';
 import { getCrossPlatformString } from '../misc/crossPlatformHelper.js';
 import { loadThemeObject } from '../../ui/themes.js';
 import clipboard from 'clipboardy';
@@ -61,6 +61,27 @@ export async function processCommand(command) {
             setSongTitle(searchResult["title"])
             setPlayStatus("report", searchResult);
             break;
+        case 'pl': 
+            setPlayStatus("log", "Searching...")
+            let playList = await search(command.replace("pl ", ""), 'playlist')
+            let plSearchType = config['searchEngine']
+
+            while (!playList) {
+                if (plSearchType == 'youtube') {
+                    setPlayStatus("log", "Falling back to invidious api")
+                    plSearchType = 'invidious'
+                    search = getSearchFunction(plSearchType)
+                    playList = await search(command.replace("pl ", ""))
+                } else {
+                    setPlayStatus("log", "Retrying search.")
+                    playList = await search(command.replace("pl ", ""))
+                }
+            }
+
+            replaceList(playList['videos'])
+            listContinue()
+            setPlayStatus("log", `Added ${playList['videoCount']} songs to the queue!`)
+            break
         case 'queue' :
             if (command.split(" ")[1] == "add")  {
                 setPlayStatus("log", "Searching...")
