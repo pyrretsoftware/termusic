@@ -5,7 +5,7 @@
   "main": "termusic.js",
   "bin": "termusic.js",
   "scripts": {
-    "test": "node --test"
+    "test": "node --test --test-force-exit"
   },
   "repository": {
     "type": "git",
