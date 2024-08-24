@@ -4,6 +4,9 @@
 name: nightly youtube scraper test
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:  # This does not need a colon or additional values
   schedule:
     - cron: '0 0 * * *'
