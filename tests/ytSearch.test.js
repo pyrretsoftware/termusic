@@ -1,4 +1,4 @@
-import { searchYoutube } from "../helpers/ytScrape.js"
+import { searchYoutube } from "../helpers/search/ytScrape.js"
 import test from "node:test";
 import assert from 'node:assert';
 
