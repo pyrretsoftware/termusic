@@ -29,6 +29,6 @@ Start typing on your keyboard to enter a command. Here's a list of commands you 
 - ``reloadui`` - reloads the ui, mainly useful for debugging.
 - ``about`` - shows an about dialog.
 - ``pl <playlist>`` - searches for a playlist and adds all of its songs to the queue.
-
+- ``se <engine>`` - switches search engine. Possible values are 'invidious' and 'youtube'.
 
 You can also use the right and left arrow keys to restart or skip songs.
