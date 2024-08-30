@@ -3,7 +3,7 @@ termusic/snippets/player.js
 
 Written by axell (mail@axell.me) for pyrret software.
 */
-import { exec, spawn } from 'child_process';
+import { exec, execSync, spawn } from 'child_process';
 import { getCrossPlatformString } from '../helpers/misc/crossPlatformHelper.js';
 import { setPlayStatus } from '../helpers/player/playStatus.js';
 
@@ -12,8 +12,8 @@ let audioVolume = 100
 
 export function killAudioProcesses() {
     if (currentlyPLayingAudio) {
-        exec(getCrossPlatformString("kill-process") + currentlyPLayingAudio.pid, {
-            detached: true
+        execSync(getCrossPlatformString("kill-process") + currentlyPLayingAudio.pid, {
+            windowsHide: true
         })
     }
 }
@@ -29,7 +29,8 @@ export function changeAudioVolume(vol) {
 export async function playAudioUrl(url) {
     if (currentlyPLayingAudio) {
         exec(getCrossPlatformString("kill-process") + currentlyPLayingAudio.pid, {
-            detached: true
+            detached: true,
+            windowsHide: true
         })
     }
 

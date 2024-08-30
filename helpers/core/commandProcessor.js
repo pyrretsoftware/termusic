@@ -4,7 +4,7 @@ termusic/helpers/commandprocessor.js
 Written by axell (mail@axell.me) for pyrret software.
 */
 import { getAudioUrl } from '../misc/cobalt.js'
-import { changeAudioVolume, playAudioUrl} from '../../snippets/player.js'
+import { changeAudioVolume, killAudioProcesses, playAudioUrl} from '../../snippets/player.js'
 import { currentSongPlayingReport, setPlayStatus } from '../player/playStatus.js';
 import { performFullRealTimeReRender, setSongTitle, startProgressBarMoving, startSongDurationMoving } from '../../ui/uiManagers/player.js';
 import { addSong, clearList, listContinue, removeLastSong, replaceList, toggleLooping } from '../player/listManager.js';
@@ -115,7 +115,10 @@ export async function processCommand(command) {
             break;
         case 'exit': 
             console.clear()
-            process.kill(process.pid, 'SIGTERM');
+            console.log('Cleaning up ffplay processes...')
+            killAudioProcesses()
+            process.exit()
+            break;
         case 'about':
             spawn(`${getCrossPlatformString("new-terminal-window")} node ${directory} about`, [], {shell: true})
             break;
