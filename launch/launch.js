@@ -1,7 +1,8 @@
 import { displayPlayUi } from '../ui/uiManagers/player.js';
+import { changeProgramTitleStatus } from '../helpers/player/programTitle.js'
 
 export function launch() {
-    process.stdout.write(String.fromCharCode(27) + "]0;termusic" + String.fromCharCode(7));
+    changeProgramTitleStatus('idling')
 
     setInterval(function() {}, 1000 * 60 * 60);
     console.clear()

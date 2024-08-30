@@ -2,6 +2,7 @@ import { playAudioUrl } from "../../snippets/player.js"
 import { getAudioUrl } from "../misc/cobalt.js"
 import { currentSongReport, setPlayStatus } from "./playStatus.js"
 import { setSongDuration, setSongTitle, startProgressBarMoving, startSongDurationMoving, updateProgressBar } from "../../ui/uiManagers/player.js"
+import { changeProgramTitleStatus } from "./programTitle.js"
 
 let list = []
 let looping = false
@@ -22,10 +23,12 @@ export async function listContinue(isSkip = false) {
         setSongTitle(list[0]["title"])
         startSongDurationMoving(list[0]["length"])
         setPlayStatus("important", `Now playing ${list[0]["title"]}!`)
+        changeProgramTitleStatus(list[0]['isLive'] ? 'radio' : 'playing')
         setPlayStatus("report", list[0])
         list.shift()
     } else if (!isSkip) {
         setSongTitle("no song playing")
+        changeProgramTitleStatus('idling')
         updateProgressBar(0)
         setSongDuration("0:00", "0:00")
         setPlayStatus("report", {
@@ -49,6 +52,7 @@ export async function restartSong() {
         setSongTitle(currentSongReport["title"])
         startSongDurationMoving(currentSongReport["length"])
         setPlayStatus("important", `Restarted song ${currentSongReport["title"]}!`)
+        changeProgramTitleStatus(currentSongReport['isLive'] ? 'radio' : 'playing')
         setPlayStatus("report", currentSongReport)
     }
 }
