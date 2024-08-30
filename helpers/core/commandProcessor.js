@@ -130,8 +130,7 @@ export async function processCommand(command) {
         case 'share':
             if (currentSongPlayingReport['isLive']) {
                 setPlayStatus('important_err', 'Radio streams cannot be shared.')
-            }
-            else if (currentSongPlayingReport) {
+            } else if (currentSongPlayingReport['id']) {
                 clipboard.write('https://termusic.axell.me?s=' + currentSongPlayingReport['id'])
                 setPlayStatus('important', 'Copied song link to clipboard!')
             } else {
