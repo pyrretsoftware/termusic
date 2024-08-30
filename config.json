@@ -1,6 +1,6 @@
 {
     "invidious-instances": [
-        "https://inv.tux.pizza"
+        "https://invidious.privacyredirect.com"
     ],
     "cobalt-instances": [
         "https://api.cobalt.tools/api/json"

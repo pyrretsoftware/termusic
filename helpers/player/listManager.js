@@ -12,7 +12,7 @@ export async function listContinue(isSkip = false) {
     } else if (list[0]) {
         setPlayStatus("log", "Grabbing audio...")
         
-        const audio = await getAudioUrl(list[0]["id"])
+        const audio = await (list[0]['isLive'] ? getLiveStreamUrl : getAudioUrl)(list[0]["id"])
         if (!audio) return
 
         setPlayStatus("log", "Waiting for ffmpeg...")
@@ -39,7 +39,7 @@ export async function restartSong() {
     if (currentSongReport) {
         setPlayStatus("log", "Grabbing audio...")
         
-        const audio = await getAudioUrl(currentSongReport["id"])
+        const audio = await (currentSongReport['isLive'] ? getLiveStreamUrl : getAudioUrl)(currentSongReport["id"])
         if (!audio) return
 
         setPlayStatus("log", "Waiting for ffmpeg...")

@@ -78,9 +78,13 @@ export async function searchYoutube(query, searchType = 'song') {
             fs.writeFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), '../', '../', 'debugFiles', 'ytInitialData.json'), JSON.stringify(JSON.parse('{' + html.match(regex)[1] + '}')['contents'], null, 4))
         }
     
-        const length = (parseInt(videoField["lengthText"]['simpleText'].split(':')[0]) * 60) + parseInt(videoField["lengthText"]['simpleText'].split(':')[1])
-    
+        let length = null
+        if (videoField["lengthText"]) {
+            length = (parseInt(videoField["lengthText"]['simpleText'].split(':')[0]) * 60) + parseInt(videoField["lengthText"]['simpleText'].split(':')[1])
+        }
+
         return {
+            "isLive" : !videoField["lengthText"],
             "title" : videoField['title']['runs'][0]['text'],
             "id" : videoField['videoId'],
             "length" : length,
@@ -88,7 +92,7 @@ export async function searchYoutube(query, searchType = 'song') {
         } 
     } catch (e) {
         if (process.argv[3] == 'debug') {
-            console.log(e)
+            throw new Error(e.message)
         }
         return false
     }

@@ -16,6 +16,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { getSearchFunction, isSearchEngine } from '../search/defualtSearchEngine.js';
 import { config, editConfigValue } from '../../snippets/config.js';
+import { getLiveStreamUrl } from '../search/invidious.js';
 
 const directory = path.join(path.dirname(fileURLToPath(import.meta.url)), '../', '../', 'termusic.js')
 let search = getSearchFunction()
@@ -47,7 +48,7 @@ export async function processCommand(command) {
             }
             
             setPlayStatus("log", "Grabbing audio...")
-            const audio = await getAudioUrl(searchResult["id"])
+            const audio = await (searchResult['isLive'] ? getLiveStreamUrl : getAudioUrl)(searchResult["id"])
             if (!audio) return
 
             setPlayStatus("log", "Waiting for ffmpeg...")

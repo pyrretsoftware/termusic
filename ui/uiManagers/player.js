@@ -11,7 +11,7 @@ import { centerText } from '../utils/centerText.js';
 import { moveCursorPos } from '../utils/moveCursorPos.js';
 import { clearBar } from '../utils/clearBar.js';
 import { answer, currentSongReport, outputWritten, setoutputWritten } from '../../helpers/player/playStatus.js';
-import { Reset } from '../../helpers/misc/colorCodes.js';
+import { PastelRed, Red, Reset } from '../../helpers/misc/colorCodes.js';
 import { getThemeEscapeCode } from '../themes.js';
 
 readline.emitKeypressEvents(process.stdin);
@@ -86,12 +86,13 @@ let publicForIndexSongDuration = 0
 export async function startSongDurationMoving(songlength) {
     currentSongIndex2++
     let  _currentSongIndex = currentSongIndex2
-    for (let i = 0; i < songlength; i++) {
+    for (let i = 0; i < (songlength ? songlength : Infinity); i++) {
         publicForIndexSongDuration  = i
         if (currentSongIndex2 != _currentSongIndex) {
             return
         }
-        setSongDuration((i - (i % 60)) / 60 + ":" + (i % 60).toString().padStart(2, '0'), (songlength - (songlength % 60)) / 60 + ":" + (songlength % 60).toString().padStart(2, '0'))
+        setSongDuration((i - (i % 60)) / 60 + ":" + (i % 60).toString().padStart(2, '0'),
+        (songlength ? (songlength - (songlength % 60)) / 60 + ":" + (songlength % 60).toString().padStart(2, '0') : `${PastelRed}Live${Reset}`))
         await new Promise(resolve => setTimeout(resolve,  1000));
     }
     setSongDuration("0:00", "0:00")
@@ -102,6 +103,11 @@ let publicForIndex = 0 //another horrible way of doing this
 export async function startProgressBarMoving(length) {
     currentSongIndex++
     let  _currentSongIndex = currentSongIndex
+
+    if (!length) {
+        updateProgressBar(0)
+        return
+    }
     for (let i = 0; i < (30); i++) { 
         publicForIndex = i
         if (currentSongIndex != _currentSongIndex) {
