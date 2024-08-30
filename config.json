@@ -1,6 +1,8 @@
 {
     "invidious-instances": [
-        "https://invidious.privacyredirect.com"
+        "https://invidious.privacyredirect.com",
+        "https://invidious.nerdvpn.de",
+        "https://inv.nadeko.net"
     ],
     "cobalt-instances": [
         "https://api.cobalt.tools/api/json"
