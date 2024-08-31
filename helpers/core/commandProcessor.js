@@ -6,7 +6,7 @@ Written by axell (mail@axell.me) for pyrret software.
 import { getAudioUrl } from '../misc/cobalt.js'
 import { changeAudioVolume, killAudioProcesses, playAudioUrl} from '../../snippets/player.js'
 import { currentSongPlayingReport, setPlayStatus } from '../player/playStatus.js';
-import { performFullRealTimeReRender, setSongTitle, startProgressBarMoving, startSongDurationMoving } from '../../ui/uiManagers/player.js';
+import { performFullRealTimeReRender, setSongTitle, startMoving} from '../../ui/uiManagers/player.js';
 import { addSong, clearList, listContinue, removeLastSong, replaceList, toggleLooping } from '../player/listManager.js';
 import { getCrossPlatformString } from '../misc/crossPlatformHelper.js';
 import { loadThemeObject } from '../../ui/themes.js';
@@ -58,8 +58,7 @@ export async function processCommand(command) {
             setPlayStatus("important", `Now playing ${searchResult["title"]}!`)
             changeProgramTitleStatus(searchResult['isLive'] ? 'radio' : 'playing')
 
-            startProgressBarMoving(searchResult["length"])
-            startSongDurationMoving(searchResult["length"])
+            startMoving(searchResult["length"])
 
             setSongTitle(searchResult["title"])
             setPlayStatus("report", searchResult);

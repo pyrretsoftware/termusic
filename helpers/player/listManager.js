@@ -1,7 +1,7 @@
 import { playAudioUrl } from "../../snippets/player.js"
 import { getAudioUrl } from "../misc/cobalt.js"
 import { currentSongReport, setPlayStatus } from "./playStatus.js"
-import { setSongDuration, setSongTitle, startProgressBarMoving, startSongDurationMoving, updateProgressBar } from "../../ui/uiManagers/player.js"
+import { setSongDuration, setSongTitle, startMoving, updateProgressBar } from "../../ui/uiManagers/player.js"
 import { changeProgramTitleStatus } from "./programTitle.js"
 
 let list = []
@@ -19,9 +19,9 @@ export async function listContinue(isSkip = false) {
         setPlayStatus("log", "Waiting for ffmpeg...")
         await playAudioUrl(audio)
 
-        startProgressBarMoving(list[0]["length"])
+        startMoving(list[0]["length"])
         setSongTitle(list[0]["title"])
-        startSongDurationMoving(list[0]["length"])
+
         setPlayStatus("important", `Now playing ${list[0]["title"]}!`)
         changeProgramTitleStatus(list[0]['isLive'] ? 'radio' : 'playing')
         setPlayStatus("report", list[0])
@@ -48,9 +48,9 @@ export async function restartSong() {
         setPlayStatus("log", "Waiting for ffmpeg...")
         await playAudioUrl(audio)
 
-        startProgressBarMoving(currentSongReport["length"])
+        startMoving(currentSongReport["length"])
         setSongTitle(currentSongReport["title"])
-        startSongDurationMoving(currentSongReport["length"])
+
         setPlayStatus("important", `Restarted song ${currentSongReport["title"]}!`)
         changeProgramTitleStatus(currentSongReport['isLive'] ? 'radio' : 'playing')
         setPlayStatus("report", currentSongReport)

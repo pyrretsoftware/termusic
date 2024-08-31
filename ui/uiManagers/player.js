@@ -35,9 +35,23 @@ let command = ""
 export let isTypingCommand = false
 
 //#region playerMetadata
+
+function calculateDisplayTime(time) {
+    if (time == null) return `${PastelRed}Live${Reset}`
+
+    let hours = Math.floor(time / 3600)
+    let min = (time - (time % 60) - (hours * 3600)) / 60
+    let sec = (time % 60).toString().padStart(2, '0')
+    
+    if (hours > 0) {
+        return hours + ":" + min + ":" + sec
+    } else {
+        return min + ":" + sec
+    }
+} 
+
 export async function updateProgressBar(steps) { //steps/30
-    moveCursorPos(38, startString +1)
-    process.stdout.write('\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b\b')
+    moveCursorPos(8, startString +1)
     process.stdout.write(`\x1b[1m${getThemeEscapeCode('progressBar')}` + `──────────────────────────────`.slice(0, steps) + `${Reset}\x1b[2m${getThemeEscapeCode('progressBar')}` + '──────────────────────────────'.slice(steps) + '\x1b[0m')
     
     if (isTypingCommand) {
@@ -47,13 +61,14 @@ export async function updateProgressBar(steps) { //steps/30
         moveCursorPos(0, 0)
     }
 }
+let passedTime = 0 //another horrible way of doing this
 export function setSongDuration(dur1, dur2) {
-    moveCursorPos(7, startString + 1)
-    process.stdout.write('\b\b\b\b')
+    clearBar(startString + 1)
+    updateProgressBar(passedTime)
+    moveCursorPos(3, startString + 1)
     process.stdout.write(getThemeEscapeCode('songTitle') + dur1)
 
-    moveCursorPos(43, startString + 1)
-    process.stdout.write('\b\b\b\b')
+    moveCursorPos(39, startString + 1)
     process.stdout.write(dur2 + Reset)
 
     if (isTypingCommand) {
@@ -80,45 +95,40 @@ export function setSongTitle(title) {
         moveCursorPos(0, 0)
     }
 }
-let currentSongIndex2 = 0; //this is a horrible way of doing this..
-
-let publicForIndexSongDuration = 0
-export async function startSongDurationMoving(songlength) {
-    currentSongIndex2++
-    let  _currentSongIndex = currentSongIndex2
-    for (let i = 0; i < (songlength ? songlength : Infinity); i++) {
-        publicForIndexSongDuration  = i
-        if (currentSongIndex2 != _currentSongIndex) {
-            return
-        }
-        setSongDuration((i - (i % 60)) / 60 + ":" + (i % 60).toString().padStart(2, '0'),
-        (songlength ? (songlength - (songlength % 60)) / 60 + ":" + (songlength % 60).toString().padStart(2, '0') : `${PastelRed}Live${Reset}`))
-        await new Promise(resolve => setTimeout(resolve,  1000));
-    }
-    setSongDuration("0:00", "0:00")
-}
 let currentSongIndex = 0; //this is a horrible way of doing this..
-
-let publicForIndex = 0 //another horrible way of doing this
-export async function startProgressBarMoving(length) {
+let passedTimeBars = 0
+export async function startMoving(length) {
     currentSongIndex++
-    let  _currentSongIndex = currentSongIndex
+    let  _currentSongIndex = currentSongIndex;
 
-    if (!length) {
-        updateProgressBar(0)
-        return
-    }
-    for (let i = 0; i < (30); i++) { 
-        publicForIndex = i
-        if (currentSongIndex != _currentSongIndex) {
+    (async () => {
+        for (let i = 0; i < (length ? length : Infinity); i++) {
+            passedTimeBars  = i
+            if (currentSongIndex != _currentSongIndex) {
+                return
+            }
+            setSongDuration(calculateDisplayTime(i), calculateDisplayTime(length))
+            await new Promise(resolve => setTimeout(resolve,  1000));
+        }
+        setSongDuration("0:00", "0:00")
+    })();
+
+    (async () => {
+        if (!length) {
+            passedTime = 0
+            updateProgressBar(0)
             return
         }
-        updateProgressBar(i)
-        await new Promise(resolve => setTimeout(resolve, (length / 30) * 1000));
-    }
-
-    //we have reached the end of the song
-    listContinue()
+        for (let i = 0; i < (30); i++) { 
+            if (currentSongIndex != _currentSongIndex) {
+                return
+            }
+            passedTime = i
+            updateProgressBar(i)
+            await new Promise(resolve => setTimeout(resolve, (length / 30) * 1000));
+        }
+        listContinue()
+    })();
 }
 const mediaComponents = {
     "progressBar" : "{0} ────────────────────────────── {1}", //30 lines
@@ -152,8 +162,8 @@ export async function performFullRealTimeReRender() {
         songInfo = currentSongReport
     }
     setSongTitle(songInfo['title'])
-    setSongDuration((publicForIndexSongDuration - (publicForIndexSongDuration % 60)) / 60 + ":" + (publicForIndexSongDuration % 60).toString().padStart(2, '0'), (songInfo['length'] - (songInfo['length'] % 60)) / 60 + ":" + (songInfo['length'] % 60).toString().padStart(2, '0'))
-    updateProgressBar(publicForIndex)
+    setSongDuration(calculateDisplayTime(passedTimeBars), calculateDisplayTime(songInfo['length']))
+    updateProgressBar(passedTime)
     moveCursorPos(0, startString +2)
     process.stdout.write(getThemeEscapeCode('mediaComponents') + centerText(process.argv[3] == 'debug' ? mediaComponents["mediaComponent"] : getCrossPlatformString("mediaComponents"), widthChars) + Reset)
 }
