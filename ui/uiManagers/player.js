@@ -48,10 +48,21 @@ function calculateDisplayTime(time) {
     } else {
         return min + ":" + sec
     }
-} 
+}
+let timingBar = 3
+let dur1LengthOffset = 0 
+export function performTimingOffsets(dur1, dur2) {
+    if (dur2.includes("Live")) {
+        dur2 = "Live"
+    }
 
+    let offset = Math.floor(((7 - dur1.length) - (7 - dur2.length)) / 2)
+    timingBar = 3 - offset
+
+    dur1LengthOffset = dur1.length - 4
+}
 export async function updateProgressBar(steps) { //steps/30
-    moveCursorPos(8, startString +1)
+    moveCursorPos(timingBar + 5, startString +1)
     process.stdout.write(`\x1b[1m${getThemeEscapeCode('progressBar')}` + `──────────────────────────────`.slice(0, steps) + `${Reset}\x1b[2m${getThemeEscapeCode('progressBar')}` + '──────────────────────────────'.slice(steps) + '\x1b[0m')
     
     if (isTypingCommand) {
@@ -63,12 +74,13 @@ export async function updateProgressBar(steps) { //steps/30
 }
 let passedTime = 0 //another horrible way of doing this
 export function setSongDuration(dur1, dur2) {
+    performTimingOffsets(dur1, dur2)
     clearBar(startString + 1)
     updateProgressBar(passedTime)
-    moveCursorPos(3, startString + 1)
+    moveCursorPos(timingBar - dur1LengthOffset, startString + 1)
     process.stdout.write(getThemeEscapeCode('songTitle') + dur1)
 
-    moveCursorPos(39, startString + 1)
+    moveCursorPos(timingBar + 36, startString + 1)
     process.stdout.write(dur2 + Reset)
 
     if (isTypingCommand) {
