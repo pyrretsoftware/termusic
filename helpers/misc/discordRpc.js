@@ -3,21 +3,19 @@ import { setPlayStatus } from '../player/playStatus.js';
 import { config } from '../../snippets/config.js';
 
 let ep
-let connected = false
 
-if (process.argv[2] == 'launch') {
+let lastActivity
+
+if (process.argv[2] == 'launch' && config['discordRpcEnabled']) {
     ep = new _ep.EasyPresence("1263923824613920861")
 
     ep.on('connected', () => {
-        connected = true
         setPlayStatus('important', 'Connected to Discord.')
         setTimeout(() => {
-            setPlayStatus("report", {
-                'special' : 'idling'
-            })
+            if (!lastActivity) return
+            setPlayStatus("report", lastActivity)
         }, 500) //wait a little before starting discordrpc
     })
-    ep.on('disconnected', () => connected = false)
 }
 
 export function changeRpcStatus(title, thumbnail, id, idling = false) {
@@ -32,7 +30,6 @@ export function changeRpcStatus(title, thumbnail, id, idling = false) {
         },
         timestamps: { start: new Date() },
     }
-
     if (!idling) {
         activity['buttons'] = [
             {
@@ -42,5 +39,6 @@ export function changeRpcStatus(title, thumbnail, id, idling = false) {
         ]
     }
 
+    lastActivity = activity
     ep.setActivity(activity)
 }
