@@ -11,7 +11,7 @@ import { addSong, clearList, listContinue, removeLastSong, replaceList, toggleLo
 import { getCrossPlatformString } from '../misc/crossPlatformHelper.js';
 import { loadThemeObject } from '../../ui/themes.js';
 import clipboard from 'clipboardy';
-import { spawn } from 'child_process'
+import { spawn, execSync } from 'child_process'
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { getSearchFunction, isSearchEngine } from '../search/defualtSearchEngine.js';
@@ -122,7 +122,26 @@ export async function processCommand(command) {
             process.exit()
             break;
         case 'about':
-            spawn(`${getCrossPlatformString("new-terminal-window")} node ${directory} about`, [], {shell: true})
+            const useWinIconLauncher = (() => { 
+                if (process.platform === 'win32') { 
+                    try {
+                        const dotNetInfo = execSync('dotnet --info')
+                        if (dotNetInfo.toString().includes('8.')) {
+                            return true
+                        }
+                    } catch (e) {}
+                }
+                return false
+            })()
+        
+            if (useWinIconLauncher) {
+                spawn(`${getCrossPlatformString("new-terminal-window")} iconhost.exe about`, [], {
+                    shell: true,
+                    cwd: path.join(path.dirname(fileURLToPath(import.meta.url)), '../', '../', 'bin')
+                })
+            } else {
+                spawn(`${getCrossPlatformString("new-terminal-window")} node ${directory} about`, [], {shell: true})
+            }
             break;
         case 'volume':
             changeAudioVolume(command.split(" ")[1])

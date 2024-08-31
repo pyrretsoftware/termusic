@@ -58,7 +58,7 @@ export async function startLauncher() {
     process.stdout.write('Launching termusic in a seperate window ')
 
     if (useWinIconLauncher) {
-        spawn(`${getCrossPlatformString("new-terminal-window")} iconhost.exe`,[], {
+        spawn(`${getCrossPlatformString("new-terminal-window")} iconhost.exe launch`, [], {
             shell: true,
             cwd: path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'bin')
         })
