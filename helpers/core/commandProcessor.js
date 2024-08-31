@@ -120,23 +120,11 @@ export async function processCommand(command) {
             killAudioProcesses()
             process.exit()
             break;
-        case 'about':
-            const useWinIconLauncher = (() => { 
-                if (process.platform === 'win32') { 
-                    try {
-                        const dotNetInfo = execSync('dotnet --info')
-                        if (dotNetInfo.toString().includes('8.')) {
-                            return true
-                        }
-                    } catch (e) {}
-                }
-                return false
-            })()
-        
-            if (useWinIconLauncher) {
-                spawn(`${getCrossPlatformString("new-terminal-window")} iconhost.exe about`, [], {
+        case 'about':        
+            if (config['useWic']) {
+                spawn(`${getCrossPlatformString("new-terminal-window")} winIconLauncher.exe about`, [], {
                     shell: true,
-                    cwd: path.join(path.dirname(fileURLToPath(import.meta.url)), '../', '../', 'bin')
+                    cwd: path.join(path.dirname(fileURLToPath(import.meta.url)), '../', '../', 'wic')
                 })
             } else {
                 spawn(`${getCrossPlatformString("new-terminal-window")} node ${directory} about`, [], {shell: true})

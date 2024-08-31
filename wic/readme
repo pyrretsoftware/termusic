@@ -1,0 +1,1 @@
+simply compile the file winIconLauncher.cpp in your favourite compiler. The program icon is added afterwards using resource hacker and the icon file located at ./images/icon.ico

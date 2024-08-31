@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 import { Green, Magenta, PastelGreen, PastelRed, Red, Reset, Yellow } from '../helpers/misc/colorCodes.js';
 import { checkForUpdates } from '../helpers/startup/updateChecker.js'
+import { config } from '../snippets/config.js';
 
 const directory = path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'termusic.js')
 
@@ -36,31 +37,12 @@ export async function startLauncher() {
     } else {
         console.log(`[${PastelGreen}DONE${Reset}]`)
     }
-    
-    const useWinIconLauncher = (() => { 
-        if (process.platform === 'win32') { 
-            process.stdout.write('Checking whether winIconLauncher can be used ')
-            try {
-                const dotNetInfo = execSync('dotnet --info')
-
-                if (dotNetInfo.toString().includes('8.')) {
-                    console.log(`[${PastelGreen}DONE${Reset}]`)
-                    return true
-                } else {
-                    console.log(`[${PastelRed}.NET 8.0 NOT FOUND${Reset}]`)
-                }
-            } catch (e) {
-                console.log(`[${PastelRed}NO .NET RUNTIMES FOUND${Reset}]`)
-            }
-        }
-        return false
-    })()
     process.stdout.write('Launching termusic in a seperate window ')
 
-    if (useWinIconLauncher) {
-        spawn(`${getCrossPlatformString("new-terminal-window")} iconhost.exe launch`, [], {
+    if (config['useWic']) {
+        spawn(`${getCrossPlatformString("new-terminal-window")} winIconLauncher.exe launch`, [], {
             shell: true,
-            cwd: path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'bin')
+            cwd: path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'wic')
         })
     } else {
         spawn(`${getCrossPlatformString("new-terminal-window")} node ${directory} launch`, [], {shell: true})
