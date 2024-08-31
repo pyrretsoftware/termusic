@@ -80,7 +80,12 @@ export async function searchYoutube(query, searchType = 'song') {
     
         let length = null
         if (videoField["lengthText"]) {
-            length = (parseInt(videoField["lengthText"]['simpleText'].split(':')[0]) * 60) + parseInt(videoField["lengthText"]['simpleText'].split(':')[1])
+            length = 0
+            const lengthsBackwards = videoField["lengthText"]['simpleText'].split(':').reverse()
+
+            for (let i = 0; i < lengthsBackwards.length; i++) {
+                length += parseInt(lengthsBackwards[i]) * Math.pow(60, i)
+            }
         }
 
         return {
