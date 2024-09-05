@@ -3,7 +3,9 @@
   "version": "1.5.0",
   "description": "a music player inside your terminal",
   "main": "termusic.js",
-  "bin": "termusic.js",
+  "bin": {
+    "termusic": "termusic.js"
+  },
   "scripts": {
     "test": "node --test --test-force-exit"
   },
