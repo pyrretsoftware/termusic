@@ -1,8 +1,4 @@
 {
-    "progressBar" : "rgb(255, 255, 255)",
-    "songTitle" : "rgb(255, 255, 255)",
-    "mediaComponents" : "rgb(255, 255, 255)",
-    "commandBar" : "rgb(255, 255, 255)",
     "commandSuccess" : "rgb(13, 188, 121)",
     "commandError" : "rgb(203, 89, 89)",
     "log" : "rgb(231, 245, 67)",
