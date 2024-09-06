@@ -1,0 +1,10 @@
+{
+    "progressBar" : "rgb(138, 43, 226)",
+    "songTitle" : "rgb(173, 216, 230)",
+    "mediaComponents" : "rgb(240, 128, 128)",
+    "commandBar" : "rgb(138, 43, 226)",
+    "commandSuccess" : "rgb(50, 205, 50)",
+    "commandError" : "rgb(255, 69, 0)",
+    "log" : "rgb(218, 112, 214)",
+    "question" : "rgb(255, 215, 0)"
+}
