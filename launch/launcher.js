@@ -39,7 +39,7 @@ export async function startLauncher() {
     }
     process.stdout.write('Launching termusic in a seperate window ')
 
-    if (config['useWic']) {
+    if (config['useWic'] && process.platform === 'win32') {
         spawn(`${getCrossPlatformString("new-terminal-window")} winIconLauncher.exe launch`, [], {
             shell: true,
             cwd: path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'wic')

@@ -20,11 +20,6 @@ const DarkerAccentColor = 'rgb(41, 41, 41)'
 process.stdout.on('resize', () => {
     if (process.argv[2] == 'about') {
         process.stdout.write(`${String.fromCharCode(0o33)}[8;h;wt`.replaceAll("h", "15").replaceAll("w", "73"))
-        
-        setTimeout(() => {
-            moveCursorPos(0, 0)
-            process.stdout.write(' \b\b')//make sure we dont scroll down during resize 
-        }, 150)
     }
 }); 
 

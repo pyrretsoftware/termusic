@@ -223,7 +223,7 @@ process.stdin.on('keypress', async function(c, key) {
                 command += " "
                 process.stdout.write(" ")                
             } else if (key.sequence != "\b") {
-                if (RegExp(/[^\t]/,'u').test(key.sequence) || parseInt(key.sequence) || key.sequence === "0") {
+                if ((RegExp(/[^\t]/,'u').test(key.sequence) && key.name != 'up' && key.name != 'down' && key.name != 'left' && key.name != 'right') || parseInt(key.sequence) || key.sequence === "0") {
                     if (command.length < widthChars - 3) {
                         command += key.sequence
                         process.stdout.write(key.sequence)

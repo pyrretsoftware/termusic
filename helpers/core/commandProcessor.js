@@ -5,7 +5,7 @@ Written by axell (mail@axell.me) for pyrret software.
 */
 import { getAudioUrl } from '../misc/cobalt.js'
 import { changeAudioVolume, killAudioProcesses, playAudioUrl} from '../../snippets/player.js'
-import { currentSongPlayingReport, setPlayStatus } from '../player/playStatus.js';
+import { currentSongPlayingReport, currentSongReport, setPlayStatus } from '../player/playStatus.js';
 import { performFullRealTimeReRender, setSongTitle, startMoving} from '../../ui/uiManagers/player.js';
 import { addSong, clearList, listContinue, removeLastSong, replaceList, toggleLooping } from '../player/listManager.js';
 import { getCrossPlatformString } from '../misc/crossPlatformHelper.js';
@@ -121,7 +121,7 @@ export async function processCommand(command) {
             process.exit()
             break;
         case 'about':        
-            if (config['useWic']) {
+            if (config['useWic'] && process.platform === 'win32') {
                 spawn(`${getCrossPlatformString("new-terminal-window")} winIconLauncher.exe about`, [], {
                     shell: true,
                     cwd: path.join(path.dirname(fileURLToPath(import.meta.url)), '../', '../', 'wic')
@@ -130,17 +130,30 @@ export async function processCommand(command) {
                 spawn(`${getCrossPlatformString("new-terminal-window")} node ${directory} about`, [], {shell: true})
             }
             break;
+        case 'help':
+            if (config['useWic'] && process.platform === 'win32') {
+                spawn(`${getCrossPlatformString("new-terminal-window")} winIconLauncher.exe help-dialog`, [], {
+                    shell: true,
+                    cwd: path.join(path.dirname(fileURLToPath(import.meta.url)), '../', '../', 'wic')
+                })
+            } else {
+                spawn(`${getCrossPlatformString("new-terminal-window")} node ${directory} help-dialog`, [], {shell: true})
+            }
+            break
         case 'volume':
             changeAudioVolume(command.split(" ")[1])
             break;
         case 'share':
+            if (!currentSongPlayingReport) {
+                setPlayStatus('important_err', 'No song playing.')
+                break
+            }
+
             if (currentSongPlayingReport['isLive']) {
                 setPlayStatus('important_err', 'Radio streams cannot be shared.')
-            } else if (currentSongPlayingReport['id']) {
+            } else if (currentSongPlayingReport) {
                 clipboard.write('https://termusic.axell.me?s=' + currentSongPlayingReport['id'])
                 setPlayStatus('important', 'Copied song link to clipboard!')
-            } else {
-                setPlayStatus('important_err', 'No song playing.')
             }
             break;
         case 'loop':
