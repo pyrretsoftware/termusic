@@ -74,11 +74,12 @@ export async function updateProgressBar(steps) { //steps/30
         moveCursorPos(0, 0)
     }
 }
-let passedTime = 0 //another horrible way of doing this
+let passedTime = 0
+let passedTimeBars = 0
 export function setSongDuration(dur1, dur2) {
     performTimingOffsets(dur1, dur2)
     clearBar(startString + 1)
-    updateProgressBar(passedTime)
+    updateProgressBar(passedTimeBars)
     moveCursorPos(timingBar - dur1LengthOffset, startString + 1)
     process.stdout.write(getThemeEscapeCode('songTitle') + dur1)
 
@@ -110,7 +111,6 @@ export function setSongTitle(title) {
     }
 }
 let currentSongIndex = 0; //this is a horrible way of doing this..
-let passedTimeBars = 0
 export async function startMoving(length) {
     currentSongIndex++
     let  _currentSongIndex = currentSongIndex;
@@ -118,7 +118,7 @@ export async function startMoving(length) {
 
     (async () => {
         if (!length) {
-            passedTime = 0
+            passedTimeBars = 0
             updateProgressBar(0)
         }
 
@@ -130,9 +130,12 @@ export async function startMoving(length) {
             const timeDifference = Math.floor((Date.now() - startTime) / 1000)
             const barDifference = Math.floor((Date.now() - startTime) / 1000) / (length / 30)
 
-            if (passedTimeBars != timeDifference && passedTime != barDifference) {
-                passedTimeBars  = timeDifference
-                passedTime = barDifference
+            if  (passedTimeBars == 30) {
+                return
+            }
+            if (passedTime != timeDifference && passedTimeBars != barDifference) {
+                passedTime  = timeDifference
+                passedTimeBars = barDifference
     
                 setSongDuration(calculateDisplayTime(timeDifference), calculateDisplayTime(length))
     
@@ -178,8 +181,8 @@ export async function performFullRealTimeReRender() {
         songInfo = currentSongReport
     }
     setSongTitle(songInfo['title'])
-    setSongDuration(calculateDisplayTime(passedTimeBars), calculateDisplayTime(songInfo['length']))
-    updateProgressBar(passedTime)
+    setSongDuration(calculateDisplayTime(passedTime), calculateDisplayTime(songInfo['length']))
+    updateProgressBar(passedTimeBars)
     moveCursorPos(0, startString +2)
     process.stdout.write(getThemeEscapeCode('mediaComponents') + centerText(process.argv[3] == 'debug' ? mediaComponents["mediaComponent"] : getCrossPlatformString("mediaComponents"), widthChars) + Reset)
 }
