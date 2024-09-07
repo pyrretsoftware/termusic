@@ -13,6 +13,7 @@ import { clearBar } from '../utils/clearBar.js';
 import { answer, currentSongReport, outputWritten, setoutputWritten } from '../../helpers/player/playStatus.js';
 import { PastelRed, Red, Reset } from '../../helpers/misc/colorCodes.js';
 import { getThemeEscapeCode } from '../themes.js';
+import { config } from '../../snippets/config.js';
 
 readline.emitKeypressEvents(process.stdin);
 if (process.stdin.isTTY) {
@@ -30,6 +31,7 @@ const startString = 1
 const commandString = 4
 const heightChars = 5
 const widthChars = 46
+const FPS = config['fps']
 
 let command = ""
 export let isTypingCommand = false
@@ -112,33 +114,35 @@ let passedTimeBars = 0
 export async function startMoving(length) {
     currentSongIndex++
     let  _currentSongIndex = currentSongIndex;
-
-    (async () => {
-        for (let i = 0; i < (length ? length : Infinity); i++) {
-            passedTimeBars  = i
-            if (currentSongIndex != _currentSongIndex) {
-                return
-            }
-            setSongDuration(calculateDisplayTime(i), calculateDisplayTime(length))
-            await new Promise(resolve => setTimeout(resolve,  1000));
-        }
-        setSongDuration("0:00", "0:00")
-    })();
+    const startTime = new Date();
 
     (async () => {
         if (!length) {
             passedTime = 0
             updateProgressBar(0)
-            return
         }
-        for (let i = 0; i < (30); i++) { 
+
+        for (let i = 0; i < (length ? length * FPS : Infinity); i++) {
             if (currentSongIndex != _currentSongIndex) {
                 return
             }
-            passedTime = i
-            updateProgressBar(i)
-            await new Promise(resolve => setTimeout(resolve, (length / 30) * 1000));
+
+            const timeDifference = Math.floor((Date.now() - startTime) / 1000)
+            const barDifference = Math.floor((Date.now() - startTime) / 1000) / (length / 30)
+
+            if (passedTimeBars != timeDifference && passedTime != barDifference) {
+                passedTimeBars  = timeDifference
+                passedTime = barDifference
+    
+                setSongDuration(calculateDisplayTime(timeDifference), calculateDisplayTime(length))
+    
+                if (length) {
+                    updateProgressBar(barDifference)
+                }   
+            }
+            await new Promise(resolve => setTimeout(resolve,  (1 / FPS) * 1000));
         }
+        setSongDuration("0:00", "0:00")
         listContinue()
     })();
 }
