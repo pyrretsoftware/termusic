@@ -3,8 +3,11 @@ termusic/helpers/cobalt.js
 
 Written by axell (mail@axell.me) for pyrret software.
 */
+import path from 'path'
 import {config} from '../../snippets/config.js'
 import { setPlayStatus } from '../player/playStatus.js'
+import fs from 'fs'
+import { fileURLToPath } from 'url'
 
 let currentInstance = 0
 
@@ -24,6 +27,10 @@ export async function getAudioUrl(id ) {
     let cobaltResponse = await cobaltRequest.json()
     let retryTimes = 3
 
+    if (cobaltResponse['status'] == 'error' && cobaltResponse['text'].includes('process videos longer than') ) {
+        setPlayStatus('important_err', 'Cobalt can only handle songs up to 3 hours.')
+        return false
+    }
 
     while (cobaltResponse['status'] == 'error' && retryTimes != 0) {
         setPlayStatus('log', 'Cobalt failed, trying again...')
@@ -45,6 +52,10 @@ export async function getAudioUrl(id ) {
 
     if (cobaltResponse['status'] == 'error') {
         setPlayStatus('important_err', 'Cobalt failed, check status.cobalt.tools')
+        if (process.argv[3] == 'debug') {
+            fs.writeFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), '../', '../', 'debugFiles', 'cobaltError.json'), JSON.stringify(cobaltResponse, null, 4)) 
+        }
+
         return false
     }
 
