@@ -11,6 +11,6 @@
     "alwaysFullReload": false,
     "searchEngine": "youtube",
     "discordRpcEnabled": true,
-    "useWic" : true,
-    "fps" : 10
+    "useWic": true,
+    "fps": 5
 }

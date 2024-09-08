@@ -4,7 +4,7 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 import { Green, Magenta, PastelGreen, PastelRed, Red, Reset, Yellow } from '../helpers/misc/colorCodes.js';
 import { checkForUpdates } from '../helpers/startup/updateChecker.js'
-import { config } from '../snippets/config.js';
+import { config, editConfigValue } from '../snippets/config.js';
 
 const directory = path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'termusic.js')
 
@@ -38,12 +38,28 @@ export async function startLauncher() {
         console.log(`[${PastelGreen}DONE${Reset}]`)
     }
     process.stdout.write('Launching termusic in a seperate window ')
-
+    
     if (config['useWic'] && process.platform === 'win32') {
-        spawn(`${getCrossPlatformString("new-terminal-window")} winIconLauncher.exe launch`, [], {
+        const wicProcess = spawn(`${getCrossPlatformString("new-terminal-window")} winIconLauncher.exe launch`, [], {
             shell: true,
             cwd: path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'wic')
         })
+        if (config['useWic'] == 'notSure') {
+            let isAlive = true
+            await new Promise(resolve => setTimeout(resolve, 1800))
+
+            exec('tasklist', (err, stdout, stderr) => {
+                isAlive = (stdout.toLowerCase().indexOf(query.toLowerCase()) > -1)
+            })
+            if (!isAlive) {
+                console.log(`[${PastelRed}FAILED${Reset}]`)
+                process.stdout.write('Launching termusic with the legacy launcher ')
+                spawn(`${getCrossPlatformString("new-terminal-window")} node ${directory} launch`, [], {shell: true})
+                editConfigValue('useWic', false)
+            } else {
+                editConfigValue('useWic', true)
+            }
+        }
     } else {
         spawn(`${getCrossPlatformString("new-terminal-window")} node ${directory} launch`, [], {shell: true})
     }
