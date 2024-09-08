@@ -13,6 +13,7 @@ const widthChars = 46
 const idlingImageStyle = config['idlingImageStyle']
 
 export let answer
+export let statusText = ''
 
 export function setPlayStatus(type, playStatus) { //playStatus can either be a string or a video object
     if (type == 'report') {
@@ -41,7 +42,8 @@ export function setPlayStatus(type, playStatus) { //playStatus can either be a s
         }
 
         process.stdout.write(themes[type]  + playStatus + '\x1b[0m')
-        
+        statusText = themes[type]  + playStatus + '\x1b[0m'
+
         outputWritten = true
         moveCursorPos(0, 0)
         setTimeout(function() {
@@ -68,6 +70,7 @@ export function ask(question) {
             answer = undefined
         }
         process.stdout.write(getThemeEscapeCode('question') + question + ' (y/n)' + '\x1b[0m')
+        statusText = getThemeEscapeCode('question') + question + ' (y/n)' + '\x1b[0m'
     })
 }
 export function setoutputWritten(val) {

@@ -1,8 +1,3 @@
-/*
-termusic/snippets/player.js
-
-Written by axell (mail@axell.me) for pyrret software.
-*/
 import { exec, execSync, spawn } from 'child_process';
 import { getCrossPlatformString } from '../helpers/misc/crossPlatformHelper.js';
 import { setPlayStatus } from '../helpers/player/playStatus.js';
@@ -34,7 +29,7 @@ export async function playAudioUrl(url) {
         })
     }
 
-    //currentlyPLayingAudio = spawn(`ffplay "${url}" -nodisp`, [], {stdio: 'pipe', shell: true})
+    //currentlyPLayingAudio = spawn(`ffplay "${url}" -nodisp`, [], {shell: true})
     currentlyPLayingAudio = exec(`ffplay "${url}" -nodisp -volume ${audioVolume}`, {stdio: 'pipe', detached: true})
     await fetch(url)
 }

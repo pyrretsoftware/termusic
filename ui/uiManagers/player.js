@@ -10,7 +10,7 @@ import { killAudioProcesses } from '../../snippets/player.js';
 import { centerText } from '../utils/centerText.js';
 import { moveCursorPos } from '../utils/moveCursorPos.js';
 import { clearBar } from '../utils/clearBar.js';
-import { answer, currentSongReport, outputWritten, setoutputWritten } from '../../helpers/player/playStatus.js';
+import { answer, currentSongReport, outputWritten, setoutputWritten, statusText } from '../../helpers/player/playStatus.js';
 import { PastelRed, Red, Reset } from '../../helpers/misc/colorCodes.js';
 import { getThemeEscapeCode } from '../themes.js';
 import { config } from '../../snippets/config.js';
@@ -130,8 +130,8 @@ export async function startMoving(length) {
             const timeDifference = Math.floor((Date.now() - startTime) / 1000)
             const barDifference = Math.floor((Date.now() - startTime) / 1000) / (length / 30)
 
-            if  (passedTimeBars == 30) {
-                return
+            if (passedTimeBars >= 30) {
+                break
             }
             if (passedTime != timeDifference && passedTimeBars != barDifference) {
                 passedTime  = timeDifference
@@ -166,8 +166,15 @@ export async function reWriteCommandText() {
         moveCursorPos(0, commandString)
         process.stdout.write(getThemeEscapeCode('commandBar') + " >" + command + Reset)
     }
-
 }
+
+export function rewriteStatusText() {
+    if (!isTypingCommand) {
+        moveCursorPos(0, commandString)
+        process.stdout.write(statusText)
+    }
+}
+
 
 //#endregion
 
@@ -185,6 +192,12 @@ export async function performFullRealTimeReRender() {
     updateProgressBar(passedTimeBars)
     moveCursorPos(0, startString +2)
     process.stdout.write(getThemeEscapeCode('mediaComponents') + centerText(process.argv[3] == 'debug' ? mediaComponents["mediaComponent"] : getCrossPlatformString("mediaComponents"), widthChars) + Reset)
+
+    if (!outputWritten) {
+        reWriteCommandText()
+    } else {
+        rewriteStatusText()
+    }
 }
 //#endregion
 //#region userInput
