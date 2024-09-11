@@ -11,11 +11,18 @@ const __dirname = path.dirname(__filename);
 let themeObject = config['storedTheme']
 
 export function loadThemeObject(themeName) {
-    if (fs.existsSync(path.join(__dirname, 'themes', themeName + '.json'))) {
+    if (themeName == 'defualt') {
+        themeObject = null
+        (async () => { //async for if the drive is slow
+            editConfigValue('storedTheme', themeObject)
+        })()
+        setPlayStatus('important', 'Set theme to defualt!')
+    } else if (fs.existsSync(path.join(__dirname, 'themes', themeName + '.json'))) {
         themeObject = JSON.parse(fs.readFileSync(path.join(__dirname, 'themes', themeName + '.json')));
         (async () => { //async for if the drive is slow
             editConfigValue('storedTheme', themeObject)
         })()
+        setPlayStatus('important', 'Applied theme!')
     } else {
         setPlayStatus('important_err', 'Theme file not found.')
     }

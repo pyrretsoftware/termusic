@@ -165,7 +165,6 @@ export async function processCommand(command) {
         case 'theme':
             loadThemeObject(command.replace('theme ', ''))
             performFullRealTimeReRender()
-            setPlayStatus('important', 'Applied theme!')
             break;
         case 'reloadui':
             console.clear()
