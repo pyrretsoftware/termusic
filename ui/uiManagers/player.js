@@ -145,6 +145,8 @@ export async function startMoving(length) {
             }
             await new Promise(resolve => setTimeout(resolve,  (1 / FPS) * 1000));
         }
+        passedTimeBars = 0
+        passedTime = 0
         setSongDuration("0:00", "0:00")
         listContinue()
     })();

@@ -1,6 +1,8 @@
 # <img src="https://github.com/pyrretsoftware/termusic/raw/main/images/icon.png" width="32"/> termusic
 
 A minimal and lightweight terminal music player. Uses the cobalt api and ffplay to stream and play audio from youtube.
+
+Termusic is designed to sit in the corner of your screen while you work, study, or play video games, while taking up as little screen real estate as possible.
 # Getting started!
 First, make sure you have node.js version **18** or later, [npm](https://npmjs.org), aswell as [ffmpeg](https://ffmpeg.org) installed on your system.
 
