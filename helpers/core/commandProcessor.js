@@ -4,8 +4,7 @@ termusic/helpers/commandprocessor.js
 Written by axell (mail@axell.me) for pyrret software.
 */
 import { getAudioUrl } from '../misc/cobalt.js'
-import { changeAudioVolume, killAudioProcesses, playAudioUrl} from '../../snippets/player.js'
-import { currentSongPlayingReport, currentSongReport, setPlayStatus } from '../player/playStatus.js';
+import { currentSongPlayingReport, setPlayStatus } from '../player/playStatus.js';
 import { performFullRealTimeReRender, setSongTitle, startMoving} from '../../ui/uiManagers/player.js';
 import { addSong, clearList, listContinue, removeLastSong, replaceList, toggleLooping } from '../player/listManager.js';
 import { getCrossPlatformString } from '../misc/crossPlatformHelper.js';
@@ -18,6 +17,7 @@ import { getSearchFunction, isSearchEngine } from '../search/defualtSearchEngine
 import { config, editConfigValue } from '../../snippets/config.js';
 import { getLiveStreamUrl } from '../search/invidious.js';
 import { changeProgramTitleStatus } from '../player/programTitle.js';
+import { changeAudioVolume, killAudioProcesses, playSlsfAudioUrl } from './playAudio.js';
 
 const directory = path.join(path.dirname(fileURLToPath(import.meta.url)), '../', '../', 'termusic.js')
 let search = getSearchFunction()
@@ -53,7 +53,7 @@ export async function processCommand(command) {
             if (!audio) return
 
             setPlayStatus("log", "Waiting for ffmpeg...")
-            await playAudioUrl(audio)
+            await playSlsfAudioUrl(audio)
 
             setPlayStatus("important", `Now playing ${searchResult["title"]}!`)
             changeProgramTitleStatus(searchResult['isLive'] ? 'radio' : 'playing')

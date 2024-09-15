@@ -5,15 +5,15 @@ import process from 'process';
 import { processCommand } from '../../helpers/core/commandProcessor.js';
 import { getCrossPlatformString } from '../../helpers/misc/crossPlatformHelper.js';
 import { listContinue, restartSong } from '../../helpers/player/listManager.js';
-import { killAudioProcesses } from '../../snippets/player.js';
 
 import { centerText } from '../utils/centerText.js';
 import { moveCursorPos } from '../utils/moveCursorPos.js';
 import { clearBar } from '../utils/clearBar.js';
-import { answer, currentSongReport, outputWritten, setoutputWritten, statusText } from '../../helpers/player/playStatus.js';
+import { answer, currentSongPlayingReport, currentSongReport, outputWritten, setoutputWritten, setPlayStatus, statusText } from '../../helpers/player/playStatus.js';
 import { PastelRed, Red, Reset } from '../../helpers/misc/colorCodes.js';
 import { getThemeEscapeCode } from '../themes.js';
 import { config } from '../../snippets/config.js';
+import { changePlayState, currentlyPLayingAudio } from '../../helpers/core/playAudio.js';
 
 readline.emitKeypressEvents(process.stdin);
 if (process.stdin.isTTY) {
@@ -74,7 +74,7 @@ export async function updateProgressBar(steps) { //steps/30
         moveCursorPos(0, 0)
     }
 }
-let passedTime = 0
+export let passedTime = 0
 let passedTimeBars = 0
 export function setSongDuration(dur1, dur2) {
     performTimingOffsets(dur1, dur2)
@@ -93,9 +93,10 @@ export function setSongDuration(dur1, dur2) {
         moveCursorPos(0, 0)
     }
 }
-function changePlayState(state) {
-    moveCursorPos(23, startString + 2)
-    process.stdout.write('\b' + getThemeEscapeCode('mediaComponents') + (state ? '▶️' : '⏸️') + Reset)
+export function changeUiPlayState(state) {
+    moveCursorPos(0, startString +2)
+    process.stdout.write(getThemeEscapeCode('mediaComponents') + centerText((state ? getCrossPlatformString("mediaComponents") : getCrossPlatformString("mediaComponentsPaused")), widthChars) + Reset)
+    moveCursorPos(0,0)
 }
 export function setSongTitle(title) {
     moveCursorPos(widthChars, startString)
@@ -114,26 +115,28 @@ let currentSongIndex = 0; //this is a horrible way of doing this..
 export async function startMoving(length) {
     currentSongIndex++
     let  _currentSongIndex = currentSongIndex;
-    const startTime = new Date();
+    let startTime = new Date()
+    changeUiPlayState(true);
 
     (async () => {
-        if (!length) {
-            passedTimeBars = 0
-            updateProgressBar(0)
-        }
-
         for (let i = 0; i < (length ? length * FPS : Infinity); i++) {
+            if (!currentlyPLayingAudio['isPlaying']) {
+                startTime = new Date(startTime.getTime() + ((1 / FPS) * 1000)) //account for passed time when pausing
+                await new Promise(resolve => setTimeout(resolve,  (1 / FPS) * 1000));
+                continue
+            }
+
             if (currentSongIndex != _currentSongIndex) {
                 return
             }
 
             const timeDifference = Math.floor((Date.now() - startTime) / 1000)
-            const barDifference = Math.floor((Date.now() - startTime) / 1000) / (length / 30)
+            const barDifference = timeDifference / (length / 30) //will be NaN if playing radio
 
-            if (passedTimeBars >= 30) {
+            if (passedTimeBars >= 30 && length) {
                 break
             }
-            if (passedTime != timeDifference && passedTimeBars != barDifference) {
+            if (passedTime != timeDifference && (passedTimeBars != barDifference || !length)) {
                 passedTime  = timeDifference
                 passedTimeBars = barDifference
     
@@ -160,7 +163,7 @@ export async function displayPlayUi(title) {
     setSongDuration('0:00', '0:00')
     updateProgressBar(0)
     moveCursorPos(0, startString +2)
-    process.stdout.write(getThemeEscapeCode('mediaComponents') + centerText(process.argv[3] == 'debug' ? mediaComponents["mediaComponent"] : getCrossPlatformString("mediaComponents"), widthChars) + Reset)
+    process.stdout.write(getThemeEscapeCode('mediaComponents') + centerText((currentlyPLayingAudio['isPlaying'] ? getCrossPlatformString("mediaComponents") : getCrossPlatformString("mediaComponentsPaused")), widthChars) + Reset)
 }
 
 export async function reWriteCommandText() {
@@ -193,7 +196,7 @@ export async function performFullRealTimeReRender() {
     setSongDuration(calculateDisplayTime(passedTime), calculateDisplayTime(songInfo['length']))
     updateProgressBar(passedTimeBars)
     moveCursorPos(0, startString +2)
-    process.stdout.write(getThemeEscapeCode('mediaComponents') + centerText(process.argv[3] == 'debug' ? mediaComponents["mediaComponent"] : getCrossPlatformString("mediaComponents"), widthChars) + Reset)
+    process.stdout.write(getThemeEscapeCode('mediaComponents') + centerText((currentlyPLayingAudio['isPlaying'] ? getCrossPlatformString("mediaComponents") : getCrossPlatformString("mediaComponentsPaused")), widthChars) + Reset)
 
     if (!outputWritten) {
         reWriteCommandText()
@@ -234,6 +237,12 @@ process.stdin.on('keypress', async function(c, key) {
                     restartSong()
                 } else if (key.name == "right") {
                     listContinue(true)
+                } else if (key.name == "space" && currentSongPlayingReport) {
+                    if (currentlyPLayingAudio['usesLegacyPlayback']) {
+                        setPlayStatus('important_err', `Radio can't be paused`)
+                    } else {
+                        changePlayState()
+                    }
                 } else {
                     isTypingCommand = true
                     moveCursorPos(1, commandString)

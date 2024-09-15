@@ -1,8 +1,8 @@
-import { playAudioUrl } from "../../snippets/player.js"
 import { getAudioUrl } from "../misc/cobalt.js"
 import { currentSongReport, setPlayStatus } from "./playStatus.js"
 import { setSongDuration, setSongTitle, startMoving, updateProgressBar } from "../../ui/uiManagers/player.js"
 import { changeProgramTitleStatus } from "./programTitle.js"
+import { playSlsfAudioUrl } from "../core/playAudio.js"
 
 let list = []
 let looping = false
@@ -17,7 +17,7 @@ export async function listContinue(isSkip = false) {
         if (!audio) return
 
         setPlayStatus("log", "Waiting for ffmpeg...")
-        await playAudioUrl(audio)
+        await playSlsfAudioUrl(audio)
 
         startMoving(list[0]["length"])
         setSongTitle(list[0]["title"])
@@ -46,7 +46,7 @@ export async function restartSong() {
         if (!audio) return
 
         setPlayStatus("log", "Waiting for ffmpeg...")
-        await playAudioUrl(audio)
+        await playSlsfAudioUrl(audio)
 
         startMoving(currentSongReport["length"])
         setSongTitle(currentSongReport["title"])
