@@ -1,6 +1,5 @@
 import { fileURLToPath } from 'url';
 import path from 'path';
-import { config } from '../../snippets/config.js';
 import fs from 'fs';
 import { ask } from '../player/playStatus.js';
 

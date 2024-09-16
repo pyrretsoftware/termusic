@@ -1,4 +1,4 @@
-import { Red, Reset, RGBToEscapeCode } from '../../helpers/misc/colorCodes.js'
+import { Reset, RGBToEscapeCode } from '../../helpers/misc/colorCodes.js'
 import { moveCursorPos } from '../utils/moveCursorPos.js';
 import fs from 'fs';
 import path from 'path';

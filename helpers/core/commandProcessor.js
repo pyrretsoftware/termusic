@@ -10,7 +10,7 @@ import { addSong, clearList, listContinue, removeLastSong, replaceList, toggleLo
 import { getCrossPlatformString } from '../misc/crossPlatformHelper.js';
 import { loadThemeObject } from '../../ui/themes.js';
 import clipboard from 'clipboardy';
-import { spawn, execSync } from 'child_process'
+import { spawn } from 'child_process'
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { getSearchFunction, isSearchEngine } from '../search/defualtSearchEngine.js';

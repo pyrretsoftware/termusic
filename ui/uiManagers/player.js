@@ -10,7 +10,7 @@ import { centerText } from '../utils/centerText.js';
 import { moveCursorPos } from '../utils/moveCursorPos.js';
 import { clearBar } from '../utils/clearBar.js';
 import { answer, currentSongPlayingReport, currentSongReport, outputWritten, setoutputWritten, setPlayStatus, statusText } from '../../helpers/player/playStatus.js';
-import { PastelRed, Red, Reset } from '../../helpers/misc/colorCodes.js';
+import { PastelRed, Reset } from '../../helpers/misc/colorCodes.js';
 import { getThemeEscapeCode } from '../themes.js';
 import { config } from '../../snippets/config.js';
 import { changePlayState, currentlyPLayingAudio } from '../../helpers/core/playAudio.js';
@@ -153,10 +153,6 @@ export async function startMoving(length) {
         setSongDuration("0:00", "0:00")
         listContinue()
     })();
-}
-const mediaComponents = {
-    "progressBar" : "{0} ────────────────────────────── {1}", //30 lines
-    "mediaComponent" : "◀◀ ▶ ▶▶"
 }
 export async function displayPlayUi(title) {
     setSongTitle(title)
