@@ -3,6 +3,7 @@ import { execSync, exec } from 'child_process';
 
 import { changeUiPlayState, passedTime } from '../../ui/uiManagers/player.js' 
 import { getCrossPlatformString } from '../misc/crossPlatformHelper.js';
+import { setPlayStatus } from '../player/playStatus.js';
 
 export let currentlyPLayingAudio = {
     'audioProcess': null,
@@ -23,7 +24,7 @@ export function killAudioProcesses() {
 }
 
 export function changeAudioVolume(vol) {
-    if (parseInt(vol) && vol <= 100) {
+    if (parseInt(vol) && vol <= 100 && vol >= 0) {
         audioVolume = vol
         setPlayStatus("important", "Changed volume.")
     } else {
@@ -45,6 +46,32 @@ export function changePlayState() {
     }
 }
 export async function playSlsfAudioUrl(url) {
+    setPlayStatus('log', 'Waiting for fetch to begin...')
+    const audioRequest = await fetch(url)
+
+    if (!audioRequest.ok) {
+        setPlayStatus('important_err', 'Failed to fetch audio, error ' + audioRequest.status)
+    }
+    if (audioRequest.headers.get('Content-Type') == 'application/x-mpegURL') {
+        currentlyPLayingAudio['audioBuffer'] = null
+        currentlyPLayingAudio['audioProcess'] = exec(`ffplay "${url}" -nodisp -volume ${audioVolume}`, {stdio: 'pipe', detached: true})
+        currentlyPLayingAudio['isPlaying'] = true
+        currentlyPLayingAudio['usesLegacyPlayback'] = true
+
+        if (currentlyPLayingAudio['audioProcess']) {
+            exec(getCrossPlatformString("kill-process") + currentlyPLayingAudio['audioProcess'].pid, {
+                detached: true,
+                windowsHide: true
+            })
+        }
+        return
+    }
+
+    currentlyPLayingAudio['usesLegacyPlayback'] = false
+    setPlayStatus('log', 'Waiting for fetch to finish...')
+    currentlyPLayingAudio['audioBuffer'] = await (audioRequest).arrayBuffer()
+    
+    setPlayStatus('log', 'Cleaning up ffplay processes...')
     if (currentlyPLayingAudio['audioProcess']) {
         exec(getCrossPlatformString("kill-process") + currentlyPLayingAudio['audioProcess'].pid, {
             detached: true,
@@ -52,19 +79,12 @@ export async function playSlsfAudioUrl(url) {
         })
     }
 
-    const audioRequest = await fetch(url)
-    if (audioRequest.headers.get('Content-Type') == 'application/vnd.apple.mpegurl') {
-        currentlyPLayingAudio['audioBuffer'] = null
-        currentlyPLayingAudio['audioProcess'] = exec(`ffplay "${url}" -nodisp -volume ${audioVolume}`, {stdio: 'pipe', detached: true})
-        currentlyPLayingAudio['isPlaying'] = true
-        return
-    }
-
-    currentlyPLayingAudio['usesLegacyPlayback'] = audioRequest.headers.get('Content-Type') == 'application/vnd.apple.mpegurl'
-    currentlyPLayingAudio['audioBuffer'] = await (audioRequest).arrayBuffer()
+    setPlayStatus('log', 'Waiting for ffmpeg...')
     currentlyPLayingAudio['audioProcess'] = exec(`ffplay "http://127.0.0.1:${port}/stream" -nodisp -volume ${audioVolume}`, {stdio: 'pipe', detached: true})
     currentlyPLayingAudio['mimeType'] = audioRequest.headers.get('Content-Type')
     currentlyPLayingAudio['isPlaying'] = true
+
+    
 }
 
 function generatePortNumber() {

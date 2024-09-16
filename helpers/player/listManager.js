@@ -16,7 +16,6 @@ export async function listContinue(isSkip = false) {
         const audio = await (list[0]['isLive'] ? getLiveStreamUrl : getAudioUrl)(list[0]["id"])
         if (!audio) return
 
-        setPlayStatus("log", "Waiting for ffmpeg...")
         await playSlsfAudioUrl(audio)
 
         startMoving(list[0]["length"])
@@ -45,7 +44,6 @@ export async function restartSong() {
         const audio = await (currentSongReport['isLive'] ? getLiveStreamUrl : getAudioUrl)(currentSongReport["id"])
         if (!audio) return
 
-        setPlayStatus("log", "Waiting for ffmpeg...")
         await playSlsfAudioUrl(audio)
 
         startMoving(currentSongReport["length"])

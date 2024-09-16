@@ -52,7 +52,6 @@ export async function processCommand(command) {
             const audio = await (searchResult['isLive'] ? getLiveStreamUrl : getAudioUrl)(searchResult["id"])
             if (!audio) return
 
-            setPlayStatus("log", "Waiting for ffmpeg...")
             await playSlsfAudioUrl(audio)
 
             setPlayStatus("important", `Now playing ${searchResult["title"]}!`)
