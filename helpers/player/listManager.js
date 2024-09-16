@@ -2,7 +2,7 @@ import { getAudioUrl } from "../misc/cobalt.js"
 import { currentSongReport, setPlayStatus } from "./playStatus.js"
 import { setSongDuration, setSongTitle, startMoving, updateProgressBar } from "../../ui/uiManagers/player.js"
 import { changeProgramTitleStatus } from "./programTitle.js"
-import { playSlsfAudioUrl } from "../core/playAudio.js"
+import { currentlyPLayingAudio, playSlsfAudioUrl } from "../core/playAudio.js"
 
 let list = []
 let looping = false
@@ -27,6 +27,7 @@ export async function listContinue(isSkip = false) {
         list.shift()
     } else if (!isSkip) {
         setSongTitle("no song playing")
+        currentlyPLayingAudio['isPlaying'] = false
         changeProgramTitleStatus('idling')
         updateProgressBar(0)
         setSongDuration("0:00", "0:00")
