@@ -243,6 +243,7 @@ process.stdin.on('keypress', async function(c, key) {
                     } else {
                         changePlayState()
                     }
+                    return
                 } else {
                     isTypingCommand = true
                     moveCursorPos(1, commandString)

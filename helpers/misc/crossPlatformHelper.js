@@ -8,8 +8,8 @@ const crossPlatformStrings = {
     "new-terminal-window" : ["start conhost.exe --", "xdg-open"],
     "account-for-scrollbar" : [" ", ""],
     "kill-process" : ["taskkill /F /T /PID ", "kill -9 "],
-    "mediaComponents" : ["◀◀️▶️▶", "◀◀ ▶ ▶▶"],
-    "mediaComponentsPaused" : ["◀◀️⏸️ ▶▶", "◀◀ ⏸ ▶▶"]
+    "mediaComponents" : ["◀◀️▶️▶▶", "◀◀ ▶ ▶▶"],
+    "mediaComponentsPaused" : ["◀◀️।।▶▶", "◀◀ ⏸ ▶▶"]
 }
 export function getCrossPlatformString(string) {
     return crossPlatformStrings[string][process.platform === "win32" ? 0 : 1]
