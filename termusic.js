@@ -5,8 +5,6 @@ import { validateConfig} from "./helpers/startup/configFileValidator.js"
 import { launchAbout } from "./launch/about.js";
 import { launchHelp } from "./launch/help.js";
 
-validateConfig()
-
 if (process.argv[2] == 'launch') {
     launch()
 } else if (process.argv[2] == 'about') {
