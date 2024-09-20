@@ -4,6 +4,7 @@ import { execSync, exec } from 'child_process';
 import { changeUiPlayState, passedTime } from '../../ui/uiManagers/player.js' 
 import { getCrossPlatformString } from '../misc/crossPlatformHelper.js';
 import { setPlayStatus } from '../player/playStatus.js';
+import { config } from '../../snippets/config.js';
 
 export let currentlyPLayingAudio = {
     'audioProcess': null,
@@ -33,6 +34,14 @@ export function changeAudioVolume(vol) {
 }
 
 export function changePlayState() {
+    if (!currentlyPLayingAudio['audioBuffer'] && config['memorySavingMode']) {
+        setPlayStatus('important_err', 'Pausing isnt supported with memory saving mode.')
+        return
+    } else if (!currentlyPLayingAudio['audioBuffer']) {
+        setPlayStatus('important_err', 'Still buffering audio, please wait before pausing.')
+        return
+    }
+
     if (currentlyPLayingAudio['isPlaying']) { 
         changeUiPlayState(false)
 
@@ -47,13 +56,13 @@ export function changePlayState() {
 }
 export async function playSlsfAudioUrl(url) {
     setPlayStatus('log', 'Waiting for fetch to begin...')
+    currentlyPLayingAudio['audioBuffer'] = null
     const audioRequest = await fetch(url)
 
     if (!audioRequest.ok) {
         setPlayStatus('important_err', 'Failed to fetch audio, error ' + audioRequest.status)
     }
     if (audioRequest.headers.get('Content-Type') == 'application/x-mpegURL') {
-        currentlyPLayingAudio['audioBuffer'] = null
         currentlyPLayingAudio['audioProcess'] = exec(`ffplay "${url}" -nodisp -volume ${audioVolume}`, {stdio: 'pipe', detached: true})
         currentlyPLayingAudio['isPlaying'] = true
         currentlyPLayingAudio['usesLegacyPlayback'] = true
@@ -67,9 +76,12 @@ export async function playSlsfAudioUrl(url) {
         return
     }
 
-    currentlyPLayingAudio['usesLegacyPlayback'] = false
-    setPlayStatus('log', 'Waiting for fetch to finish...')
-    currentlyPLayingAudio['audioBuffer'] = await (audioRequest).arrayBuffer()
+    currentlyPLayingAudio['usesLegacyPlayback'] = false;
+    (async () => {
+        if (!config['memorySavingMode']) {
+            currentlyPLayingAudio['audioBuffer'] = await audioRequest.arrayBuffer()
+        }
+    })();
     
     setPlayStatus('log', 'Cleaning up ffplay processes...')
     if (currentlyPLayingAudio['audioProcess']) {
@@ -80,7 +92,7 @@ export async function playSlsfAudioUrl(url) {
     }
 
     setPlayStatus('log', 'Waiting for ffmpeg...')
-    currentlyPLayingAudio['audioProcess'] = exec(`ffplay "http://127.0.0.1:${port}/stream" -nodisp -volume ${audioVolume}`, {stdio: 'pipe', detached: true})
+    currentlyPLayingAudio['audioProcess'] = exec(`ffplay "${url}" -nodisp -volume ${audioVolume}`, {stdio: 'pipe', detached: true})
     currentlyPLayingAudio['mimeType'] = audioRequest.headers.get('Content-Type')
     currentlyPLayingAudio['isPlaying'] = true
 

@@ -64,6 +64,5 @@ export async function getAudioUrl(id ) {
     } else {
         currentInstance = 0
     }
-    
     return cobaltResponse["url"]
 }

@@ -30,7 +30,10 @@ export async function scrapePlaylist(plId) {
         }
         return playlistVideos
     } catch (e) {
-        console.log(e)
+        if (process.argv[3] == 'debug') {
+            throw new Error(e.message)
+        }
+        return
     }
 }
 export async function searchYoutube(query, searchType = 'song') {

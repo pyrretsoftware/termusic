@@ -12,5 +12,6 @@
     "searchEngine": "youtube",
     "discordRpcEnabled": true,
     "useWinIconLauncher": true,
-    "fps": 5
+    "fps": 5,
+    "memorySavingMode" : false
 }
