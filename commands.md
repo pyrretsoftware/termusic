@@ -12,4 +12,5 @@
 - ``reloadui`` - reloads the ui, mainly useful for debugging
 - ``about`` - shows an about dialog
 - ``pl <playlist>`` - searches for a playlist and adds all of its songs to the queue
+- ``help`` - show a help menu.
 - ``se <engine>`` - switches search engine. Possible values are 'invidious' and 'youtube'
