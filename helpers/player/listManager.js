@@ -38,8 +38,10 @@ export async function listContinue(isSkip = false) {
         setPlayStatus("important_err", "Couldn't skip song, no songs in the queue.")
     }
 }
+let lastRestartTime = new Date().getTime() / 1000
 export async function restartSong() {
-    if (currentSongReport) {
+    if (currentSongReport && (new Date().getTime() / 1000) > (lastRestartTime + 2)) {
+        lastRestartTime = new Date().getTime() / 1000
         setPlayStatus("log", "Grabbing audio...")
         
         const audio = await (currentSongReport['isLive'] ? getLiveStreamUrl : getAudioUrl)(currentSongReport["id"])
@@ -53,6 +55,8 @@ export async function restartSong() {
         setPlayStatus("important", `Restarted song ${currentSongReport["title"]}!`)
         changeProgramTitleStatus(currentSongReport['isLive'] ? 'radio' : 'playing')
         setPlayStatus("report", currentSongReport)
+    } else if (currentSongReport) {
+        setPlayStatus("important_err", "Please wait a bit before restarting the song.")
     }
 }
 

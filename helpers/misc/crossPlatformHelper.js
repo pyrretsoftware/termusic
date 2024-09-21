@@ -7,7 +7,7 @@ const crossPlatformStrings = {
 //   String                 Windows   Linux
     "new-terminal-window" : ["start conhost.exe --", "xdg-open"],
     "account-for-scrollbar" : [" ", ""],
-    "kill-process" : ["taskkill /F /T /PID ", "kill -9 "],
+    "kill-process" : [`C:\\Windows\\System32\\taskkill.exe /F /T /PID `, "kill -9 "],
     "mediaComponents" : ["◀◀️▶️▶▶", "◀◀ ▶ ▶▶"],
     "mediaComponentsPaused" : ["◀◀️।।▶▶", "◀◀ ⏸ ▶▶"]
 }

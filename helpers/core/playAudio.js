@@ -6,6 +6,7 @@ import { getCrossPlatformString } from '../misc/crossPlatformHelper.js';
 import { setPlayStatus } from '../player/playStatus.js';
 import { config } from '../../snippets/config.js';
 
+
 export let currentlyPLayingAudio = {
     'audioProcess': null,
     'audioBuffer' : null,
@@ -19,9 +20,16 @@ let audioVolume = 100
 export function killAudioProcesses() {
     if (currentlyPLayingAudio['audioProcess'] && currentlyPLayingAudio['isPlaying']) {
         execSync(getCrossPlatformString("kill-process") + currentlyPLayingAudio['audioProcess'].pid, {
+            external: true,
             windowsHide: true
         })
     }
+}
+export function killProcess(process) {
+    exec(getCrossPlatformString("kill-process") + process.pid, {
+        external: true,
+        windowsHide: true
+    })
 }
 
 export function changeAudioVolume(vol) {
@@ -38,7 +46,7 @@ export function changePlayState() {
         setPlayStatus('important_err', 'Pausing isnt supported with memory saving mode.')
         return
     } else if (!currentlyPLayingAudio['audioBuffer']) {
-        setPlayStatus('important_err', 'Still buffering audio, please wait before pausing.')
+        setPlayStatus('important_err', 'Still buffering audio, wait before pausing.')
         return
     }
 
@@ -51,7 +59,7 @@ export function changePlayState() {
         changeUiPlayState(true)
 
         currentlyPLayingAudio['isPlaying'] = true
-        currentlyPLayingAudio['audioProcess'] = exec(`ffplay "http://127.0.0.1:${port}/stream" -ss ${passedTime} -nodisp -volume ${audioVolume}`, {stdio: 'pipe', detached: true})
+        currentlyPLayingAudio['audioProcess'] = exec(`ffplay "http://127.0.0.1:${port}/stream" -ss ${passedTime} -nodisp -volume ${audioVolume}`)
     }
 }
 export async function playSlsfAudioUrl(url) {
@@ -63,15 +71,31 @@ export async function playSlsfAudioUrl(url) {
         setPlayStatus('important_err', 'Failed to fetch audio, error ' + audioRequest.status)
     }
     if (audioRequest.headers.get('Content-Type') == 'application/x-mpegURL') {
-        currentlyPLayingAudio['audioProcess'] = exec(`ffplay "${url}" -nodisp -volume ${audioVolume}`, {stdio: 'pipe', detached: true})
+        const oldAudioProcess = currentlyPLayingAudio['audioProcess']
+        currentlyPLayingAudio['audioProcess'] = exec(`ffplay "${url}" -nodisp -volume ${audioVolume}`)
         currentlyPLayingAudio['isPlaying'] = true
         currentlyPLayingAudio['usesLegacyPlayback'] = true
 
-        if (currentlyPLayingAudio['audioProcess']) {
-            exec(getCrossPlatformString("kill-process") + currentlyPLayingAudio['audioProcess'].pid, {
-                detached: true,
-                windowsHide: true
-            })
+        /*
+        async function getInnerPlaylist(rawPlaylist) {
+            const playlist = rawPlaylist.split('\n')
+
+            for (let i = 0; i < playlist.length; i++) {
+                if (playlist[i].startsWith('http')) {
+                    return (await fetch(playlist[i])).text()
+                }
+            }
+        }
+
+        await getInnerPlaylist(await getInnerPlaylist(await audioRequest.text()))*/
+
+        //i know were assuming that it takes 10 seconds here, but from my testing its always been accurate
+        for (let i = 0; i < 10; i++) {
+            setPlayStatus('log', `Loading audio stream (${i}/10)`)
+            await new Promise(resolve => setTimeout(resolve, 1000))
+        }
+        if (oldAudioProcess) {
+            killProcess(oldAudioProcess)
         }
         return
     }
@@ -85,14 +109,11 @@ export async function playSlsfAudioUrl(url) {
     
     setPlayStatus('log', 'Cleaning up ffplay processes...')
     if (currentlyPLayingAudio['audioProcess']) {
-        exec(getCrossPlatformString("kill-process") + currentlyPLayingAudio['audioProcess'].pid, {
-            detached: true,
-            windowsHide: true
-        })
+        killProcess(currentlyPLayingAudio['audioProcess'])
     }
 
     setPlayStatus('log', 'Waiting for ffmpeg...')
-    currentlyPLayingAudio['audioProcess'] = exec(`ffplay "${url}" -nodisp -volume ${audioVolume}`, {stdio: 'pipe', detached: true})
+    currentlyPLayingAudio['audioProcess'] = exec(`ffplay "${url}" -nodisp -volume ${audioVolume}`)
     currentlyPLayingAudio['mimeType'] = audioRequest.headers.get('Content-Type')
     currentlyPLayingAudio['isPlaying'] = true
 

@@ -11,7 +11,7 @@
     "alwaysFullReload": false,
     "searchEngine": "youtube",
     "discordRpcEnabled": true,
-    "useWinIconLauncher": true,
+    "useWinIconLauncher": "notSure",
     "fps": 5,
-    "memorySavingMode" : false
+    "memorySavingMode": false
 }
