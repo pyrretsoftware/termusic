@@ -7,6 +7,7 @@ import { Green, Magenta, PastelGreen, PastelRed, Red, Reset, Yellow } from '../h
 import { checkForUpdates } from '../helpers/startup/updateChecker.js'
 import { config, editConfigValue, reloadConfig } from '../snippets/config.js';
 import { validateConfig } from '../helpers/startup/configFileValidator.js'
+import { generatePortNumber } from '../helpers/core/playAudio.js';
 
 const directory = path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'termusic.js')
 
@@ -69,18 +70,30 @@ export async function startLauncher() {
     process.stdout.write('Launching termusic in a seperate window ')
     
     if (config['useWinIconLauncher'] && process.platform === 'win32') {
-        const wicProcess = spawn(`${getCrossPlatformString("new-terminal-window")} winIconLauncher.exe launch`, [], {
+        let port
+        if (config['useWinIconLauncher'] == 'notSure') {
+            port = await generatePortNumber()
+        }
+
+        spawn(`${getCrossPlatformString("new-terminal-window")} winIconLauncher.exe launch${config['useWinIconLauncher'] == 'notSure' ? '-port-' + port : 'gfgf'}`, [], {
             shell: true,
             cwd: path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'wic')
         })
         if (config['useWinIconLauncher'] == 'notSure') {
-            let isAlive = true
-            await new Promise(resolve => setTimeout(resolve, 1800))
+            await new Promise(resolve => setTimeout(resolve, 3000))
 
-            exec('tasklist', (err, stdout, stderr) => {
-                isAlive = (stdout.toLowerCase().indexOf(query.toLowerCase()) > -1)
-            })
-            if (!isAlive) {
+            const processAlive = await (async () => {
+                try {
+                    const results = await (await fetch(`http://127.0.0.1:${port}/test`, { signal: AbortSignal.timeout(5000) })).text()
+                    if (results == 'success') return true
+
+                    return false
+                } catch (e) {
+                    return false
+                }
+            })()
+
+            if (!processAlive) {
                 console.log(`[${PastelRed}FAILED${Reset}]`)
                 process.stdout.write('Launching termusic with the legacy launcher ')
                 spawn(`${getCrossPlatformString("new-terminal-window")} node ${directory} launch`, [], {shell: true})

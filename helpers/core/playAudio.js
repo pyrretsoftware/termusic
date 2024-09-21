@@ -120,23 +120,43 @@ export async function playSlsfAudioUrl(url) {
     
 }
 
-function generatePortNumber() {
+export async function generatePortNumber() {
     //generates a port number thats not and cant be registered with IANA
     //see https://en.wikipedia.org/wiki/List_of_TCP_and_UDP_port_numbers#Dynamic,_private_or_ephemeral_ports
 
-    return Math.floor(Math.random() * 65535 - 49152) + 49152
-}
-export function startAudioServer() {
+    const randomPort = Math.floor(Math.random() * 65535 - 49152) + 49152
+    let server = http.createServer((req, res) => {})
     try {
-        port = generatePortNumber()
-        http.createServer(async (req, res) => {
-            if (req.url == '/stream') {
-                res.setHeader("Content-Type", currentlyPLayingAudio['mimeType'])
-                res.write(Buffer.from(currentlyPLayingAudio['audioBuffer']))
-            }
-            res.end()
-        }).listen(port)
+        server.listen(randomPort) 
+        await new Promise(resolve => {
+            server.on('listening', (socket) => {
+                server.close()
+                resolve()
+            })
+        })
     } catch (e) {
-        startAudioServer()
+        return await generatePortNumber()   
     }
+    return randomPort
+}
+export async function startAudioServer() {
+    if (process.argv[2].includes('port-')) {
+        port = parseInt(process.argv[2].replace('launch-port-', ''))
+    } else  {
+        port = await generatePortNumber()
+    }
+    http.createServer(async (req, res) => {
+        if (req.url == '/stream') {
+            res.setHeader("Content-Type", currentlyPLayingAudio['mimeType'])
+
+            if (currentlyPLayingAudio['audioBuffer']) {
+                res.write(Buffer.from(currentlyPLayingAudio['audioBuffer']))
+            } else {
+                res.write('whar')
+            }
+        } else if (req.url == '/test') {
+            res.write('success')
+        }
+        res.end()
+    }).listen(port)
 }

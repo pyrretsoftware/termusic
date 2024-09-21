@@ -203,7 +203,7 @@ export async function performFullRealTimeReRender() {
 //#endregion
 //#region userInput
 process.stdin.on('keypress', async function(c, key) {
-    if (process.argv[2] == "launch") {
+    if (process.argv[2]?.includes('launch')) {
         if (outputWritten && !answer) {
             clearBar()
             reWriteCommandText()

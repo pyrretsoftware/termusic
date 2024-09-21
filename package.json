@@ -1,6 +1,6 @@
 {
   "name": "termusic",
-  "version": "1.6.1",
+  "version": "1.6.1-patch2",
   "description": "a music player inside your terminal",
   "main": "termusic.js",
   "bin": {

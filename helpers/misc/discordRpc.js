@@ -6,7 +6,7 @@ let ep
 
 let lastActivity
 
-if (process.argv[2] == 'launch' && config['discordRpcEnabled']) {
+if (process.argv[2]?.includes('launch') && config['discordRpcEnabled']) {
     ep = new _ep.EasyPresence("1263923824613920861")
 
     ep.on('connected', () => {
