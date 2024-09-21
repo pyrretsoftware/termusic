@@ -20,7 +20,7 @@ if (process.stdin.isTTY) {
     process.stdin.setRawMode(true);   
 }
 process.stdout.on('resize', () => {
-    if (process.argv[2] == 'launch') {
+    if (process.argv[2]?.includes('launch')) {
         console.clear()
         performFullRealTimeReRender()
         process.stdout.write(`${String.fromCharCode(0o33)}[8;h;wt`.replaceAll("h", "5").replaceAll("w", "46"))    
