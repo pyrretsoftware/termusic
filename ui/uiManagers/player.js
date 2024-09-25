@@ -119,7 +119,7 @@ export async function startMoving(length) {
     changeUiPlayState(true);
 
     (async () => {
-        for (let i = 0; i < (length ? length * FPS : Infinity); i++) {
+        while (true) {
             if (!currentlyPLayingAudio['isPlaying']) {
                 startTime = new Date(startTime.getTime() + ((1 / FPS) * 1000)) //account for passed time when pausing
                 await new Promise(resolve => setTimeout(resolve,  (1 / FPS) * 1000));
@@ -132,7 +132,7 @@ export async function startMoving(length) {
 
             const timeDifference = Math.floor((Date.now() - startTime) / 1000)
             const barDifference = timeDifference / (length / 30) //will be NaN if playing radio
-
+            
             if (passedTimeBars >= 30 && length) {
                 break
             }

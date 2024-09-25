@@ -43,7 +43,7 @@ export async function searchInvidious(query, searchType = 'song') {
 
     if (searchType == 'playlist') {
         let playlistVideos = []
-        for (item in invidiousResponse[0]['videos']) {
+        for (let item in invidiousResponse[0]['videos']) {
             playlistVideos.push({
                 "title" : invidiousResponse[0]['videos'][item]["title"],
                 "id" : invidiousResponse[0]['videos'][item]["videoId"],

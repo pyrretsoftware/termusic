@@ -80,7 +80,7 @@ export async function startLauncher() {
             cwd: path.join(path.dirname(fileURLToPath(import.meta.url)), '../', 'wic')
         })
         if (config['useWinIconLauncher'] == 'notSure') {
-            await new Promise(resolve => setTimeout(resolve, 3000))
+            await new Promise(resolve => setTimeout(resolve, 4500))
 
             const processAlive = await (async () => {
                 try {

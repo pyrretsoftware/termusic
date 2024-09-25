@@ -16,13 +16,14 @@ export function showHelp() {
     moveCursorPos(2, 3)
     process.stdout.write(`\x1b[2mFetching command definitions...${Reset}`)
     
-    const file = fs.readFileSync(path.join(__dirname, '../', '../', 'commands.md'), 'utf8').split('\n')
+    const file = fs.readFileSync(path.join(__dirname, '../', '../', 'commands.md'), 'utf8').split('\n')[0]
     const regex = /- ``(.*)`` - (.*)/
     clearBar()
     
     let longestDefintion = 0
     for (let i = 0; i < file.length; i++) { //we have to do a double for loop here because some terminals behave differently
         const match = file[i].match(regex)
+        console.log(file)
         if (match[2].length > longestDefintion) {
             longestDefintion = match[2].length
         }

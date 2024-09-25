@@ -65,7 +65,13 @@ export function changePlayState() {
 export async function playSlsfAudioUrl(url) {
     setPlayStatus('log', 'Waiting for fetch to begin...')
     currentlyPLayingAudio['audioBuffer'] = null
-    const audioRequest = await fetch(url)
+    let audioRequest
+    try {
+        audioRequest = await fetch(url)
+    } catch (e) {
+        setPlayStatus('important_err', 'Failed to fetch audio, error ' + e)
+        return
+    }
 
     if (!audioRequest.ok) {
         setPlayStatus('important_err', 'Failed to fetch audio, error ' + audioRequest.status)

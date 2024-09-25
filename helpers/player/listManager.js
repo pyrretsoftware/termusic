@@ -8,6 +8,11 @@ let list = []
 let looping = false
 
 export async function listContinue(isSkip = false) {
+    if (!list) {
+        setPlayStatus("important_err", "The list manager failed.")
+        return
+    }
+
     if (looping) {
         restartSong()
     } else if (list[0]) {

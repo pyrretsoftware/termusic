@@ -11,31 +11,9 @@ import { fileURLToPath } from 'url'
 
 let currentInstance = 0
 
-export async function getAudioUrl(id ) {
-
-    let cobaltRequest = await fetch(config["cobalt-instances"][currentInstance], {
-        method : "POST",
-        body : JSON.stringify({
-            "url": "https://www.youtube.com/watch?v=" + id,
-            "isAudioOnly": "true"
-        }),
-        headers : {
-            "Accept": "application/json",
-            "Content-type": "application/json"
-        }
-    })
-    let cobaltResponse = await cobaltRequest.json()
-    let retryTimes = 3
-
-    if (cobaltResponse['status'] == 'error' && cobaltResponse['text'].includes('process videos longer than') ) {
-        setPlayStatus('important_err', 'Cobalt can only handle songs up to 3 hours.')
-        return false
-    }
-
-    while (cobaltResponse['status'] == 'error' && retryTimes != 0) {
-        setPlayStatus('log', 'Cobalt failed, trying again...')
-        retryTimes -= 1
-
+export async function getAudioUrl(id) {
+    let cobaltRequest
+    try {
         cobaltRequest = await fetch(config["cobalt-instances"][currentInstance], {
             method : "POST",
             body : JSON.stringify({
@@ -47,6 +25,35 @@ export async function getAudioUrl(id ) {
                 "Content-type": "application/json"
             }
         })
+    } catch (e) {
+        setPlayStatus('important_err', 'Cobalt request threw error.')
+    }
+    let cobaltResponse = await cobaltRequest.json()
+    let retryTimes = 3
+
+    if (cobaltResponse['status'] == 'error' && cobaltResponse['text'].includes('process videos longer than') ) {
+        setPlayStatus('important_err', 'Cobalt can only handle songs up to 3 hours.')
+        return false
+    }
+
+    while (cobaltResponse['status'] == 'error' && retryTimes != 0) {
+        setPlayStatus('log', 'Cobalt failed, trying again...')
+        retryTimes -= 1
+        try {
+            cobaltRequest = await fetch(config["cobalt-instances"][currentInstance], {
+                method : "POST",
+                body : JSON.stringify({
+                    "url": "https://www.youtube.com/watch?v=" + id,
+                    "isAudioOnly": "true"
+                }),
+                headers : {
+                    "Accept": "application/json",
+                    "Content-type": "application/json"
+                }
+            })
+        } catch (e) {
+            setPlayStatus('important_err', 'Cobalt request threw error.')
+        }
         cobaltResponse = await cobaltRequest.json()
     }
 

@@ -4,7 +4,7 @@ termusic/helpers/commandprocessor.js
 Written by axell (mail@axell.me) for pyrret software.
 */
 import { getAudioUrl } from '../misc/cobalt.js'
-import { currentSongPlayingReport, setPlayStatus } from '../player/playStatus.js';
+import { currentSongPlayingReport, currentSongReport, setPlayStatus } from '../player/playStatus.js';
 import { performFullRealTimeReRender, setSongTitle, startMoving} from '../../ui/uiManagers/player.js';
 import { addSong, clearList, listContinue, removeLastSong, replaceList, toggleLooping } from '../player/listManager.js';
 import { getCrossPlatformString } from '../misc/crossPlatformHelper.js';
@@ -80,15 +80,22 @@ export async function processCommand(command) {
             }
 
             replaceList(playList['videos'])
-            listContinue()
+            if (!currentSongPlayingReport) {
+                listContinue()
+            }
             setPlayStatus("log", `Added ${playList['videoCount']} songs to the queue!`)
             break
         case 'queue' :
             if (command.split(" ")[1] == "add")  {
                 setPlayStatus("log", "Searching...")
-                let searchResult = await search(command.replace("play ", ""))
+                let searchResult = await search(command.replace("queue add ", ""))
                 let searchType = config['searchEngine']
-    
+
+                if (searchResult['status'] && searchResult['status'] == 'typeIssue') {
+                    setPlayStatus("log", "Searching again...")
+                    searchResult = await search(searchResult['query'])
+                }
+
                 while (!searchResult) {
                     if (searchType == 'youtube') {
                         setPlayStatus("log", "Falling back to invidious api")
@@ -111,7 +118,10 @@ export async function processCommand(command) {
                 setPlayStatus('important', `Cleared queue!`)
             } else if (command.split(" ")[1] == "skip") {
                 listContinue(true)
+            } else {
+                setPlayStatus("important_err", "Unknown command.")
             }
+
             break;
         case 'exit': 
             console.clear()
@@ -120,7 +130,7 @@ export async function processCommand(command) {
             process.exit()
             break;
         case 'about':        
-            if (config['useWic'] && process.platform === 'win32') {
+            if (config['useWinIconLauncher'] && process.platform === 'win32') {
                 spawn(`${getCrossPlatformString("new-terminal-window")} winIconLauncher.exe about`, [], {
                     shell: true,
                     cwd: path.join(path.dirname(fileURLToPath(import.meta.url)), '../', '../', 'wic')
@@ -130,7 +140,7 @@ export async function processCommand(command) {
             }
             break;
         case 'help':
-            if (config['useWic'] && process.platform === 'win32') {
+            if (config['useWinIconLauncher'] && process.platform === 'win32') {
                 spawn(`${getCrossPlatformString("new-terminal-window")} winIconLauncher.exe help-dialog`, [], {
                     shell: true,
                     cwd: path.join(path.dirname(fileURLToPath(import.meta.url)), '../', '../', 'wic')
