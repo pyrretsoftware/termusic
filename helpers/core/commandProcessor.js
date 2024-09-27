@@ -87,29 +87,45 @@ export async function processCommand(command) {
             break
         case 'queue' :
             if (command.split(" ")[1] == "add")  {
-                setPlayStatus("log", "Searching...")
-                let searchResult = await search(command.replace("queue add ", ""))
-                let searchType = config['searchEngine']
+                let queries = []
 
-                if (searchResult['status'] && searchResult['status'] == 'typeIssue') {
-                    setPlayStatus("log", "Searching again...")
-                    searchResult = await search(searchResult['query'])
+                if (config['queueCommaSeperation'] && command.replace("queue add ", "").split(',').length > 0) {
+                    queries = command.replace("queue add ", "").split(',')
+                } else {
+                    queries = [command.replace("queue add ", "")]
                 }
 
-                while (!searchResult) {
-                    if (searchType == 'youtube') {
-                        setPlayStatus("log", "Falling back to invidious api")
-                        searchType = 'invidious'
-                        search = getSearchFunction(searchType)
-                        searchResult = await search(command.replace("play ", ""))
-                    } else {
-                        setPlayStatus("log", "Retrying search.")
-                        searchResult = await search(command.replace("play ", ""))
+                for (let i = 0; i < queries.length; i++) {
+                    setPlayStatus("log", "Searching...")
+                    let searchResult = await search(queries[i])
+                    let searchType = config['searchEngine']
+    
+                    if (searchResult['status'] && searchResult['status'] == 'typeIssue') {
+                        setPlayStatus("log", "Searching again...")
+                        searchResult = await search(searchResult['query'])
+                    }
+    
+                    while (!searchResult) {
+                        if (searchType == 'youtube') {
+                            setPlayStatus("log", "Falling back to invidious api")
+                            searchType = 'invidious'
+                            search = getSearchFunction(searchType)
+                            searchResult = await search(command.replace("play ", ""))
+                        } else {
+                            setPlayStatus("log", "Retrying search.")
+                            searchResult = await search(command.replace("play ", ""))
+                        }
+                    }
+                    addSong(searchResult)
+
+                    if (queries.length == 1) {
+                        setPlayStatus("important", `Added ${searchResult["title"]} to the queue!`)
                     }
                 }
 
-                addSong(searchResult)
-                setPlayStatus("important", `Added ${searchResult["title"]} to the queue!`)
+                if (queries.length > 1) {
+                    setPlayStatus("important", `Added ${queries.length} songs to the queue!`)
+                }
             } else if (command.split(" ")[1] == "remove") {
                 removeLastSong()
                 setPlayStatus('important', `Removed last song from the queue!`)

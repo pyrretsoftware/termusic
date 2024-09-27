@@ -13,5 +13,6 @@
     "discordRpcEnabled": true,
     "useWinIconLauncher": "notSure",
     "fps": 5,
-    "memorySavingMode": false
+    "memorySavingMode": false,
+    "queueCommaSeperation" : false
 }

@@ -12,7 +12,7 @@ if (process.argv[2]?.includes('launch') && config['discordRpcEnabled']) {
     ep.on('connected', () => {
         setPlayStatus('important', 'Connected to Discord.')
         setTimeout(() => {
-            if (!lastActivity) return
+            if (!lastActivity?.['title']) return
             setPlayStatus("report", lastActivity)
         }, 500) //wait a little before starting discordrpc
     })
