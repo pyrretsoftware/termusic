@@ -1,5 +1,8 @@
 # <img src="https://github.com/pyrretsoftware/termusic/raw/main/images/icon.png" width="32"/> termusic
 
+> [!CAUTION]
+> Due to cobalt completly shutting down their api, and all invidious apis shutting down or becoming login-only and unreliable, termusic no longer works and will not be supported anymore.
+
 A minimal and lightweight terminal music player. Uses the cobalt api and ffplay to stream and play audio from youtube.
 
 Termusic is designed to sit in the corner of your screen while you work, study, or play video games, while taking up as little screen real estate as possible.
